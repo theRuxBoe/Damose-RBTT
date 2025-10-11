@@ -23,20 +23,20 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		
 	}
-	private void addLoginButton() {
-		JButton b = new JButton("Login");
-		ActionListener l = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				login.setVisible(!loginIsVisible);
-				loginIsVisible = !loginIsVisible;
-			}
-		};
-		b.addActionListener(l);
-		frame.add(b);
-		
-	}
+//	private void addLoginButton() {
+//		JButton b = new JButton("Login");
+//		ActionListener l = new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				login.setVisible(!loginIsVisible);
+//				loginIsVisible = !loginIsVisible;
+//			}
+//		};
+//		b.addActionListener(l);
+//		frame.add(b);
+//		
+//	}
 	
 	
 //	the search panel will arrive from its class already split in two panels

@@ -3,6 +3,7 @@ package frontend;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.List;
 
 //import java.awt.peer.ComponentPeer;
 
@@ -39,13 +40,15 @@ public class Map  extends JPanel{
 //	private int MAXIMUM_ZOOM = 10;
 	private JPanel panel;
 	
-	public Map() {
-		}
+//	public Map() {
+//		}
 	
 	
 	
-	public void paintWaypoint() {}
-	
+//	private void paintWaypoint(List<GeoPosition> positions) {
+//		
+//	}
+//	
 	private void setZooming() {
 		MouseInputListener mice = new PanMouseInputListener(map);
 		map.addMouseListener(mice);
