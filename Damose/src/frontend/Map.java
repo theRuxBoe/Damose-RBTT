@@ -37,18 +37,12 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 public class Map  extends JPanel{
 	
 	private JXMapViewer map;
-//	private int MAXIMUM_ZOOM = 10;
 	private JPanel panel;
 	
-//	public Map() {
-//		}
+
 	
 	
-	
-//	private void paintWaypoint(List<GeoPosition> positions) {
-//		
-//	}
-//	
+
 	private void setZooming() {
 		MouseInputListener mice = new PanMouseInputListener(map);
 		map.addMouseListener(mice);

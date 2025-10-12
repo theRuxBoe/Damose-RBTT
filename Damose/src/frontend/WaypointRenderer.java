@@ -28,7 +28,7 @@ public class WaypointRenderer {
 		}
 	}
 	
-//	TODO placeholder, we need the object that will be returned by backend
+//	TODO placeholder, we need the object that will be returned by back-end
 	
 	private void paintWaypoints(List<GeoPosition> positions) {
 		Set<BusWaypoint> waypoints = new HashSet<>();

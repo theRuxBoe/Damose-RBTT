@@ -2,10 +2,10 @@ package frontend;
 
 import javax.swing.JPanel;
 
-public class BusSearchPanel extends JPanel {
+public class SearchPanel extends JPanel {
 
 	
-	public BusSearchPanel() {
+	public SearchPanel() {
 		
 	}
 	

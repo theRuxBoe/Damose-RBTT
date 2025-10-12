@@ -5,20 +5,22 @@ import javax.swing.JPanel;
 public class BusStopFocusPanel extends JPanel {
 	
 	private BusStopView currentStop;
-	private BusView currentBus;
+	private BusPanel currentBus;
 	
 	public BusStopFocusPanel() {
-		
+//		should we place something here?
 	}
 	
 //	TODO enter the input type for shoBus, it should be something like a JPanel
-	public JPanel showBus(BusView b) {
+	public JPanel showBus(BusPanel b) {
 		if (currentStop != null || currentBus != null) {
 			this.clear();
 		}
-		return b;
+		JPanel panel = b.createBusPanel();
+		return panel;
 	}
 	
+
 //	TODO same as above except for bus stops
 	public JPanel showStop(BusStopView s) {
 		if (currentStop != null || currentBus != null) {
