@@ -14,7 +14,7 @@ public class SearchFocusPanel extends JPanel{
 	
 	public JPanel createPanels() {
 		BusStopFocusPanel focus = new BusStopFocusPanel();
-		BusSearchPanel search = new BusSearchPanel();
+		SearchPanel search = new SearchPanel();
 		
 		focus.setBorder(new BevelBorder(1));
 		search.setBorder(new BevelBorder(0)); 

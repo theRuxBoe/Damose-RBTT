@@ -46,6 +46,8 @@ public class BusPanel extends JPanel {
 			panel.add(new JLabel("Seats_available :" + seats_available));
 		}
 		
+		panel.add(new JScrollBar());
+		
 		
 	}
 	

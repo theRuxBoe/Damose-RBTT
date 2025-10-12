@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 
 public class BusStopFocusPanel extends JPanel {
 	
-	private BusStopView currentStop;
+	private BusStopPanel currentStop;
 	private BusPanel currentBus;
 	
 	public BusStopFocusPanel() {
@@ -22,7 +22,7 @@ public class BusStopFocusPanel extends JPanel {
 	
 
 //	TODO same as above except for bus stops
-	public JPanel showStop(BusStopView s) {
+	public JPanel showStop(BusStopPanel s) {
 		if (currentStop != null || currentBus != null) {
 			this.clear();
 		}
