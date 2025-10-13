@@ -45,7 +45,18 @@ Main Frame :
 		...
 	- fields :
 		...
-
+TODO 
+	I have to think about adding a third panel class for bus lines, because I discovered that buses
+	aren't treated as bus lines in the data that's sent from roma mobilità, and that could be why 
+	I didn't managed to find a good trade off in their representation
+	
+	Line:
+		shows a list of bus stops (and maybe the current buses) ( and maybe also the actual line on map)
+	Bus:
+		shows a waypoint on the map and a panel with its informations (id, line, seats, nearest stop (???))
+	Bus Stop:
+		shows a list of buses with their arrival times	
+	
 
 	
 TODO

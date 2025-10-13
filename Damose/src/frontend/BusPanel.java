@@ -7,11 +7,15 @@ import org.jxmapviewer.viewer.GeoPosition;
 public class BusPanel extends JPanel {
 	
 	private GeoPosition position;
-	private double id;
+	private int id;
 	private int line;
 	private String direction;
 	private int seats_available;
+	private List<BusStop> line_stops;	// TODO we will need to check if List is the optimal data structure
 	
+	
+//	when the waypoint is pressed a new buspanel is created to show the vehicle informations
+//	this one represents a concrete instance of the line
 	public BusPanel(BusWaypoint waypoint) {
 		this.position = waypoint.getPosition();
 		this.id = waypoint.getId();
@@ -22,13 +26,15 @@ public class BusPanel extends JPanel {
 		
 	}
 	
-	public BusPanel(Bus b) {
+//	when the bus is pressed from the search panel, in the focus panel the user will see information about 
+//	the entire line (this represents an abstraction of the line)
+	public BusPanel(BusLine b) {
 		this.position = b.getPosition();
-		this.id = b.getId();
+//		this.id = b.getId();
 		this.line = b.getLine();
 		this.direction = b.getDirection();
-		this.seats_available = b.getSeats_available();
-		
+//		this.seats_available = b.getSeats_available();
+		this.line_stops = b.getLineStops();
 		
 	}
 	

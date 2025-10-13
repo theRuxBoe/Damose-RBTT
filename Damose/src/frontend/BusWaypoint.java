@@ -13,7 +13,7 @@ public class BusWaypoint extends JButton implements Waypoint {
 	
 	
 	private GeoPosition position;
-	private double id;
+	private int id;
 	private int line;
 	private String direction;
 	private int seats_available;
@@ -38,7 +38,7 @@ public class BusWaypoint extends JButton implements Waypoint {
 	public GeoPosition getPosition() {
 		return position;
 	}
-	public double getId() {
+	public int getId() {
 		return id;
 	}
 	public int getLine() {
