@@ -1,4 +1,4 @@
-package frontend;
+package frontend.focus;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

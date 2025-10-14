@@ -13,6 +13,8 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 
+import frontend.focus.SearchFocusPanel;
+
 public class MainFrame extends JFrame {
 
 	private JFrame frame;

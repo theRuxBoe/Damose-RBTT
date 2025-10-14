@@ -1,10 +1,10 @@
-package frontend;
+package frontend.focus;
 
 import javax.swing.*;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-public class BusPanel extends JPanel {
+public class BusPanel extends JPanel implements Focusable {
 	
 	private GeoPosition position;
 	private int id;
@@ -22,23 +22,19 @@ public class BusPanel extends JPanel {
 		this.line = waypoint.getLine();
 		this.direction = waypoint.getDirection();
 		this.seats_available = waypoint.getSeats_available();
-		
-		
 	}
 	
-//	when the bus is pressed from the search panel, in the focus panel the user will see information about 
-//	the entire line (this represents an abstraction of the line)
-	public BusPanel(BusLine b) {
+	public BusPanel(Bus b) {
 		this.position = b.getPosition();
-//		this.id = b.getId();
+		this.id = b.getId();
 		this.line = b.getLine();
 		this.direction = b.getDirection();
-//		this.seats_available = b.getSeats_available();
-		this.line_stops = b.getLineStops();
-		
+		this.seats_available = b.getSeats_available();
 	}
 	
-	public JPanel createBusPanel() {
+
+	
+	private JPanel createBusPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.add(new JLabel("Position :" + this.position));
@@ -51,9 +47,14 @@ public class BusPanel extends JPanel {
 		else {
 			panel.add(new JLabel("Seats_available :" + seats_available));
 		}
+		return panel;
 		
-		panel.add(new JScrollBar());
 		
+	}
+
+	@Override
+	public JPanel createPanel() {
+		this.createBusPanel();
 		
 	}
 	

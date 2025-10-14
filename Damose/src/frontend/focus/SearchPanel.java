@@ -1,4 +1,4 @@
-package frontend;
+package frontend.focus;
 
 import javax.swing.JPanel;
 
