@@ -1,17 +1,24 @@
 package frontend.focus;
 
+import java.awt.Dimension;
+//import java.awt.FlowLayout;
+import java.awt.GridLayout;
+
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-public class BusPanel extends JPanel implements Focusable {
+import backendDONTPUSH.Bus;
+import frontend.BusWaypoint;
+
+public class BusPanel implements Focusable {
 	
 	private GeoPosition position;
 	private int id;
 	private int line;
 	private String direction;
 	private int seats_available;
-	private List<BusStop> line_stops;	// TODO we will need to check if List is the optimal data structure
 	
 	
 //	when the waypoint is pressed a new buspanel is created to show the vehicle informations
@@ -36,16 +43,23 @@ public class BusPanel extends JPanel implements Focusable {
 	
 	private JPanel createBusPanel() {
 		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.add(new JLabel("Position :" + this.position));
-		panel.add(new JLabel("Vehicle ID :" + this.id));
-		panel.add(new JLabel("Line :" + this.line));
-		panel.add(new JLabel("Direction :" + this.direction));
+		panel.setLayout(new GridLayout(5, 0, 0, 10));
+		
+		panel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		
+		panel.setPreferredSize(new Dimension(500,200));
+		panel.add(new JLabel("Line : " + this.line), 0);
+		
+		panel.add(new JLabel("Direction : " + this.direction), 1);
+		
+		panel.add(new JLabel("Position : " + this.position), 2);
+		
+		panel.add(new JLabel("Vehicle ID : " + this.id), 3);
 		if (seats_available == -1) {
-			panel.add(new JLabel("Seats unavailable"));
+			panel.add(new JLabel("Seats : unavailable"), 4);
 		}
 		else {
-			panel.add(new JLabel("Seats_available :" + seats_available));
+			panel.add(new JLabel("Seats available : " + seats_available), 4);
 		}
 		return panel;
 		
@@ -54,8 +68,8 @@ public class BusPanel extends JPanel implements Focusable {
 
 	@Override
 	public JPanel createPanel() {
-		this.createBusPanel();
-		
+		JPanel pan = this.createBusPanel();
+		return pan;
 	}
 	
 	

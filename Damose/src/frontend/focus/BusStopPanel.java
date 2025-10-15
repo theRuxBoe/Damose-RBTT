@@ -1,15 +1,24 @@
 package frontend.focus;
 
+import backendDONTPUSH.*;
+
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.util.List;
+
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneLayout;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
 import frontend.MainFrame;
 
-public class BusStopPanel extends JPanel implements Focusable{
+public class BusStopPanel implements Focusable{
 
 //	we need to wait until we know how the information is passed from the back-end
 	private List<Bus> arrivingBuses;
@@ -20,22 +29,35 @@ public class BusStopPanel extends JPanel implements Focusable{
 	public BusStopPanel(BusStop bs) {
 		this.id = bs.getId();
 		this.position = bs.getPosition();
+		this.arrivingBuses = bs.getArrivingBuses();
 		
 	}
 	
 	private JPanel createStopPanel() {
 		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.add(new JLabel("Stop id :" + id));
+		JPanel supportPanel = new JPanel();
+		panel.setLayout(new GridLayout(1, 3));
+		panel.setPreferredSize(new Dimension(500,200));
+		panel.add(new JLabel("Stop id : " + id), 0);
+		
+		supportPanel.setLayout(new BoxLayout(supportPanel, BoxLayout.Y_AXIS));
+		
 //		MainFrame.getMap().add(new StopWaypoint(position));		we could show on the map the stop
-		JScrollPane scrollpanel = new JScrollPane();
+		
+		
+		
+		for (Bus bus : arrivingBuses) {
+			BusPanel b = new BusPanel(bus);
+			supportPanel.add(b.createPanel());
+//			scrollpanel.add(new JLabel("Arriving time :" + bus.getTime(position))); //unimplemented method
+		}
+		
+		JScrollPane scrollpanel = new JScrollPane(supportPanel);
+		scrollpanel.setLayout(new ScrollPaneLayout());
 		scrollpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		for (Bus bus : arrivingBuses) {
-			scrollpanel.add(new BusPanel(bus));
-			scrollpanel.add(new JLabel("Arriving time :" + bus.getTime(position))); //unimplemented method
-		}
-		panel.add(scrollpanel);
+		
+		panel.add(scrollpanel, 1);
 		return panel;
 	}
 	
@@ -44,8 +66,8 @@ public class BusStopPanel extends JPanel implements Focusable{
 
 @Override
 	public JPanel createPanel() {
-		this.createStopPanel();
-	
+		JPanel a = this.createStopPanel();
+		return a;
 	}
 	
 	
