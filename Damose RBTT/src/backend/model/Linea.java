@@ -2,7 +2,7 @@ package backend.model;
 
 import java.util.Objects;
 
-public class Linea {
+public class Linea extends DatoGTF {
 	
 	private String routeId, name, agencyId, description;
 	private int type;

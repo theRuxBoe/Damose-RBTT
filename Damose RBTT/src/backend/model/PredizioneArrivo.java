@@ -3,7 +3,7 @@ package backend.model;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class PredizioneArrivo {
+public class PredizioneArrivo extends DatoGTF {
 	
 	private String stopId, routeId, tripId;
 	private LocalTime arrivalTime;

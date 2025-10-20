@@ -2,7 +2,7 @@ package backend.model;
 
 import java.util.Objects;
 
-public class Fermata {
+public class Fermata extends DatoGTF {
 	
 	private String stopId, name;
 	private double lat, lon;

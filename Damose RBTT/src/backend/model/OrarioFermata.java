@@ -3,16 +3,18 @@ package backend.model;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class OrarioFermata {
+public class OrarioFermata extends DatoGTF {
 	
 	private String tripId, stopId, arrivalTime, departureTime;
+	private int stopSequence;
 	
-	public OrarioFermata(String tId, String sId, String at, String dt) {
+	public OrarioFermata(String tId, String sId, String at, String dt, int sSq) {
 		
 		this.tripId = tId;
 		this.stopId = sId;
 		this.arrivalTime = at;
 		this.departureTime = dt;
+		this.stopSequence = sSq;
 		
 	}
 
@@ -51,6 +53,14 @@ public class OrarioFermata {
 	public LocalTime getArrivalAsTime() {
 		
 		return LocalTime.parse(arrivalTime);
+	}
+
+	public int getStopSequence() {
+		return stopSequence;
+	}
+
+	public void setStopSequence(int stopSequence) {
+		this.stopSequence = stopSequence;
 	}
 
 	@Override

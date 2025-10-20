@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class RisultatoLinea {
+public class RisultatoLinea extends Risultato {
 	
 	private String routeId, directionName;
 	private List<String> arrivals;

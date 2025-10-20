@@ -2,7 +2,7 @@ package backend.model;
 
 import java.util.Objects;
 
-public class Corsa {
+public class Corsa extends DatoGTF {
 	
 	private String routeId, tripId, serviceId, directionName;
 	private int directionId;
@@ -15,6 +15,12 @@ public class Corsa {
 		this.directionName = dirn;
 		this.directionId = dirId;
 		
+	}
+	
+	@Override
+	public String toString() {
+		
+		return "Corsa di linea "+routeId+" direzione "+directionName;
 	}
 
 	public String getRouteId() {
