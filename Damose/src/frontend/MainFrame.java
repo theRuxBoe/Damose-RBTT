@@ -25,20 +25,6 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		
 	}
-//	private void addLoginButton() {
-//		JButton b = new JButton("Login");
-//		ActionListener l = new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				login.setVisible(!loginIsVisible);
-//				loginIsVisible = !loginIsVisible;
-//			}
-//		};
-//		b.addActionListener(l);
-//		frame.add(b);
-//		
-//	}
 	
 	
 //	the search panel will arrive from its class already split in two panels
@@ -51,7 +37,7 @@ public class MainFrame extends JFrame {
 		
 		this.frame = f;
 		
-		JPanel mapPanel = new JPanel();
+		JPanel mapPanel = new Map();
 		SearchFocusPanel searchPanel = new SearchFocusPanel();
 		JPanel servicePanel = new JPanel();
 //		JPanel focusPanel = new JPanel();
@@ -69,6 +55,7 @@ public class MainFrame extends JFrame {
 		
 		mapPanel.setPreferredSize(new Dimension(500,500));
 		searchPanel.setPreferredSize(new Dimension(300,500));
+		servicePanel.setPreferredSize(new Dimension(100,200));
 		
 		
 		basePanel.add(mapPanel, BorderLayout.CENTER);

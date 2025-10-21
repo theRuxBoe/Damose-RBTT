@@ -1,2 +1,2 @@
-La classe BusPanel è pronta ma bisogna ricontrollare 
+La classe BusPanel ( e anche BusStopPanel e LinePanel) è pronta ma bisogna ricontrollare 
 la logica di creare un oggetto il cui metodo crea un pannello

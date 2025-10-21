@@ -1,11 +1,13 @@
 package frontend.focus;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+import backendDONTPUSH.*;
 
 public class FocusPanel extends JPanel {
 	
@@ -13,11 +15,11 @@ public class FocusPanel extends JPanel {
 	
 	public FocusPanel() {
 		super();
-		this.setLayout(null);	// TODO da sistemare
+		this.setLayout(new BorderLayout());
 		this.setBorder(new BevelBorder(BevelBorder.RAISED));
 		this.setPreferredSize(new Dimension(500,300));
 		this.add(new JLabel("You have selected :"));
-		createPanel();
+		
 		
 	}
 
@@ -30,7 +32,7 @@ public class FocusPanel extends JPanel {
 			this.clear();
 		}
 		BusPanel panel = new BusPanel(b);
-		this.current = panel;
+		this.current = panel.createPanel();
 		current.setVisible(true);
 	}
 	
@@ -41,8 +43,8 @@ public class FocusPanel extends JPanel {
 			current.setVisible(false);
 			this.clear();
 		}
-		BusStopPanel stop = new BusStopPanel(s.getPosition());
-		this.current = stop;
+		BusStopPanel stop = new BusStopPanel(s);
+		this.current = stop.createPanel();
 		current.setVisible(true);
 	}
 	

@@ -1,11 +1,19 @@
 Waypoints :
-	- clickable
-	- take you to the bus stop page
+	- clickable (stand-by)
+	- take you to the bus stop page (stand-by)
 	- get updated from bus positions every 30 seconds
-	- on top of the map, so one layer over the map level
+	x on top of the map, so one layer over the map level 
+
+Favourites logic 
+	- lines and stops must be favouritable
+	- button on the panel to mark them
+	- on the main frame we need a button to open a favourites list to be added on screen
+
+Services dashboard
+
+Vehicles differentiated management
 
 Stop/Bus search panel :
-	- hidden (?)
 	- JTextField to insert bus/stops number
 	- JScrollbar to navigate through buses/stops
 	- every bus/stop panel clickable
@@ -23,7 +31,7 @@ Bus panel focus :
 	- after the bus is clicked this one is opened on the same place as the busstop one
 	- the panel must have :
 		- bus number
-		- bus direction (that can be changed)
+		- bus direction
 		- bus stops in that direction
 		- current position of the bus
 
@@ -38,17 +46,12 @@ Login Panel :
 		- ...
 		
 Main Frame :
-	- every object should be a JPanel
-	- it should have positions already set, like the drawing i'm allegating
-	- panels MUST NOT be created on top of one another
 	- methods :
 		...
 	- fields :
 		...
 TODO 
-	I have to think about adding a third panel class for bus lines, because I discovered that buses
-	aren't treated as bus lines in the data that's sent from roma mobilità, and that could be why 
-	I didn't managed to find a good trade off in their representation
+	
 	
 	Line:
 		shows a list of bus stops (and maybe the current buses) ( and maybe also the actual line on map)
@@ -58,7 +61,3 @@ TODO
 		shows a list of buses with their arrival times	
 	
 
-	
-TODO
- 	should we represent also bus stops?
- 	I really think it would be a time wasting job

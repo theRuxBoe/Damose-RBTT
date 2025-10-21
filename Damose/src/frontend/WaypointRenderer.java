@@ -8,40 +8,28 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
+import backendDONTPUSH.Bus;
+
 public class WaypointRenderer {
 	
-	private Map map;
+	private JXMapViewer map;
+	private HashSet<BusWaypoint> waypoints;
 	
-	public WaypointRenderer(List<GeoPosition> positions, Map map) {
-		setMap(map);
-		paintWaypoints(positions);
-	}
 	
-//	when the map is already set
-	public WaypointRenderer(List<GeoPosition> positions) {
-		paintWaypoints(positions);
-	}
-	
-	private void setMap(Map map) {
-		if (this.map == null) {
-			this.map = map;
-		}
+	public WaypointRenderer(List<Bus> buses, JXMapViewer map) {
+		this.map = map;
+		paintWaypoints(buses);
 	}
 	
 //	TODO placeholder, we need the object that will be returned by back-end
-	
-	private void paintWaypoints(List<GeoPosition> positions) {
-		Set<BusWaypoint> waypoints = new HashSet<>();
-	    for (GeoPosition pos : positions) {
-//	        waypoints.add(new BusWaypoint(pos.getLatitude(), pos.getLongitude()));
-	    }
-
-	    WaypointPainter<BusWaypoint> painter = new WaypointPainter<>();
-	    painter.setWaypoints(waypoints);
+	private void paintWaypoints(List<Bus> buses) {
+		WaypointAggregator wa = new WaypointAggregator(buses);
+		WaypointPainter<BusWaypoint> painter = new WaypointPainter<>();
+	    painter.setWaypoints(wa.getWaypoints());
 	    
-	    JXMapViewer map = (JXMapViewer) this.map.getComponent(0);
+//	    JXMapViewer map = (JXMapViewer) this.map.getComponent(0);
 	    map.setOverlayPainter(painter);
+	    
 	}
-	
 	
 }

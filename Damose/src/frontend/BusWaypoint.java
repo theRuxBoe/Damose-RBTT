@@ -1,6 +1,9 @@
 package frontend;
 
 import java.awt.event.ActionEvent;
+import backendDONTPUSH.*;
+import frontend.focus.BusPanel;
+
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
@@ -17,20 +20,24 @@ public class BusWaypoint extends JButton implements Waypoint {
 	private int line;
 	private String direction;
 	private int seats_available;
-//	private 
 	
 	
 	public BusWaypoint(Bus bus) {
-		this.position = new GeoPosition(bus.lat, bus.lon);
-		this.id = bus.id;
-//		this.listener = add
+		this.position = bus.getPosition();
+		this.id = bus.getId();
+		this.direction = bus.getDirection();
+		this.seats_available = bus.getSeats_available();
+		this.line = bus.getLine();
 		this.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 //				it needs to call the focus panel and to show the clicked bus on it
+				 	// TODO we don't know if that works
+				b.createPanel();
 				
 			}
+		
 		});
 		
 	}

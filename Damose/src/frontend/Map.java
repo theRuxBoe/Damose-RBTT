@@ -3,6 +3,7 @@ package frontend;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 //import java.awt.peer.ComponentPeer;
@@ -27,12 +28,14 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
+
+import backendDONTPUSH.Bus;
+
 import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
-//import javax.swing.*;
 
 public class Map  extends JPanel{
 	
@@ -40,7 +43,16 @@ public class Map  extends JPanel{
 	private JPanel panel;
 	
 
-	
+	public Map() {
+		super(new BorderLayout());
+		setMapPanel();
+		add(panel);
+		List<Bus> list = new ArrayList<Bus>();
+		list.add(new Bus());
+		WaypointRenderer render = new WaypointRenderer(list, map);
+		
+		
+	}
 	
 
 	private void setZooming() {
@@ -102,7 +114,7 @@ public class Map  extends JPanel{
 		f.add(m.getMapPanel());
 		f.setVisible(true);
 		
-	}
 	
+	}
 }
 
