@@ -39,21 +39,29 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 public class Map  extends JPanel{
 	
-	private JXMapViewer map;
+	private static JXMapViewer map;
 	private JPanel panel;
-	
+	private WaypointRenderer renderer;
 
 	public Map() {
 		super(new BorderLayout());
 		setMapPanel();
-		add(panel);
 		List<Bus> list = new ArrayList<Bus>();
 		list.add(new Bus());
-		WaypointRenderer render = new WaypointRenderer(list, map);
-		
+		refreshPaint(list);
 		
 	}
 	
+	
+	
+	public void refreshPaint(List<Bus> buses) {
+ 		if (renderer == null) {
+		WaypointRenderer rend = new WaypointRenderer(buses, getMapViewer());
+		this.renderer = rend;
+ 		}
+ 		renderer.setAndPaintWaypoints(buses);
+ 		
+ 	}
 
 	private void setZooming() {
 		MouseInputListener mice = new PanMouseInputListener(map);
@@ -65,16 +73,17 @@ public class Map  extends JPanel{
 	}
 	
 	
-	
+	public static JXMapViewer getMapViewer() {
+		return map;
+	}
 
 	
 	public JPanel getMapPanel() {
-		return this.panel;
+		return this;
 	}
 	
 	
 	private void setMapPanel() {
-		JPanel p = new JPanel();
 		JXMapViewer map = new JXMapViewer();
 		this.map = map;
 		TileFactoryInfo info = new OSMTileFactoryInfo("OpenStreetMap", "https://tile.openstreetmap.org");
@@ -95,26 +104,24 @@ public class Map  extends JPanel{
 		
 		
 		setZooming();
-		p.setLayout(new BorderLayout());
-		p.add(map);
+		this.add(map);
 		
-		this.panel = p;
 		
 		
 	}
 	
-	public static void main(String[] args) {
-		Map m = new Map();
-		m.setMapPanel();
-		JFrame f = new JFrame();
-		
-		f.setLayout(new BorderLayout());
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(500,500);
-		f.add(m.getMapPanel());
-		f.setVisible(true);
-		
-	
-	}
+//	public static void main(String[] args) {
+//		Map m = new Map();
+//		m.setMapPanel();
+//		JFrame f = new JFrame();
+//		
+//		f.setLayout(new BorderLayout());
+//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		f.setSize(500,500);
+//		f.add(m.getMapPanel());
+//		f.setVisible(true);
+//		
+//	
+//	}
 }
 

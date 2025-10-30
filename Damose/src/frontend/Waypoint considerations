@@ -8,7 +8,6 @@ Outputs :
 	
 Rules :
 	- the waypoints on the map must refresh every time the database is updated
-	- the waypoints need to be clickable to access the bus they are representing
 	
 Steps : 
 	1) getting bus list

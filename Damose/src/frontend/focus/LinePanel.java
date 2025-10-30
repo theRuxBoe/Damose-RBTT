@@ -8,24 +8,36 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import backendDONTPUSH.*;
+import javax.swing.border.BevelBorder;
 
-public class LinePanel extends JPanel { // implements Focusable, Favouritable 
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.Waypoint;
+import org.jxmapviewer.viewer.WaypointPainter;
+
+import backendDONTPUSH.*;
+import frontend.MainFrame;
+import frontend.Map;
+
+public class LinePanel extends JPanel { // implements Focusable,
 	
 	private List<BusStop> stops;
 	private int id;
 	private String direction;
+	private GeoPosition position;
 	
 	
 	public LinePanel(Line l) {
 		super(new GridLayout(1, 3));
 		setPreferredSize(new Dimension(300,400));
-		
+		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		this.id = l.getId();
 		this.direction = l.getDirection();
 		this.stops = l.getStops();
+//		this.position = l.getPosition();
 		addInfo();
 		addScrollPanel();
+		showOnMap();
 		
 	
 	}
@@ -36,7 +48,7 @@ public class LinePanel extends JPanel { // implements Focusable, Favouritable
 	}
 	
 
-		private void addScrollPanel() {
+	private void addScrollPanel() {
 		JPanel support = new JPanel();
 		support.setLayout(new BoxLayout(support, BoxLayout.Y_AXIS));
 		for (BusStop stop : this.stops) {
@@ -53,14 +65,19 @@ public class LinePanel extends JPanel { // implements Focusable, Favouritable
 		this.add(scrollpanel);
 	}
 
+	private void showOnMap() {
+		JXMapViewer m = Map.getMapViewer();
+		m.setCenterPosition(position);
+		WaypointPainter<Waypoint> painter = new WaypointPainter<>();
+	    painter(position);
+	    
+	    m.setOverlayPainter(painter);
+	}
 //	@Override
-//	public JPanel createPanel() {
+//	public static JPanel createPanel() {
 //		JPanel a = this.createLinePanel();
 //		return a;
 //	}
 
-//	@Override
-//	public void setFavourite() {
-////		Favourites.getPreferiti().add(this);  //TODO same as busstoppanel
-//	}
+
 }

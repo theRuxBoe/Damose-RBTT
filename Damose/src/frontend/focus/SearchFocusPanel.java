@@ -12,10 +12,11 @@ public class SearchFocusPanel extends JPanel{
 	private SearchPanel search;
 	
 	public SearchFocusPanel() {
-		// TODO Auto-generated constructor stub
+		super();
+		addPanels();
 	} 
 	
-	public JPanel createPanels() {
+	public void addPanels() {
 		FocusPanel focus = new FocusPanel();
 		SearchPanel search = new SearchPanel();
 		this.focus = focus;
@@ -24,14 +25,13 @@ public class SearchFocusPanel extends JPanel{
 		search.setBorder(new BevelBorder(0)); 
 		
 		
-		search.setPreferredSize(new Dimension(500,500));
+//		search.setPreferredSize(new Dimension(500,500));
 		
 		this.setLayout(new BorderLayout());
 		
 		this.add(search, BorderLayout.NORTH);
 		this.add(focus, BorderLayout.SOUTH);
 		
-		return this;
 		
 	}
 

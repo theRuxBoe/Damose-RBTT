@@ -5,22 +5,30 @@ import backendDONTPUSH.*;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
+import javax.swing.border.BevelBorder;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
 import frontend.MainFrame;
 
-public class BusStopPanel extends JPanel {	//implements Focusable, Favouritable
 
-//	we need to wait until we know how the information is passed from the back-end
+public class BusStopPanel extends JPanel implements Favouritable {	//implements Focusable
+
+	
+//	TODO find the right layout!!!
 	private List<Bus> arrivingBuses;
 	private int id;
 	private GeoPosition position;
@@ -28,24 +36,49 @@ public class BusStopPanel extends JPanel {	//implements Focusable, Favouritable
 	
 	
 	public BusStopPanel(BusStop bs) {
-		super(new GridLayout(1, 3));
+		super();
+		setLayout(new SpringLayout());
 		setPreferredSize(new Dimension(500,200));
-		
+		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		this.id = bs.getId();
 		this.position = bs.getPosition();
 		this.arrivingBuses = bs.getArrivingBuses();
 //		this.name = bs.getName();		
 		addInfo();
-		addScrollPanel();
+//		addScrollPanel();
+		if (MainFrame.isLogged() == true) {
+			addFavouriteButton();
+		}
 	}
 	
 	private JPanel addInfo() {
-		add(new JLabel("Stop id : " + id), 0);
-		add(new JLabel("Name : " + name), 0);
+		add(new JLabel("Stop id : " + id), SpringLayout.VERTICAL_CENTER);
+		add(new JLabel("Name : " + name), SpringLayout.BASELINE);
 		
 		return this;
 	}
 	
+	private void addFavouriteButton() {
+		JButton b = new JButton("☆");
+		b.setSize(new Dimension(10,10));
+		b.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (b.getText() == "☆") {
+					b.setText("★");
+//					this will put the stop into the favourites area
+				}
+				else {
+					b.setText("☆");
+//					this will kick the stop from the favourites
+				}
+				
+			}
+		});
+		this.add(b, SpringLayout.EAST);
+		
+	}
 //	private JPanel createStopPanel() {
 //		JPanel panel = new JPanel();
 //		
@@ -85,9 +118,9 @@ public class BusStopPanel extends JPanel {	//implements Focusable, Favouritable
 //	}
 
 
-//	public void setFavourite() {
-////		Favourites.getPreferiti().add(this); //TODO add a Favourite class for logic in backend
-//	}
+	public void setFavourite() {
+		 //TODO add a Favourite class for logic in backend
+	}
 	
 	
 	

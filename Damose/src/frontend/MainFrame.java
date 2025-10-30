@@ -1,5 +1,7 @@
 package frontend;
 
+//TODO add setimageIcon to put a small logo on the frame
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,19 +10,22 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
+
+import org.jxmapviewer.JXMapViewer;
 
 import frontend.focus.SearchFocusPanel;
 
 public class MainFrame extends JFrame {
 
 	private JFrame frame;
-	private JPanel mapPanel;
+	private static JPanel mapPanel;
 	private JPanel login;
-	private boolean loginIsVisible = false;
+	private static boolean logged;
 	
 	public MainFrame() {
 		
@@ -43,8 +48,7 @@ public class MainFrame extends JFrame {
 //		JPanel focusPanel = new JPanel();
 		
 		frame.add(basePanel);
-		
-		searchPanel.createPanels();
+		searchPanel.addPanels();
 		
 		mapPanel.setBorder(new BevelBorder(1));
 		searchPanel.setBorder(new BevelBorder(0));
@@ -68,19 +72,25 @@ public class MainFrame extends JFrame {
 		
 		
 		
-		
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.pack();
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		frame.setVisible(true);
 	}
 	
 
+ 	public static boolean isLogged() {
+ 		return logged;
+ 	}
+ 	
+ 
+ 
  	
 	
 	public static void main(String[] args) {
 		MainFrame m = new MainFrame();
 		
 		m.setFrame();
+		
 		
 //		m.frame.add(new LoginPanel());
 //		m.frame.setVisible(true);

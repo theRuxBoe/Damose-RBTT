@@ -1,2 +1,14 @@
-La classe BusPanel ( e anche BusStopPanel e LinePanel) è pronta ma bisogna ricontrollare 
-la logica di creare un oggetto il cui metodo crea un pannello
+Mancano sicuramente :
+	- dashboard monitoraggio servizi
+	
+	- fermate preferite
+	
+	- funzioni esclusive per gli utenti registrati
+	
+	- aggiornamento posizione bus sulla mappa
+	
+	- quando l'utente cerca una linea dovrebbero essere mostrati tutti gli autobus 
+			con le rispettive posizioni
+	
+	- ...
+	

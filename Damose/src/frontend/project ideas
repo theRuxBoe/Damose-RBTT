@@ -1,13 +1,11 @@
 Waypoints :
-	- clickable (stand-by)
-	- take you to the bus stop page (stand-by)
 	- get updated from bus positions every 30 seconds
-	x on top of the map, so one layer over the map level 
 
 Favourites logic 
-	- lines and stops must be favouritable
+	- stops must be favouritable
 	- button on the panel to mark them
-	- on the main frame we need a button to open a favourites list to be added on screen
+	- on the main frame we need a button to open a favourites list to be added on screen 
+	- when the app is opened they should appear on the right side
 
 Services dashboard
 
@@ -28,12 +26,11 @@ Busstop panel focus :
 		- the buses are clickable (hopefully) and they will open a bus panel on top of the busstop one
 
 Bus panel focus :
-	- after the bus is clicked this one is opened on the same place as the busstop one
+	- (NOT SURE) after the bus is clicked this one is opened on the same place as the busstop one
 	- the panel must have :
 		- bus number
 		- bus direction
 		- bus stops in that direction
-		- current position of the bus
 
 Login Panel :
 	- hidden (?)
@@ -54,10 +51,15 @@ TODO
 	
 	
 	Line:
-		shows a list of bus stops (and maybe the current buses) ( and maybe also the actual line on map)
+		shows a list of bus stops 
+		displays on the map the current buses
+		(???) displays the actual line on map (???)
 	Bus:
-		shows a waypoint on the map and a panel with its informations (id, line, seats, nearest stop (???))
+		can be converted into a waypoint on the map 
+		shows a panel with its informations BUT it's not focusable, 
+		because we don't need to focus on a particular bus but on the stops
 	Bus Stop:
-		shows a list of buses with their arrival times	
+		shows a panel with a list of buses with their arrival times	
+		shows a waypoint on the map where the stop is
 	
 

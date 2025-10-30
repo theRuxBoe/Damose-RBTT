@@ -1,8 +1,11 @@
 package frontend.focus;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 //import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.concurrent.Flow;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -21,22 +24,23 @@ public class BusPanel extends JPanel {
 	private int seats_available;
 	
 	
-//	when the waypoint is pressed a new buspanel is created to show the vehicle informations
-//	this one represents a concrete instance of the line
-	public BusPanel(BusWaypoint waypoint) {
-		super(new GridLayout(5, 0, 0, 10));
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		setPreferredSize(new Dimension(500,200));
-		this.position = waypoint.getPosition();
-		this.id = waypoint.getId();
-		this.line = waypoint.getLine();
-		this.direction = waypoint.getDirection();
-		this.seats_available = waypoint.getSeats_available();
-		addInfo();
-	}
+
+//	public BusPanel(BusWaypoint waypoint) {
+//		super(new GridLayout(5, 0, 0, 10));
+//		setBorder(new BevelBorder(BevelBorder.LOWERED));
+//		setPreferredSize(new Dimension(500,200));
+//		
+//		this.position = waypoint.getPosition();
+//		this.id = waypoint.getId();
+//		this.line = waypoint.getLine();
+//		this.direction = waypoint.getDirection();
+//		this.seats_available = waypoint.getSeats_available();
+//		addInfo();
+//	}
 	
 	public BusPanel(Bus b) {
-		super(new GridLayout(5, 0, 0, 10));
+		super(new GridLayout(5, 1, 11, 0));
+//		super(new FlowLayout(FlowLayout.TRAILING, 100, 3));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setPreferredSize(new Dimension(500,200));
 		this.position = b.getPosition();
