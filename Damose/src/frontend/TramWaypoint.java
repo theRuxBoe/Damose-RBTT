@@ -9,8 +9,8 @@ public class TramWaypoint  implements Waypoint{
 	
 	private GeoPosition position;
 	
-	public TramWaypoint(Tram t) {
-		this.position = t.getPosition();
+	public TramWaypoint() { 	//Tram t
+//		this.position = t.getPosition();
 		
 	}
 	

@@ -7,6 +7,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+
+import org.jxmapviewer.viewer.GeoPosition;
+
 import backendDONTPUSH.*;
 
 public class FocusPanel extends JPanel {
@@ -22,7 +25,6 @@ public class FocusPanel extends JPanel {
 //		label.setSize(new Dimension(50,30));
 		this.add(label, BorderLayout.NORTH);
 //		setBus(new Bus());
-		
 	}
 
 	

@@ -29,6 +29,10 @@ public class BusWaypoint implements Waypoint {
 //		super();
 		this.position = bus.getPosition();
 	}
+	
+	public BusWaypoint(GeoPosition pos) {
+		this.position = pos;
+	}
 //		this.id = bus.getId();
 //		this.direction = bus.getDirection();
 //		this.seats_available = bus.getSeats_available();

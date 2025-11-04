@@ -14,15 +14,15 @@ public class LoginPanel extends JPanel{
 
 	private JTextField name;
 	private JPasswordField pwd;
-	private JPanel pane;
 	
 	public LoginPanel() {
-		openLoginPanel();
+		super(new BorderLayout());
+		addInnerPanel();
+	
 	}
 	
-	private void openLoginPanel() {
+	private void addInnerPanel() {
 //		opens the login panel where you can type name and password for all-feature access
-		JPanel panel = new JPanel();
 		JPanel innerPanel = new JPanel(new FlowLayout());
 //		panel.setLayout();
 		JTextField name = new JTextField("Name", 20);
@@ -63,13 +63,14 @@ public class LoginPanel extends JPanel{
 		innerPanel.add(name);
 		innerPanel.add(pwd);
 		
-		panel.setLayout(new BorderLayout());
 //		panel.setLayer(innerPanel, 0);
-		panel.add(innerPanel, BorderLayout.CENTER);
-		panel.add(new JLabel("Damose - Rome Bus Transit Tracker"), BorderLayout.NORTH);
-		panel.add(new JButton("Login"), BorderLayout.SOUTH);
-		panel.setVisible(true);
-		this.pane = panel;
+		this.add(innerPanel, BorderLayout.CENTER);
+	}
+	
+	private void addInfos() {
+		this.add(new JLabel("Damose - Rome Bus Transit Tracker"), BorderLayout.NORTH);
+		this.add(new JButton("Login"), BorderLayout.SOUTH);
+//		this.setVisible(true);
 	}
 	
 	public boolean isUserValid() {
@@ -92,7 +93,7 @@ public class LoginPanel extends JPanel{
 	}
 	
 	public JPanel getLoginPanel() {
-		return pane;
+		return this;
 	}
 	
 	public String getName() {
@@ -103,20 +104,20 @@ public class LoginPanel extends JPanel{
 		return pwd.getPassword();
 	}
 	
-	public static void main(String[] args) {
-		LoginPanel l = new LoginPanel();
-		JFrame f = new JFrame();
-		
-		
-		
-		f.setLayout(new BorderLayout());
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		f.add(l.getLoginPanel(), BorderLayout.CENTER);
-		f.pack();
-		f.setVisible(true);
-		f.requestFocus();
-		
-	}
+//	public static void main(String[] args) {
+//		LoginPanel l = new LoginPanel();
+//		JFrame f = new JFrame();
+//		
+//		
+//		
+//		f.setLayout(new BorderLayout());
+//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		
+//		f.add(l.getLoginPanel(), BorderLayout.CENTER);
+//		f.pack();
+//		f.setVisible(true);
+//		f.requestFocus();
+//		
+//	}
 	
 }

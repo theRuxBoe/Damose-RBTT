@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -20,9 +21,14 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.border.BevelBorder;
 
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.Waypoint;
+import org.jxmapviewer.viewer.WaypointPainter;
 
+import frontend.BusWaypoint;
 import frontend.MainFrame;
+import frontend.Map;
 
 
 public class BusStopPanel extends JPanel implements Favouritable {	//implements Focusable
@@ -37,7 +43,7 @@ public class BusStopPanel extends JPanel implements Favouritable {	//implements 
 	
 	public BusStopPanel(BusStop bs) {
 		super();
-		setLayout(new SpringLayout());
+		setLayout(new FlowLayout());
 		setPreferredSize(new Dimension(500,200));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		this.id = bs.getId();
@@ -49,6 +55,7 @@ public class BusStopPanel extends JPanel implements Favouritable {	//implements 
 		if (MainFrame.isLogged() == true) {
 			addFavouriteButton();
 		}
+		showOnMap();
 	}
 	
 	private JPanel addInfo() {
@@ -78,6 +85,18 @@ public class BusStopPanel extends JPanel implements Favouritable {	//implements 
 		});
 		this.add(b, SpringLayout.EAST);
 		
+	}
+	
+	private void showOnMap() {
+		JXMapViewer m = Map.getMapViewer();
+		m.setCenterPosition(position);
+		WaypointPainter<Waypoint> painter = new WaypointPainter<>();
+		HashSet<BusWaypoint> h = new HashSet();
+		h.add(new BusWaypoint(this.position));
+		
+		painter.setWaypoints(h);
+	    
+	    m.setOverlayPainter(painter);
 	}
 //	private JPanel createStopPanel() {
 //		JPanel panel = new JPanel();

@@ -1,7 +1,9 @@
 package frontend.focus;
 
+import frontend.*;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -37,7 +39,6 @@ public class LinePanel extends JPanel { // implements Focusable,
 //		this.position = l.getPosition();
 		addInfo();
 		addScrollPanel();
-		showOnMap();
 		
 	
 	}
@@ -65,14 +66,7 @@ public class LinePanel extends JPanel { // implements Focusable,
 		this.add(scrollpanel);
 	}
 
-	private void showOnMap() {
-		JXMapViewer m = Map.getMapViewer();
-		m.setCenterPosition(position);
-		WaypointPainter<Waypoint> painter = new WaypointPainter<>();
-	    painter(position);
-	    
-	    m.setOverlayPainter(painter);
-	}
+	
 //	@Override
 //	public static JPanel createPanel() {
 //		JPanel a = this.createLinePanel();

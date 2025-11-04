@@ -18,6 +18,7 @@ import javax.swing.border.CompoundBorder;
 
 import org.jxmapviewer.JXMapViewer;
 
+import frontend.focus.FavouritesPanel;
 import frontend.focus.SearchFocusPanel;
 
 public class MainFrame extends JFrame {
@@ -28,14 +29,32 @@ public class MainFrame extends JFrame {
 	private static boolean logged;
 	
 	public MainFrame() {
-		
+		createBaseFrame();
 	}
 	
 	
 //	the search panel will arrive from its class already split in two panels
 //	to show the main search panel and the focused one
 	
- 	public void setFrame() {
+	private void addSwitchButton() {
+		JButton b = new JButton("search");
+		b.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				b.setText("prefe");
+				getFrame().add(new SearchFocusPanel(), BorderLayout.EAST);
+				getFrame().repaint();
+				
+			}
+		});
+	}
+	
+	public JFrame getFrame() {
+		return frame;
+	}
+	
+ 	private void createBaseFrame() {
 // 		TODO add every panel to a field in this class
 		JFrame f = new JFrame("Damose");
 		JLayeredPane basePanel = new JLayeredPane();
@@ -43,27 +62,26 @@ public class MainFrame extends JFrame {
 		this.frame = f;
 		
 		JPanel mapPanel = new Map();
-		SearchFocusPanel searchPanel = new SearchFocusPanel();
+		FavouritesPanel favouritePanel = new FavouritesPanel();
 		JPanel servicePanel = new JPanel();
 //		JPanel focusPanel = new JPanel();
 		
 		frame.add(basePanel);
-		searchPanel.addPanels();
-		
+				
 		mapPanel.setBorder(new BevelBorder(1));
-		searchPanel.setBorder(new BevelBorder(0));
+		favouritePanel.setBorder(new BevelBorder(0));
 		servicePanel.setBorder(new BevelBorder(0));
 //		focusPanel.setBorder(new BevelBorder(1));
 		
 		basePanel.setLayout(new BorderLayout());
 		
 		mapPanel.setPreferredSize(new Dimension(500,500));
-		searchPanel.setPreferredSize(new Dimension(300,500));
+		favouritePanel.setPreferredSize(new Dimension(300,500));
 		servicePanel.setPreferredSize(new Dimension(100,200));
 		
 		
 		basePanel.add(mapPanel, BorderLayout.CENTER);
-		basePanel.add(searchPanel, BorderLayout.EAST);
+		basePanel.add(favouritePanel, BorderLayout.EAST);
 		basePanel.add(servicePanel, BorderLayout.WEST);
 //		basePanel.add(focusPanel, BorderLayout.SOUTH);
 		
@@ -89,7 +107,7 @@ public class MainFrame extends JFrame {
 	public static void main(String[] args) {
 		MainFrame m = new MainFrame();
 		
-		m.setFrame();
+//		m.setFrame();
 		
 		
 //		m.frame.add(new LoginPanel());
