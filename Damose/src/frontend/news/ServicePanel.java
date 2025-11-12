@@ -11,7 +11,8 @@ public class ServicePanel extends ScrollablePanel{	// TODO create a superclass o
 		add(new JLabel("Real-Time service updates : "));
 //		NewsData news = new NewsData();
 //		news.getNews();
-//		setContent(news.getNews());
+//		setContentList(news.getNews());
+		
 		
 	}
 	

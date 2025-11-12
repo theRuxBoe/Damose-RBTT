@@ -6,14 +6,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-public class ScrollablePanel extends JPanel{
+public abstract class ScrollablePanel extends JPanel{
 	
 //	private JScrollPane addScrollPanel() {
 //		
 //		return p;
 //	}
 	
-	private JScrollPane setContent(List<JPanel> panels) {
+	public JScrollPane setContent(List<JPanel> panels) {
 		JPanel support = new JPanel();
 		support.setLayout(new BoxLayout(support, 0));
 		for ( JPanel p : panels) {
@@ -23,4 +23,8 @@ public class ScrollablePanel extends JPanel{
 		return scroll;
 	}
 	
+//	we are making a method to convert a given list of elements into a list of panels (lines, bus stops, news, ...)
+//	public List<JPanel> setList(List<Object> x) {
+//		
+//	}
 }

@@ -12,8 +12,8 @@ import javax.swing.*;
 
 public class LoginPanel extends JPanel{
 
-	private JTextField name;
-	private JPasswordField pwd;
+	private String name;
+	private char[] pwd;
 	
 	public LoginPanel() {
 		super(new BorderLayout());
@@ -58,8 +58,8 @@ public class LoginPanel extends JPanel{
 			}
 		});
 		
-		this.name = name;
-		this.pwd = pwd;
+		this.name = name.getText();
+		this.pwd = pwd.getPassword();
 		innerPanel.add(name);
 		innerPanel.add(pwd);
 		
@@ -76,7 +76,7 @@ public class LoginPanel extends JPanel{
 	public boolean isUserValid() {
 		
 //		checks the database for user's data
-		String n = name.getText();
+		String n = name;
 		char[] p = getPwd();
 		
 //		retrieves data from user's info file
@@ -97,11 +97,11 @@ public class LoginPanel extends JPanel{
 	}
 	
 	public String getName() {
-		return name.getText();
+		return name;
 	}
 	
 	private char[] getPwd() {
-		return pwd.getPassword();
+		return pwd;
 	}
 	
 //	public static void main(String[] args) {
