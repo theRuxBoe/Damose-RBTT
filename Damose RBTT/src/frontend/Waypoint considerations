@@ -1,0 +1,20 @@
+Inputs :
+	-list of buses send by the backend
+	- (maybe) the map which will have the waypoints painted
+	- 
+
+Outputs : 
+	- waypoints on the map
+	
+Rules :
+	- the waypoints on the map must refresh every time the database is updated
+	
+Steps : 
+	1) getting bus list
+		1.5) fetching from every bus its geoposition
+		1.6) adding it to the list (I think the painter method needs a set)
+	2) turning the list into a list of paintable waypoints
+		2.5) adding this list as a field on ??? TODO
+	3) painting the list of waypoints on the map
+	4) repeat from 1) about every 30 seconds
+	

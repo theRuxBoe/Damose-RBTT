@@ -14,6 +14,7 @@ public class LoginPanel extends JPanel{
 
 	private JTextField name;
 	private JPasswordField pwd;
+<<<<<<< Updated upstream
 	private JPanel pane;
 	
 	public LoginPanel() {
@@ -23,6 +24,17 @@ public class LoginPanel extends JPanel{
 	private void openLoginPanel() {
 //		opens the login panel where you can type name and password for all-feature access
 		JPanel panel = new JPanel();
+=======
+	
+	public LoginPanel() {
+		super(new BorderLayout());
+		addInnerPanel();
+	
+	}
+	
+	private void addInnerPanel() {
+//		opens the login panel where you can type name and password for all-feature access
+>>>>>>> Stashed changes
 		JPanel innerPanel = new JPanel(new FlowLayout());
 //		panel.setLayout();
 		JTextField name = new JTextField("Name", 20);
@@ -63,6 +75,7 @@ public class LoginPanel extends JPanel{
 		innerPanel.add(name);
 		innerPanel.add(pwd);
 		
+<<<<<<< Updated upstream
 		panel.setLayout(new BorderLayout());
 //		panel.setLayer(innerPanel, 0);
 		panel.add(innerPanel, BorderLayout.CENTER);
@@ -70,6 +83,16 @@ public class LoginPanel extends JPanel{
 		panel.add(new JButton("Login"), BorderLayout.SOUTH);
 		panel.setVisible(true);
 		this.pane = panel;
+=======
+//		panel.setLayer(innerPanel, 0);
+		this.add(innerPanel, BorderLayout.CENTER);
+	}
+	
+	private void addInfos() {
+		this.add(new JLabel("Damose - Rome Bus Transit Tracker"), BorderLayout.NORTH);
+		this.add(new JButton("Login"), BorderLayout.SOUTH);
+//		this.setVisible(true);
+>>>>>>> Stashed changes
 	}
 	
 	public boolean isUserValid() {
@@ -92,7 +115,11 @@ public class LoginPanel extends JPanel{
 	}
 	
 	public JPanel getLoginPanel() {
+<<<<<<< Updated upstream
 		return pane;
+=======
+		return this;
+>>>>>>> Stashed changes
 	}
 	
 	public String getName() {
@@ -103,6 +130,7 @@ public class LoginPanel extends JPanel{
 		return pwd.getPassword();
 	}
 	
+<<<<<<< Updated upstream
 	public static void main(String[] args) {
 		LoginPanel l = new LoginPanel();
 		JFrame f = new JFrame();
@@ -118,5 +146,22 @@ public class LoginPanel extends JPanel{
 		f.requestFocus();
 		
 	}
+=======
+//	public static void main(String[] args) {
+//		LoginPanel l = new LoginPanel();
+//		JFrame f = new JFrame();
+//		
+//		
+//		
+//		f.setLayout(new BorderLayout());
+//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		
+//		f.add(l.getLoginPanel(), BorderLayout.CENTER);
+//		f.pack();
+//		f.setVisible(true);
+//		f.requestFocus();
+//		
+//	}
+>>>>>>> Stashed changes
 	
 }

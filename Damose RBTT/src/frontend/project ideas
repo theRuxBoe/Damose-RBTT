@@ -1,4 +1,5 @@
 Waypoints :
+<<<<<<< Updated upstream
 	- clickable
 	- take you to the bus stop page
 	- get updated from bus positions every 30 seconds
@@ -6,6 +7,21 @@ Waypoints :
 
 Stop/Bus search panel :
 	- hidden (?)
+=======
+	- get updated from bus positions every 30 seconds
+
+Favourites logic 
+	- stops must be favouritable
+	- button on the panel to mark them
+	- on the main frame we need a button to open a favourites list to be added on screen 
+	- when the app is opened they should appear on the right side
+
+Services dashboard
+
+Vehicles differentiated management
+
+Stop/Bus search panel :
+>>>>>>> Stashed changes
 	- JTextField to insert bus/stops number
 	- JScrollbar to navigate through buses/stops
 	- every bus/stop panel clickable
@@ -20,12 +36,20 @@ Busstop panel focus :
 		- the buses are clickable (hopefully) and they will open a bus panel on top of the busstop one
 
 Bus panel focus :
+<<<<<<< Updated upstream
 	- after the bus is clicked this one is opened on the same place as the busstop one
 	- the panel must have :
 		- bus number
 		- bus direction (that can be changed)
 		- bus stops in that direction
 		- current position of the bus
+=======
+	- (NOT SURE) after the bus is clicked this one is opened on the same place as the busstop one
+	- the panel must have :
+		- bus number
+		- bus direction
+		- bus stops in that direction
+>>>>>>> Stashed changes
 
 Login Panel :
 	- hidden (?)
@@ -38,14 +62,18 @@ Login Panel :
 		- ...
 		
 Main Frame :
+<<<<<<< Updated upstream
 	- every object should be a JPanel
 	- it should have positions already set, like the drawing i'm allegating
 	- panels MUST NOT be created on top of one another
+=======
+>>>>>>> Stashed changes
 	- methods :
 		...
 	- fields :
 		...
 TODO 
+<<<<<<< Updated upstream
 	I have to think about adding a third panel class for bus lines, because I discovered that buses
 	aren't treated as bus lines in the data that's sent from roma mobilità, and that could be why 
 	I didn't managed to find a good trade off in their representation
@@ -62,3 +90,20 @@ TODO
 TODO
  	should we represent also bus stops?
  	I really think it would be a time wasting job
+=======
+	
+	
+	Line:
+		shows a list of bus stops 
+		displays on the map the current buses
+		(???) displays the actual line on map (???)
+	Bus:
+		can be converted into a waypoint on the map 
+		shows a panel with its informations BUT it's not focusable, 
+		because we don't need to focus on a particular bus but on the stops
+	Bus Stop:
+		shows a panel with a list of buses with their arrival times	
+		shows a waypoint on the map where the stop is
+	
+
+>>>>>>> Stashed changes
