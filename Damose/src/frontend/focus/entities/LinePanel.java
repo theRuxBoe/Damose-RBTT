@@ -1,8 +1,10 @@
-package frontend.focus;
+package frontend.focus.entities;
 
 import frontend.*;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,11 +19,11 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import backendDONTPUSH.*;
 import frontend.MainFrame;
 import frontend.Map;
+import frontend.focus.SearchFocusPanel;
 
-public class LinePanel extends JPanel { // implements Focusable,
+public class LinePanel extends ScrollablePanel { 
 	
 	private List<BusStop> stops;
 	private int id;
@@ -38,9 +40,40 @@ public class LinePanel extends JPanel { // implements Focusable,
 		this.stops = l.getStops();
 //		this.position = l.getPosition();
 		addInfo();
-		addScrollPanel();
+//		addScrollPanel();
+//		setContent(Line.getStops());
 		
 	
+	}
+	
+	private void addListener() {
+		addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				SearchFocusPanel.getFocus().setLine(LinePanel.this);
+			}
+		});
 	}
 	
 	private void addInfo() {
@@ -66,12 +99,6 @@ public class LinePanel extends JPanel { // implements Focusable,
 		this.add(scrollpanel);
 	}
 
-	
-//	@Override
-//	public static JPanel createPanel() {
-//		JPanel a = this.createLinePanel();
-//		return a;
-//	}
 
 
 }

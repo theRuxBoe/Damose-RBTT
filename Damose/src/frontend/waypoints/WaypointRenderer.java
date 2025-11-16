@@ -1,4 +1,4 @@
-package frontend;
+package frontend.waypoints;
 
 import java.util.*;
 
@@ -9,7 +9,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import backendDONTPUSH.Bus;
 
 public class WaypointRenderer {
 	

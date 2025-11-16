@@ -4,7 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import frontend.ScrollablePanel;
 
-public class ServicePanel extends ScrollablePanel{	// TODO create a superclass of panels who needs scrollpanels
+public class ServicePanel extends ScrollablePanel{
 	
 	public ServicePanel() {
 		super();

@@ -2,7 +2,9 @@ package frontend.focus;
 
 import javax.swing.JPanel;
 
-public class FavouritesPanel extends JPanel{
+import frontend.ScrollablePanel;
+
+public class FavouritesPanel extends ScrollablePanel{
 
 	
 	public FavouritesPanel() {

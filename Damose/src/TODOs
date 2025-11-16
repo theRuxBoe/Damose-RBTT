@@ -1,0 +1,8 @@
+MainFrame	//TODO add setimageIcon to put a small logo on the frame
+			// 		TODO add every panel to a field in this class
+			
+FocusPanel	//TODO I should use a single method for all three entities, and maybe one for panels (factory pattern for lines, stops and buses)
+
+BusStopPanel	//	TODO find the right layout!!!
+				//	show the stop waypoint on map ???
+				

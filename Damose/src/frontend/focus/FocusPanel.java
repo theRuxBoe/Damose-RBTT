@@ -10,7 +10,9 @@ import javax.swing.border.BevelBorder;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import backendDONTPUSH.*;
+import frontend.focus.entities.BusPanel;
+import frontend.focus.entities.BusStopPanel;
+import frontend.focus.entities.LinePanel;
 
 public class FocusPanel extends JPanel {
 	
@@ -24,43 +26,31 @@ public class FocusPanel extends JPanel {
 		JLabel label = new JLabel("You have selected : ");
 //		label.setSize(new Dimension(50,30));
 		this.add(label, BorderLayout.NORTH);
-//		setBus(new Bus());
+
 	}
 
-	
-	public void setBus(Bus b) {
-		
-		if (current != null) {
-			current.setVisible(false);
-			this.clear();
-		}
-		this.current = new BusPanel(b);
-		this.add(current);
-		current.setVisible(true);
-	}
-	
 
-	public void setStop(BusStop s) {
+	
+	public void setFocusFromBackend(Object o) {		//just a placeholder, this will accept the superclass for bus, lines and stops
+//													we need a factory pattern which decides what to instantiate based on the type of the object given
 		if (current != null) {
-			current.setVisible(false);
 			this.clear();
 		}
-		this.current = new BusStopPanel(s);
+//		this.current = new FocusPanelFactory(o);
 		this.add(current);
-		current.setVisible(true);
+		repaint();
 	}
 	
-	public void setLine(Line l) {
+	public void setFocusFromPanel(JPanel p) {
 		if (current != null) {
-			current.setVisible(false);
 			this.clear();
 		}
-		this.current = new LinePanel(l);
+		this.current = p;
 		this.add(current);
-		current.setVisible(true);
+//		current.setVisible(true);
+		repaint();
 	}
 	
-
 	
 	public void clear() {
 		current = null;

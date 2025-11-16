@@ -1,4 +1,4 @@
-package frontend;
+package frontend.waypoints;
 
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;

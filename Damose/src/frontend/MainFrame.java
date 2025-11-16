@@ -1,6 +1,6 @@
 package frontend;
 
-//TODO add setimageIcon to put a small logo on the frame
+
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -33,9 +33,6 @@ public class MainFrame extends JFrame {
 	}
 	
 	
-//	the search panel will arrive from its class already split in two panels
-//	to show the main search panel and the focused one
-	
 	private void addSwitchButton() {
 		JButton b = new JButton("search");
 		b.addActionListener(new ActionListener() {
@@ -55,7 +52,7 @@ public class MainFrame extends JFrame {
 	}
 	
  	private void createBaseFrame() {
-// 		TODO add every panel to a field in this class
+
 		JFrame f = new JFrame("Damose");
 		JLayeredPane basePanel = new JLayeredPane();
 		
@@ -106,11 +103,5 @@ public class MainFrame extends JFrame {
 	
 	public static void main(String[] args) {
 		MainFrame m = new MainFrame();
-		
-//		m.setFrame();
-		
-		
-//		m.frame.add(new LoginPanel());
-//		m.frame.setVisible(true);
 	}
 }

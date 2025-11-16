@@ -29,7 +29,7 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
-import backendDONTPUSH.Bus;
+import frontend.waypoints.WaypointRenderer;
 
 import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
@@ -109,19 +109,5 @@ public class Map  extends JPanel{
 		
 		
 	}
-	
-//	public static void main(String[] args) {
-//		Map m = new Map();
-//		m.setMapPanel();
-//		JFrame f = new JFrame();
-//		
-//		f.setLayout(new BorderLayout());
-//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		f.setSize(500,500);
-//		f.add(m.getMapPanel());
-//		f.setVisible(true);
-//		
-//	
-//	}
 }
 

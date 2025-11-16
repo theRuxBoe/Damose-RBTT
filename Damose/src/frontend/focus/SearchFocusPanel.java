@@ -8,7 +8,7 @@ import javax.swing.border.BevelBorder;
 
 public class SearchFocusPanel extends JPanel{
 
-	private FocusPanel focus;
+	private static FocusPanel focus;
 	private SearchPanel search;
 	
 	public SearchFocusPanel() {
@@ -21,28 +21,21 @@ public class SearchFocusPanel extends JPanel{
 		SearchPanel search = new SearchPanel();
 		this.focus = focus;
 		this.search = search;
-		
 		search.setBorder(new BevelBorder(0)); 
-		
-		
-//		search.setPreferredSize(new Dimension(500,500));
-		
 		this.setLayout(new BorderLayout());
-		
 		this.add(search, BorderLayout.NORTH);
 		this.add(focus, BorderLayout.SOUTH);
-		
-		
 	}
 
-	public FocusPanel getFocus() {
+	
+	public static FocusPanel getFocus() {
 		return focus;
 	}
 
+	
 	public SearchPanel getSearch() {
 		return search;
 	}
-	
 	
 	
 }

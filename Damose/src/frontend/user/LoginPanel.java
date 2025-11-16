@@ -1,4 +1,4 @@
-package frontend;
+package frontend.user;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -80,10 +80,7 @@ public class LoginPanel extends JPanel{
 		char[] p = getPwd();
 		
 //		retrieves data from user's info file
-		
-//		code
-		
-//		code
+
 		
 //		checks if exists an user with the same name and then compares the passwords
 //		TODO should we use an exception or just a message? I would prefer the second one!
@@ -104,20 +101,5 @@ public class LoginPanel extends JPanel{
 		return pwd;
 	}
 	
-//	public static void main(String[] args) {
-//		LoginPanel l = new LoginPanel();
-//		JFrame f = new JFrame();
-//		
-//		
-//		
-//		f.setLayout(new BorderLayout());
-//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		
-//		f.add(l.getLoginPanel(), BorderLayout.CENTER);
-//		f.pack();
-//		f.setVisible(true);
-//		f.requestFocus();
-//		
-//	}
 	
 }

@@ -51,30 +51,6 @@ public class SearchPanel extends JPanel {
 		});
 		JButton b = new JButton("🔎");
 		b.setPreferredSize(b.getMaximumSize());
-//		
-//		b.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				
-//			}
-////				we call the database search method (which we don't know at the moment)
-//				System.out.println(text.getText()); 
-////				then we put all the data we get from backend into the panel
-//				JPanel finale = new JPanel();
-//				for (Searchable s : data_retrieved) { 	// da rivedere TODO
-//					if (s instanceof Line) {
-//						finale.add(new LinePanel(s));
-//					}
-//					else {
-//						finale.add(new BusStopPanel(s));
-//						
-//					}
-//					
-//				}
-//				scroller.add(finale);
-//			}
-//		});
 		panel.add(text);
 		panel.add(b);
 		this.add(panel);
