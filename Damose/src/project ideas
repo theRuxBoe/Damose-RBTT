@@ -1,5 +1,7 @@
-Waypoints :
-	- get updated from bus positions every 30 seconds
+Panels inside the mainframe could be generated forever but we just want to switch between
+favourites and normal focus panel, so we have to keep track of their index e/o 
+their name ( hence we must save them somewhere)
+
 
 Favourites logic 
 	- stops must be favouritable
@@ -8,8 +10,6 @@ Favourites logic
 	- when the app is opened they should appear on the right side
 
 Services dashboard
-
-Bus position updating every 30 seconds
 
 Vehicles differentiated management
 
@@ -25,30 +25,20 @@ Busstop panel focus :
 		- bus stop number
 		- JScrollBar of next buses with their arrival time
 		- every bus has the number of seats displayed
-		- the buses are clickable (hopefully) and they will open a bus panel on top of the busstop one
 
 Bus panel focus :
-	- (NOT SURE) after the bus is clicked this one is opened on the same place as the busstop one
 	- the panel must have :
 		- bus number
 		- bus direction
-		- bus stops in that direction
 
 Login Panel :
 	- hidden (?)
-	- jtextfield for name and password (X)
-	- method to check the correctness of them
+	- exception handling just for flex
 	- exception to print a message of various types:
 		- the user isn't present in the database
 		- the password is too short
 		- the password is wrong
 		- ...
-		
-Main Frame :
-	- methods :
-		...
-	- fields :
-		...
 TODO 
 	
 	
