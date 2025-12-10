@@ -1,0 +1,7 @@
+MainFrame	// 		add setimageIcon to put a small logo on the frame
+			
+FocusPanel	//		I should use a single method for all three entities, and maybe one for panels (factory pattern for lines, stops and buses)
+
+BusStopPanel	//	find the right layout!!!
+				//	show the stop waypoint on map ???
+				
