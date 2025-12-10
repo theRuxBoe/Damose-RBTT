@@ -28,8 +28,6 @@ public class MainFrame extends JFrame {
 		
 		openLogin();
 		
-		
-		
 		pack();
 		setVisible(true);		
 	}
@@ -56,12 +54,10 @@ public class MainFrame extends JFrame {
 	
 	
  	private void createDefaultPanels() {
-
-		
 		JLayeredPane basePanel = new JLayeredPane();
 		basePanel.setLayout(new BorderLayout());
 		
-		Map mapPanel = new Map();			//TODO da capireeee
+		Map mapPanel = new Map();			
 		ServicePanel servicePanel = new ServicePanel();
 		
 		add(basePanel, BorderLayout.CENTER);
@@ -73,7 +69,9 @@ public class MainFrame extends JFrame {
 	}
  	
  	private void setCurrentRightPanel(JPanel p) {
- 		this.getBasePanel().getComponents();
+ 		this.remove(getBasePanel());
+ 		this.add(p);
+ 		
  		
  	}
  	
