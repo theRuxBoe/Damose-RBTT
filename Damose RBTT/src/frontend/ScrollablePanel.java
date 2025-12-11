@@ -1,4 +1,4 @@
-package main.frontend;
+package frontend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import main.frontend.focus.entities.EntitiesPanelFactory;
+import frontend.focus.entities.EntitiesPanelFactory;
 
 public abstract class ScrollablePanel extends JPanel{
 	

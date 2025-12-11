@@ -1,4 +1,4 @@
-package main.frontend.focus.entities;
+package frontend.focus.entities;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,7 +12,7 @@ import javax.swing.border.BevelBorder;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import main.frontend.waypoints.BusWaypoint;
+import frontend.waypoints.BusWaypoint;
 
 public class BusPanel extends JPanel {
 	

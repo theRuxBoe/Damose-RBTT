@@ -1,4 +1,4 @@
-package main.frontend;
+package frontend;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,7 +30,7 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
-import main.frontend.waypoints.WaypointRenderer;
+import frontend.waypoints.WaypointRenderer;
 
 import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;

@@ -1,11 +1,11 @@
-package main.frontend.focus.entities;
+package frontend.focus.entities;
 
 import javax.swing.JPanel;
 
 public class EntitiesPanelFactory {
 
 	
-	public JPanel createPanel(Entity e) {
+	public JPanel createPanel(DatoGtf e) {
 		JPanel p;
 		if (e instanceof BusStop) {
 			p = new BusStopPanel(e);

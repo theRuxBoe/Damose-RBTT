@@ -1,4 +1,4 @@
-package main.frontend.focus.entities;
+package frontend.focus.entities;
 
 
 import java.awt.Color;
@@ -28,30 +28,32 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import main.frontend.MainFrame;
-import main.frontend.Map;
-import main.frontend.ScrollablePanel;
-import main.frontend.focus.SearchFocusPanel;
-import main.frontend.waypoints.BusWaypoint;
+import backend.model.Corsa;
+import backend.model.Fermata;
+import frontend.MainFrame;
+import frontend.Map;
+import frontend.ScrollablePanel;
+import frontend.focus.SearchFocusPanel;
+import frontend.waypoints.BusWaypoint;
 
 
-public class BusStopPanel extends ScrollablePanel {	//implements Focusable
+public class BusStopPanel extends ScrollablePanel {
 
 	
 
-	private List<Bus> arrivingBuses;
-	private int id;
+	private List<Corsa> arrivingBuses;
+	private String id;
 	private GeoPosition position;
 	private String name;
 	
 	
-	public BusStopPanel(BusStop bs) {
+	public BusStopPanel(Fermata bs) {
 		super();
 		setLayout(new FlowLayout());
 		setPreferredSize(new Dimension(500,200));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		this.id = bs.getId();
-		this.position = bs.getPosition();
+		this.id = bs.getStopId();
+		this.position = new GeoPosition(bs.getLat(), bs.getLon());
 		this.arrivingBuses = bs.getArrivingBuses();
 //		this.name = bs.getName();		
 		addInfo();

@@ -1,4 +1,4 @@
-package main.frontend.news;
+package frontend.news;
 
 import java.awt.Dimension;
 
@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import main.frontend.ScrollablePanel;
+import frontend.ScrollablePanel;
 
 public class ServicePanel extends ScrollablePanel{
 	

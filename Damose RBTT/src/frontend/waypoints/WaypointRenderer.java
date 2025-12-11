@@ -1,4 +1,4 @@
-package main.frontend.waypoints;
+package frontend.waypoints;
 
 import java.util.*;
 

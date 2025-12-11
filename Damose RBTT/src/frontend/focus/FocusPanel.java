@@ -10,10 +10,10 @@ import javax.swing.border.BevelBorder;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import main.frontend.focus.entities.BusPanel;
-import main.frontend.focus.entities.BusStopPanel;
-import main.frontend.focus.entities.EntitiesPanelFactory;
-import main.frontend.focus.entities.LinePanel;
+import frontend.focus.entities.BusPanel;
+import frontend.focus.entities.BusStopPanel;
+import frontend.focus.entities.EntitiesPanelFactory;
+import frontend.focus.entities.LinePanel;
 
 public class FocusPanel extends JPanel {
 	

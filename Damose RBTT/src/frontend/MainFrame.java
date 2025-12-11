@@ -1,4 +1,4 @@
-package main.frontend;
+package frontend;
 
 //TODO promemoria : separare dalla classe mainframe tutta la parte di dialogo con il loginpanel
 
@@ -10,10 +10,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-import main.frontend.focus.FavouritesPanel;
-import main.frontend.focus.SearchFocusPanel;
-import main.frontend.news.ServicePanel;
-import main.frontend.user.LoginPanel;
+import frontend.focus.FavouritesPanel;
+import frontend.focus.SearchFocusPanel;
+import frontend.news.ServicePanel;
+import frontend.user.LoginPanel;
 
 public class MainFrame extends JFrame {
 

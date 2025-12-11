@@ -1,4 +1,4 @@
-package main.frontend.user;
+package frontend.user;
 
 public class ErrorHandler {
 	

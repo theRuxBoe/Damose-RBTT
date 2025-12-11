@@ -1,4 +1,4 @@
-package main.frontend.focus.entities;
+package frontend.focus.entities;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -18,22 +18,25 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import main.frontend.*;
-import main.frontend.focus.SearchFocusPanel;
+import backend.model.Fermata;
+import backend.model.Linea;
+import frontend.*;
+import frontend.focus.SearchFocusPanel;
 
 public class LinePanel extends ScrollablePanel { 
 	
-	private List<BusStop> stops;
-	private int id;
+	private List<Fermata> stops;
+	private String id;
 	private String direction;
 	private GeoPosition position;
 	
 	
-	public LinePanel(Line l) {
-		super(new GridLayout(1, 3));
+	public LinePanel(Linea l) {
+		super();
+		this.setLayout(new GridLayout(1, 3));
 		setPreferredSize(new Dimension(300,400));
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		this.id = l.getId();
+		this.id = l.getRouteId();
 		this.direction = l.getDirection();
 		this.stops = l.getStops();
 //		this.position = l.getPosition();
@@ -83,7 +86,7 @@ public class LinePanel extends ScrollablePanel {
 	private void addScrollPanel() {
 		JPanel support = new JPanel();
 		support.setLayout(new BoxLayout(support, BoxLayout.Y_AXIS));
-		for (BusStop stop : this.stops) {
+		for (Fermata stop : this.stops) {
 			
 			
 			support.add(new JLabel(stop.getInfo()));

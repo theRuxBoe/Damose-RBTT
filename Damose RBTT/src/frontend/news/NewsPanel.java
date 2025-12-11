@@ -1,4 +1,4 @@
-package main.frontend.news;
+package frontend.news;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;

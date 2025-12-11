@@ -1,4 +1,4 @@
-package main.frontend.waypoints;
+package frontend.waypoints;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +11,7 @@ import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
-import main.frontend.focus.entities.BusPanel;
+import frontend.focus.entities.BusPanel;
 
 public class BusWaypoint implements Waypoint {
 	

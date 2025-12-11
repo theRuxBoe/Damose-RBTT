@@ -1,4 +1,4 @@
-package main.frontend.user;
+package frontend.user;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-import main.frontend.MainFrame;
+import frontend.MainFrame;
 
 
 public class LoginPanel extends JPanel {

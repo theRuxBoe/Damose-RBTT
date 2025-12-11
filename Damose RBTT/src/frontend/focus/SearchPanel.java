@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import main.frontend.ScrollablePanel;
+import frontend.ScrollablePanel;
 
 public class SearchPanel extends ScrollablePanel {
 	
