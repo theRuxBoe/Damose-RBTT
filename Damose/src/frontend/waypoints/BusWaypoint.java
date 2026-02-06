@@ -15,7 +15,7 @@ import backendNOTPUSH.Bus;
 import frontend.focus.entities.BusPanel;
 
 public class BusWaypoint implements Waypoint {
-	
+//	deprecated (deve morire)
 	
 	private GeoPosition position;
 	

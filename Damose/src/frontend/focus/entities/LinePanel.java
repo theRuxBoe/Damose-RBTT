@@ -1,6 +1,7 @@
 package frontend.focus.entities;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -36,7 +37,8 @@ public class LinePanel extends ScrollablePanel {
 	
 	public LinePanel(Line l) {
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+//		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		this.id = l.getId();
 		this.direction = l.getDirection();
@@ -63,14 +65,20 @@ public class LinePanel extends ScrollablePanel {
 	}
 	
 	private void addLabelsData() {
-		JLabel data = new JLabel(id + " - " + direction);
+		JLabel data = new JLabel("  " + id + " - " + direction);
 		data.setFont(new Font("Serif", Font.BOLD, 30));
-		add(data);
+		add(data, BorderLayout.NORTH);
 	}
 	
 	private void addScrollPanel() {
 		JScrollPane x = this.setContent(convertList(stops));
-		this.add(x, BorderLayout.EAST);
+//		x.setPreferredSize(new Dimension(400,10));
+		add(x, BorderLayout.EAST);
+//		JPanel p = new JPanel();
+//		p.setBackground(Color.BLACK);
+////		p.setPreferredSize(new Dimension(30,30));
+//		
+//		add(p, BorderLayout.EAST);
 		
 	}
 

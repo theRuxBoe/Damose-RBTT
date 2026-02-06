@@ -31,7 +31,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
 import backendNOTPUSH.Bus;
-import frontend.waypoints.WaypointRenderer;
+import frontend.utilities.WaypointRenderer;
 
 import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
@@ -39,32 +39,34 @@ import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 
-public class Map  extends JPanel{
+public class MapPanel  extends JPanel{
 	
 	private static JXMapViewer map;
 	private JPanel panel;
 	private WaypointRenderer renderer;
 
-	public Map() {
+	public MapPanel() {
 		super(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setPreferredSize(new Dimension(500,500));
 		setMapPanel();
 		
+		WaypointRenderer.addMap(this);
 //		refreshPaint(list);
 		
 	}
 	
 	
 	
-	public void refreshPaint(List<Bus> buses) {
- 		if (renderer == null) {
-		WaypointRenderer rend = new WaypointRenderer(buses, getMapViewer());
-		this.renderer = rend;
- 		}
- 		renderer.setAndPaintWaypoints(buses);
- 		
- 	}
+	
+//	public void refreshPaint(List<Bus> buses) {
+// 		if (renderer == null) {
+//		WaypointRenderer rend = new WaypointRenderer(buses, getMapViewer());
+//		this.renderer = rend;
+// 		}
+// 		renderer.setAndPaintWaypoints(buses);
+// 		
+// 	}
 
 	private void setZooming() {
 		MouseInputListener mice = new PanMouseInputListener(map);

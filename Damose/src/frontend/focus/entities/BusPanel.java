@@ -9,7 +9,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 //import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.Insets;import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.concurrent.Flow;
 
 import javax.swing.*;
@@ -18,27 +19,30 @@ import javax.swing.border.BevelBorder;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import backendNOTPUSH.Bus;
+import frontend.MainFrame;
+import frontend.MapPanel;
+import frontend.utilities.WaypointRenderer;
 import frontend.waypoints.BusWaypoint;
 
 public class BusPanel extends JPanel {
 	
 	private GeoPosition position;
+	private Bus b ;
 	private int id;
 	private int line;
 	private String direction;
 	private int seats_available;
 	private int estimatedTime;
-	GridBagConstraints gbc = new GridBagConstraints();
+	private GridBagConstraints gbc = new GridBagConstraints();
 	
-//	5, 1, 11, 0
+//		forse conviene tenere in memoria il bus piuttosto che copiare ogni campo ???
 	
 	public BusPanel(Bus b) {
 		super();
-//		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		setLayout(new GridBagLayout());
 		
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		
+		this.b = b;
 		this.position = b.getPosition();
 		this.id = b.getId();
 		this.line = b.getLine();
@@ -104,9 +108,25 @@ public class BusPanel extends JPanel {
 	private void addTime() {
 //		con un timer questo deve recuperare regolarmente i dati
 		JPanel p = new JPanel();
-		JLabel l = new JLabel("" + estimatedTime + " minutes");
+		JLabel l = new JLabel(b.getEstimatedTime() + " minutes");
 		l.setFont(new Font("Normal", Font.BOLD, 30));
-//		p.setBackground(Color.CYAN);
+		if (MainFrame.isConnected()) {
+			l.setForeground(Color.GREEN);
+		}
+		p.add(l);
+		Timer t = new Timer(10000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WaypointRenderer.paintWaypoints(new BusWaypoint(b.getPosition()));
+//				MapPanel.getMapViewer().setCenterPosition(b.getPosition());
+				l.setText(b.getEstimatedTime() + " minutes");
+				repaint();
+				revalidate();
+				
+			}
+		});
+		t.start();
 		gbc.weightx = 0.3;
 		gbc.weighty = 0.3;
 		
@@ -115,10 +135,10 @@ public class BusPanel extends JPanel {
 //		gbc.gridheight = 3;
 		gbc.fill = GridBagConstraints.VERTICAL;
 		
-		p.add(l);
 		this.add(p, gbc);
 		
 	}
+	
 	
 
 	public static void main(String[] args) {

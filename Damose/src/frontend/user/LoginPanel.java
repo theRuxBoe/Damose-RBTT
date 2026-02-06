@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,13 +23,16 @@ public class LoginPanel extends JPanel {
 	private String name;
 	private char[] pwd;
 	private MainFrame observer;
-//	private RegisterPanel registerPanel;
+	private GridBagConstraints gbc = new GridBagConstraints();
+	private Color defaultColor = new Color(0x7851a9);
 
 	public LoginPanel() {
 		super(new BorderLayout());
+		setLayout(new GridBagLayout());
+		
 		setPreferredSize(new Dimension(300, 300));
 //		setLocation(new Point(800, 300));
-		setBackground(new Color(0x7851a9));
+		setBackground(defaultColor);
 		addLabel();
 
 		addInnerPanel();
@@ -38,25 +43,24 @@ public class LoginPanel extends JPanel {
 	}
 
 	private void addLabel() {
-		JLabel lab = new JLabel("Damose - Rome Bus Transit Tracker", JLabel.CENTER);
-		lab.setFont(new Font("Monospaced", Font.BOLD, 15));
-
-		lab.setPreferredSize(new Dimension(100, 100));
-
-		this.add(lab, BorderLayout.NORTH);
+		JLabel lab = new JLabel("Damose", JLabel.CENTER);
+		lab.setForeground(Color.WHITE);
+		lab.setFont(new Font("Monospaced", Font.BOLD, 40));
+//		lab.setPreferredSize(new Dimension(100, 100));
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0.5;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		
+		add(lab, gbc);
 	}
 
-//	private void addRegisterPanel() {
-//		RegisterPanel regi = new RegisterPanel();
-//		this.registerPanel = regi;
-//		regi.openPanel();
-//		
-//	}
-
 	private void addInnerPanel() {
-		JPanel innerPanel = new JPanel(new FlowLayout());
-		innerPanel.setBackground(new Color(0x7851a9));
-
+		JPanel innerPanel = new JPanel();
+		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.PAGE_AXIS));
+		innerPanel.setBackground(defaultColor);
+		
 		JTextField name = new JTextField("Name", 20);
 		name.setHorizontalAlignment(JTextField.CENTER);
 		name.addFocusListener(new FocusListener() {
@@ -84,23 +88,29 @@ public class LoginPanel extends JPanel {
 				pwd.setText("");
 			}
 		});
-
-		this.name = name.getText();
-		this.pwd = pwd.getPassword();
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.gridheight = 4;
+		gbc.weightx = 0.2;
+		gbc.weighty = 0.2;
+		gbc.fill = GridBagConstraints.NONE;
+		
 		innerPanel.add(name);
 		innerPanel.add(pwd);
-
-		this.add(innerPanel, BorderLayout.CENTER);
+		
+		add(innerPanel, gbc);
 	}
 
-	private void removeItself() {
-		observer.remove(this);
-	}
+	
 
 	private void addButtons() {
 		JPanel p = new JPanel();
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		gbc.anchor = GridBagConstraints.SOUTH;
+		
 		p.setLayout(new FlowLayout());
-		p.setBackground(new Color(0x7851a9));
+		p.setBackground(defaultColor);
 		JButton log = new JButton("Login");
 		JButton guest = new JButton("Enter as Guest");
 		JButton reg = new JButton("Register");
@@ -145,7 +155,11 @@ public class LoginPanel extends JPanel {
 		p.add(reg);
 		p.add(guest);
 
-		this.add(p, BorderLayout.SOUTH);
+		this.add(p, gbc);
+	}
+	
+	private void removeItself() {
+		observer.remove(this);
 	}
 
 	public void addObserver(MainFrame o) {

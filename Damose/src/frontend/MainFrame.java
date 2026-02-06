@@ -3,12 +3,18 @@ package frontend;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
 
 import frontend.focus.SearchPanel;
 import frontend.main.RightPanel;
@@ -20,7 +26,7 @@ public class MainFrame extends JFrame {
 	private RightPanel rightPanel;
 	private boolean panelsCreated = false;
 	private JPanel basePanel;
-	
+	private static boolean online;
 	
 	
 	public MainFrame() {
@@ -30,6 +36,7 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setIcon();
 		
+		verifyConnection();
 		LoginToMainFrame.openLogin(this);
 		
 		
@@ -37,6 +44,26 @@ public class MainFrame extends JFrame {
 		setVisible(true);	
 	}
 	
+	public void verifyConnection() {
+		try {
+			final URL url = new java.net.URI("https://www.google.com").toURL();
+	        final URLConnection conn = url.openConnection();
+	        conn.connect();
+	        conn.getInputStream().close();
+	        online = true;
+	    } catch (MalformedURLException e) {
+	        throw new RuntimeException(e);
+	    } catch (IOException e) {
+	        online = false;
+//	        System.out.println("offline...");
+	    } catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static boolean isConnected(){
+		return online;
+	}
 	
 	public void update(boolean log) {
 		logged = log;
@@ -48,7 +75,6 @@ public class MainFrame extends JFrame {
 			
 		}
 		if (rightPanel != null) {
-//			rightPanel.remove(rightPanel.getCurrent());
 			basePanel.remove(rightPanel);
 		}
 		
@@ -81,7 +107,6 @@ public class MainFrame extends JFrame {
 		else {	
 			img = new ImageIcon("res/bus.png");
 		}
-		
 		setIconImage(img.getImage());
 	}
 
@@ -95,7 +120,7 @@ public class MainFrame extends JFrame {
 		add(basePanel, BorderLayout.CENTER);
  		
 		
-		Map mapPanel = new Map();			
+		MapPanel mapPanel = new MapPanel();
 		ServicePanel servicePanel = new ServicePanel();
 		
 		

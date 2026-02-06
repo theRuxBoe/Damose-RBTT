@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,14 +28,17 @@ public class RegisterPanel extends JPanel{//extends LoginPanel {
 	private MainFrame observer;
 	private String name;
 	private Color defaultcolor = new Color(0x7851a9);
+	private GridBagConstraints gbc = new GridBagConstraints();
 	
 	
 	
 	public RegisterPanel() {
 		super();
-		setLayout(new BorderLayout());
+//		setLayout(new BorderLayout());
+		setLayout(new GridBagLayout());
+		
 		setPreferredSize(new Dimension(300, 300));
-		setLocation(new Point(800, 300));
+//		setLocation(new Point(800, 300));
 		setBackground(defaultcolor);
 		
 		addLabel();
@@ -42,33 +48,39 @@ public class RegisterPanel extends JPanel{//extends LoginPanel {
 	}
 	
 	private void addLabel() {
-//		JPanel p1 = new JPanel();
-//		setLayout(new FlowLayout(FlowLayout.CENTER));
-//		p1.setLayout(new BoxLayout(p1, BoxLayout.PAGE_AXIS));
-//		p1.setBackground(new Color(defaultcolor));
-		JLabel dam = new JLabel("Damose", JLabel.CENTER);
-//		dam.setAlignmentX(CENTER_ALIGNMENT);
+		JLabel dam = new JLabel("Damose - registration", JLabel.CENTER);
+		dam.setForeground(Color.WHITE);
 		dam.setFont(new Font("Serif", Font.BOLD, 20));
 		dam.setPreferredSize(new Dimension(100,100));
+//		gbc.insets = new Insets(5,5,5,5);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0.5;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
-		
-//		JLabel rbtt = new JLabel("Rome Bus Transit Tracker", JLabel.CENTER);
-//		rbtt.setFont(new Font("Monospaced", Font.BOLD, 15));
-//		p1.setPreferredSize(new Dimension(100, 100));
-		add(dam,BorderLayout.NORTH);
-//		p1.add(rbtt);
-//		add(p1, BorderLayout.NORTH);
+		add(dam, gbc);
 	}
 	
 	private void addInputField() {
 		JPanel p = new JPanel();
+		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.gridheight = 4;
+		gbc.weightx = 0.2;
+		gbc.weighty = 0.2;
+		gbc.fill = GridBagConstraints.NONE;
+		
 		JLabel n = new JLabel("Name : ");
+		n.setForeground(Color.WHITE);
 		JTextField inputname = new JTextField(20);
 		this.name = inputname.getText();
 		p.add(n);
 		p.add(inputname);
 		
 		JLabel pwd = new JLabel("Enter password : ");
+		pwd.setForeground(Color.WHITE);
 		JPasswordField inpwd = new JPasswordField(20);
 		
 		p.add(pwd);
@@ -79,13 +91,14 @@ public class RegisterPanel extends JPanel{//extends LoginPanel {
 //		p.add(inpwd);
 		
 		p.setBackground(defaultcolor);
-		add(p, BorderLayout.CENTER);
+		add(p, gbc);
 		
 	}
 	
 	private void addButtons() {
 		JPanel p = new JPanel();
-		p.setBackground(new Color(0x7851a9));
+		p.setBackground(defaultcolor);
+//		p.setBackground(Color.BLACK);
 		
 		JButton back = new JButton("Back");
 		back.addActionListener(new ActionListener() {
@@ -114,8 +127,11 @@ public class RegisterPanel extends JPanel{//extends LoginPanel {
 		
 		p.add(back);
 		p.add(reg);
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		gbc.anchor = GridBagConstraints.SOUTH;
 		
-		this.add(p, BorderLayout.SOUTH);
+		this.add(p, gbc);
 	}
 	
 	public void addObserver(MainFrame f) {

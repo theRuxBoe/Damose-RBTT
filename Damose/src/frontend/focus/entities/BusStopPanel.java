@@ -35,12 +35,13 @@ import org.jxmapviewer.viewer.WaypointPainter;
 import backendNOTPUSH.Bus;
 import backendNOTPUSH.BusStop;
 import frontend.MainFrame;
-import frontend.Map;
+import frontend.MapPanel;
 import frontend.ScrollablePanel;
 import frontend.focus.SearchFocusPanel;
 import frontend.focus.SearchPanel;
 import frontend.main.FocusController;
 import frontend.main.RightPanel;
+import frontend.utilities.WaypointRenderer;
 import frontend.waypoints.BusWaypoint;
 
 
@@ -52,6 +53,7 @@ public class BusStopPanel extends ScrollablePanel {
 	private GeoPosition position;
 	private String name;
 	private BusStop stop;
+	
 //	private RightPanel rp;
 	private Color defaultColor = this.getBackground();
 	
@@ -59,8 +61,9 @@ public class BusStopPanel extends ScrollablePanel {
 	public BusStopPanel(BusStop bs) {
 		super();
 		
-//		setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
+		setPreferredSize(new Dimension(350,50));
 		stop = bs;
 		this.name = bs.getName();
 		this.id = bs.getId();
@@ -73,22 +76,16 @@ public class BusStopPanel extends ScrollablePanel {
 		}
 	}
 	
-//	public BusStopPanel(BusStop bs, RightPanel rp) {
-//		this(bs);
-//		this.rp = rp;
-//	}
 	
 	private void addListener() {
 		addMouseListener(new MouseListener() {
 			@Override public void mouseReleased(MouseEvent e) {}
 			@Override public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				BusStopPanel.this.setBackground(defaultColor);
+			@Override public void mouseExited(MouseEvent e) {
+						BusStopPanel.this.setBackground(defaultColor);
 			}			
 			@Override public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseClicked(MouseEvent e) {
+			@Override public void mouseClicked(MouseEvent e) {
 
 				if (BusStopPanel.this.getBackground() == defaultColor) {
 					BusStopPanel.this.setBackground(Color.LIGHT_GRAY);		
@@ -111,8 +108,8 @@ public class BusStopPanel extends ScrollablePanel {
 
 	
 	private void addLabelsData() {
-		JLabel data = new JLabel(name + " - " + id);
-		data.setFont(new Font("Serif", Font.PLAIN, 25));
+		JLabel data = new JLabel("  " + name + " - " + id);
+		data.setFont(new Font("Serif", Font.PLAIN, 30));
 		add(data);
 	}
 	
@@ -133,20 +130,21 @@ public class BusStopPanel extends ScrollablePanel {
 				}
 			}
 		});
-		this.add(b);
+		this.add(b, BorderLayout.EAST);
 		
 	}
 	
 	private void showOnMap() {
-		JXMapViewer m = Map.getMapViewer();
-		m.setCenterPosition(position);
-		WaypointPainter<Waypoint> painter = new WaypointPainter<>();
-		HashSet<BusWaypoint> h = new HashSet();
-		h.add(new BusWaypoint(this.position));
-		
-		painter.setWaypoints(h);
+//		JXMapViewer m = MapPanel.getMapViewer();
+		MapPanel.getMapViewer().setCenterPosition(position);
+		WaypointRenderer.paintWaypoints(new BusWaypoint(stop.getPosition()));
+//		WaypointPainter<Waypoint> painter = new WaypointPainter<>();
+//		HashSet<BusWaypoint> h = new HashSet();
+//		h.add(new BusWaypoint(this.position));
+//		
+//		painter.setWaypoints(h);
 	    
-	    m.setOverlayPainter(painter);
+//	    m.setOverlayPainter(painter);
 	}
 
 	public BusStop getStop() {

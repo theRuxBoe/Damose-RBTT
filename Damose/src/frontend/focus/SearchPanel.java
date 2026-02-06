@@ -87,6 +87,11 @@ public class SearchPanel extends ScrollablePanel {
 		sr.add(new Line());
 		sr.add(new Line());
 		sr.add(new Line());
+		sr.add(new Line());
+		sr.add(new Line());
+		sr.add(new Line());
+		sr.add(new Line());
+		
 		
 		searchResult = setContent(convertList(sr));		
 		searchResult.setPreferredSize(new Dimension(450,800));

@@ -1,6 +1,7 @@
 package frontend.focus.entities;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class BusStopFocus extends BusStopPanel  {
 	
 	public BusStopFocus(BusStop bs) {
 		super(bs);
+		setPreferredSize(null);
 		addScroll();
 		this.arriving = bs.getArrivingBuses();
 		removeListener();
