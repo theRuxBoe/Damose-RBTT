@@ -23,32 +23,42 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import backendNOTPUSH.BusStop;
-import backendNOTPUSH.Line;
+import backend.model.Linea;
+import backend.model.RisultatoLinea;
+import backend.model.Fermata;
 import frontend.*;
 import frontend.focus.SearchFocusPanel;
 
 public class LinePanel extends ScrollablePanel { 
 	
-	private ArrayList<BusStop> stops;
-	private int id;
+//	private ArrayList<Fermata> stops;
+	private String id;
 	private String direction;
+	private Linea line;
 	
 	
-	public LinePanel(Line l) {
+	public LinePanel(Linea l) {
 		super();
 //		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		this.id = l.getId();
-		this.direction = l.getDirection();
-		this.stops = l.getStops();
+		this.line = l;
+//		this.id = l.getName();
+//		this.direction = l.getDescription();
+//		this.stops = l.get
 		
 		addLabelsData();
 		addScrollPanel();
 	
 	}
+	
+	public LinePanel(RisultatoLinea rl) {
+		super();
+		
+	}
+	
 //	questo listener dovrà mostrare sulla mappa tutte le fermate della linea come una route di jxmapviewer
+//	SE CIAO
 	private void addListener() {
 		addMouseListener(new MouseListener() {
 			@Override
@@ -65,13 +75,13 @@ public class LinePanel extends ScrollablePanel {
 	}
 	
 	private void addLabelsData() {
-		JLabel data = new JLabel("  " + id + " - " + direction);
+		JLabel data = new JLabel("  " + line.getName() + " - " + line.getDescription());
 		data.setFont(new Font("Serif", Font.BOLD, 30));
 		add(data, BorderLayout.NORTH);
 	}
 	
 	private void addScrollPanel() {
-		JScrollPane x = this.setContent(convertList(stops));
+		JScrollPane x = this.setContent(convertList(MainFrame.getTTS().trovaFermatePerLinea(line.getRouteId(), line.getDescription())));
 //		x.setPreferredSize(new Dimension(400,10));
 		add(x, BorderLayout.EAST);
 //		JPanel p = new JPanel();

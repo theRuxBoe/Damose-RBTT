@@ -102,11 +102,12 @@ public class RightPanel extends JPanel{
  	
  	public void openFocusPanel(JPanel p) {
  		if (focusPanel == null) {
- 			FocusPanel foc = new FocusPanel(p);
+ 			FocusPanel foc = new FocusPanel();
  			focusPanel = foc;
  			foc.setRightPanel(this);
  		}
  		focusPanel.setPrevious(current);
+ 		focusPanel.setFocus(p);
  		
  		setShowCurrent(focusPanel);
  	}

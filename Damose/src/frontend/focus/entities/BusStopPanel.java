@@ -32,8 +32,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import backendNOTPUSH.Bus;
-import backendNOTPUSH.BusStop;
+import backend.model.Fermata;
+import backend.model.RisultatoFermata;
+//import backendNOTPUSH.Bus;
+//import backendNOTPUSH.BusStop;
 import frontend.MainFrame;
 import frontend.MapPanel;
 import frontend.ScrollablePanel;
@@ -49,25 +51,23 @@ public class BusStopPanel extends ScrollablePanel {
 
 
 	
-	private int id;
+//	private String id;
 	private GeoPosition position;
-	private String name;
-	private BusStop stop;
-	
-//	private RightPanel rp;
+//	private String name;
+	private Fermata stop;
 	private Color defaultColor = this.getBackground();
 	
 	
-	public BusStopPanel(BusStop bs) {
+	public BusStopPanel(Fermata bs) {
 		super();
 		
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setPreferredSize(new Dimension(350,50));
 		stop = bs;
-		this.name = bs.getName();
-		this.id = bs.getId();
-		this.position = bs.getPosition();
+//		this.name = bs.getName();
+//		this.id = bs.getStopId();
+		this.position = new GeoPosition(bs.getLat(), bs.getLon());
 		addLabelsData();
 		addListener();
 	
@@ -76,6 +76,9 @@ public class BusStopPanel extends ScrollablePanel {
 		}
 	}
 	
+	public BusStopPanel(RisultatoFermata rf) {
+		this(MainFrame.getTTS().getFermataById(rf.getStopId()).get());
+	}
 	
 	private void addListener() {
 		addMouseListener(new MouseListener() {
@@ -108,7 +111,7 @@ public class BusStopPanel extends ScrollablePanel {
 
 	
 	private void addLabelsData() {
-		JLabel data = new JLabel("  " + name + " - " + id);
+		JLabel data = new JLabel("  " + stop.getName() + " - " + stop.getStopId());
 		data.setFont(new Font("Serif", Font.PLAIN, 30));
 		add(data);
 	}
@@ -137,7 +140,7 @@ public class BusStopPanel extends ScrollablePanel {
 	private void showOnMap() {
 //		JXMapViewer m = MapPanel.getMapViewer();
 		MapPanel.getMapViewer().setCenterPosition(position);
-		WaypointRenderer.paintWaypoints(new BusWaypoint(stop.getPosition()));
+		WaypointRenderer.paintWaypoints(new BusWaypoint(position));
 //		WaypointPainter<Waypoint> painter = new WaypointPainter<>();
 //		HashSet<BusWaypoint> h = new HashSet();
 //		h.add(new BusWaypoint(this.position));
@@ -147,7 +150,7 @@ public class BusStopPanel extends ScrollablePanel {
 //	    m.setOverlayPainter(painter);
 	}
 
-	public BusStop getStop() {
+	public Fermata getStop() {
 		return stop;
 	}
 }

@@ -3,6 +3,8 @@ package frontend.waypoints;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
+// da capire
+
 public class TramWaypoint  implements Waypoint{
 	//	 ancora più deprecato
 	private GeoPosition position;

@@ -29,9 +29,7 @@ public class ServicePanel extends ScrollablePanel{
 	}
 	
 	private void addNews() {
-//		logica da implementare quando sapremo cosa ci arriva dal
-//		backend, ogni notizia dovrà diventare un NewsPanel e poi 
-//		finire nello scrollable panel che sta qui
+//		prendiamo getall warnings, con un for li trasformiamo tutti in NewsPanel
 		
 	}
 	

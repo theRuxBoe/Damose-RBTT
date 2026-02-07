@@ -1,18 +1,14 @@
 package frontend.waypoints;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.Optional;
 
-import javax.imageio.ImageIO;
 
-import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
-import backendNOTPUSH.Bus;
-import frontend.focus.entities.BusPanel;
+import backend.model.Corsa;
+import backend.realtime.VehiclePositionInfo;
+import frontend.MainFrame;
 
 public class BusWaypoint implements Waypoint {
 //	deprecated (deve morire)
@@ -20,15 +16,19 @@ public class BusWaypoint implements Waypoint {
 	private GeoPosition position;
 	
 	
-	public BusWaypoint(Bus bus) {
-		this.position = bus.getPosition();
+	public BusWaypoint(Corsa bus) {
+		Optional<VehiclePositionInfo> x = MainFrame.getTTS().getVehiclePositionForTripId(bus.getTripId());
+		double lon = x.get().getLon();
+		double lat = x.get().getLat();
+		
+		this.position = new GeoPosition(lat, lon);
 	}
 	
 	public BusWaypoint(GeoPosition pos) {
 		this.position = pos;
 	}
 
-	
+//	aggiungeremo un'immagine diversa per gli autobus
 	
 	@Override
 	public GeoPosition getPosition() {

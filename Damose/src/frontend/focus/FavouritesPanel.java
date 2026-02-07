@@ -1,21 +1,18 @@
 package frontend.focus;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 
-import backendNOTPUSH.BusStop;
+import backend.model.Fermata;
 import frontend.ScrollablePanel;
-import frontend.main.RightPanel;
 
 public class FavouritesPanel extends ScrollablePanel{
 
-	private ArrayList<BusStop> favStops = new ArrayList<BusStop>();
+	private List<Fermata> favStops;
 	
 	
 	public FavouritesPanel() {
@@ -23,7 +20,7 @@ public class FavouritesPanel extends ScrollablePanel{
 		setLayout(new BorderLayout());
 		addLabel();
 		
-		showFavourites();
+//		showFavourites();
 //		setPreferredSize(new Dimension(300,1000));
 		
 //		getting favourites from database
@@ -34,7 +31,7 @@ public class FavouritesPanel extends ScrollablePanel{
 	}
 	private void showFavourites() {
 //		updates the list from the backend
-		this.add(setContent(convertList(favStops)), BorderLayout.CENTER);
+		this.add(setContent(convertList2(favStops)), BorderLayout.CENTER);
 	}
 	
 	private void addLabel() {

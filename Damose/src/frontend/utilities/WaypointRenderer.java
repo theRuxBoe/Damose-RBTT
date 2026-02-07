@@ -10,8 +10,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import backendNOTPUSH.Bus;
-import backendNOTPUSH.Entity;
+import backend.model.DatoGTF;
 import frontend.MapPanel;
 import frontend.waypoints.BusWaypoint;
 
@@ -49,7 +48,7 @@ public class WaypointRenderer {
 	}
 	
 	
-	public static void paintBusWaypoints(List<Entity> bb) {
+	public static void paintBusWaypoints(List<DatoGTF> bb) {
 		Set<Waypoint> wp = waypointConverter(bb);
 		painter.setWaypoints(wp);
 		map.setOverlayPainter(painter);
@@ -59,7 +58,7 @@ public class WaypointRenderer {
 //	public static void 
 	
 	
-	private static <T extends Entity> Set<Waypoint>  waypointConverter(List<T> entities) {
+	private static <T extends DatoGTF> Set<Waypoint>  waypointConverter(List<T> entities) {
 		Set<Waypoint> waypoints = new HashSet<Waypoint>();
 		
 		for (T e : entities) {

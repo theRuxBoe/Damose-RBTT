@@ -2,6 +2,7 @@ package frontend.utilities;
 
 import org.jxmapviewer.viewer.Waypoint;
 
+import backend.model.DatoGTF;
 import backendNOTPUSH.Bus;
 import backendNOTPUSH.Entity;
 import frontend.waypoints.BusWaypoint;
@@ -14,10 +15,10 @@ public class WaypointFactory {
 	}
 	
 //	public <T extends Entity> <W implements Waypoint> createWaypoint(T e) {
-	public <T extends Entity,W extends Waypoint> W createWaypoint(T e) {	
+	public <T extends DatoGTF,W extends Waypoint> W createWaypoint(T e) {	
 		
-		if ( e instanceof Bus ) {
-			BusWaypoint bw = new BusWaypoint((Bus) e);
+		if ( e instanceof Corsa ) {
+			BusWaypoint bw = new BusWaypoint((Corsa) e);
 			return bw ;
 		}
 		else if ( e instanceof Tram) {

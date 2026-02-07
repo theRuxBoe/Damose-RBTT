@@ -7,26 +7,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.ArrayList;
-
-import backendNOTPUSH.Line;
-import backendNOTPUSH.Line;
-//import backendNOTPUSH.Line;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
-
-import backendNOTPUSH.Entity;
-
+import backend.service.TransitServiceImpl.WrapperGenerico;
+//import backendNOTPUSH.Entity;
+import frontend.MainFrame;
 import frontend.ScrollablePanel;
 
 public class SearchPanel extends ScrollablePanel {
 	
-	private  JScrollPane searchResult;
-	
+	private JPanel resultPanel;
+	private JScrollPane scrollResult;
+	private JTextField text;	
 	
 	public SearchPanel() {
 		super();
@@ -40,6 +36,7 @@ public class SearchPanel extends ScrollablePanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
 		JTextField text = new JTextField("Search", 10);
+		this.text = text;
 		text.setPreferredSize(text.getMinimumSize());
 		text.addFocusListener(new FocusListener() {
 			
@@ -59,17 +56,18 @@ public class SearchPanel extends ScrollablePanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				String x = text.getText();
-////				database search
-//				searchResult = new ArrayList<Entity>();
-//				setContent(convertList(searchResult));
 				
-				if (searchResult != null) {
-					clearResults();
+				String x = SearchPanel.this.getText();
+				if (x != "" || x != "Search") {
+					if (scrollResult != null) {
+						resultPanel.remove(scrollResult);
+					}
+//					database search
+					List<WrapperGenerico> risultato = MainFrame.getTTS().ricercaGenerica(x);
+					
+					showResults(risultato);	// parameter needs to be a result
 				}
 				
-//				results = database search
-				showResults();	// parameter needs to be a result
 				
 			}
 		});
@@ -80,36 +78,30 @@ public class SearchPanel extends ScrollablePanel {
 		
 	}
 	
-	private void showResults() {	//param == result from db search		ArrayList<Entity> input
-		ArrayList<Line> sr = new ArrayList<Line>();
-		sr.add(new Line());
-		sr.add(new Line());
-		sr.add(new Line());
-		sr.add(new Line());
-		sr.add(new Line());
-		sr.add(new Line());
-		sr.add(new Line());
-		sr.add(new Line());
-		sr.add(new Line());
+	private String getText() {
+		return text.getText();
+	}
+	
+	private void showResults(List<WrapperGenerico> res) {	//param == result from db search		ArrayList<Entity> input
+		if (resultPanel == null) {
+			JPanel p = new JPanel();
+			resultPanel = p;
+			resultPanel.setLayout(new BorderLayout());
+//			resultPanel.setPreferredSize(new Dimension(450,800));
+			resultPanel.setPreferredSize(new Dimension(500,500));
+		}
 		
+		JScrollPane scrollResult = setContent(convertSearchedList(res));
+		this.scrollResult = scrollResult;
 		
-		searchResult = setContent(convertList(sr));		
-		searchResult.setPreferredSize(new Dimension(450,800));
-		JPanel pane = new JPanel();
-		pane.setLayout(new BorderLayout());
-		pane.setPreferredSize(new Dimension(500,500));
+		resultPanel.add(scrollResult, BorderLayout.NORTH);
 		
-		pane.add(searchResult, BorderLayout.NORTH);
-		add(pane, BorderLayout.CENTER);
+		add(resultPanel, BorderLayout.CENTER);
+		
 		repaint();
 		revalidate();
 	
 	}
 	
-	private void clearResults() {
-		
-		this.remove(searchResult);
-		searchResult = null;
-	}
 	
 }

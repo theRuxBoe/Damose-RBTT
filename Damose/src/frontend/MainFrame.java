@@ -15,7 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-
+import backend.service.TransitService;
+import backend.service.TransitServiceImpl;
 import frontend.focus.SearchPanel;
 import frontend.main.RightPanel;
 import frontend.news.ServicePanel;
@@ -23,6 +24,7 @@ import frontend.news.ServicePanel;
 public class MainFrame extends JFrame {
 
 	private static boolean logged;
+	private static TransitServiceImpl tts;
 	private RightPanel rightPanel;
 	private boolean panelsCreated = false;
 	private JPanel basePanel;
@@ -36,7 +38,9 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setIcon();
 		
-		verifyConnection();
+		
+		
+		openTransit();
 		LoginToMainFrame.openLogin(this);
 		
 		
@@ -44,21 +48,16 @@ public class MainFrame extends JFrame {
 		setVisible(true);	
 	}
 	
-	public void verifyConnection() {
+	private void openTransit() {
 		try {
-			final URL url = new java.net.URI("https://www.google.com").toURL();
-	        final URLConnection conn = url.openConnection();
-	        conn.connect();
-	        conn.getInputStream().close();
-	        online = true;
-	    } catch (MalformedURLException e) {
-	        throw new RuntimeException(e);
-	    } catch (IOException e) {
-	        online = false;
-//	        System.out.println("offline...");
-	    } catch (URISyntaxException e) {
+			tts = TransitServiceImpl.createDefault();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static TransitServiceImpl getTTS() {
+		return tts;
 	}
 	
 	public static boolean isConnected(){

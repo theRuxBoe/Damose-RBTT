@@ -1,24 +1,24 @@
 package frontend.focus;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+//import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
+//import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
+//import javax.swing.border.BevelBorder;
 
-import org.jxmapviewer.viewer.GeoPosition;
+//import org.jxmapviewer.viewer.GeoPosition;
 
-import backendNOTPUSH.Entity;
-import frontend.focus.entities.BusPanel;
-import frontend.focus.entities.BusStopFocus;
-import frontend.focus.entities.BusStopPanel;
-import frontend.focus.entities.EntitiesPanelFactory;
-import frontend.focus.entities.LinePanel;
+//import backendNOTPUSH.Entity;
+//import frontend.focus.entities.BusPanel;
+//import frontend.focus.entities.BusStopFocus;
+//import frontend.focus.entities.BusStopPanel;
+//import frontend.focus.entities.EntitiesPanelFactory;
+//import frontend.focus.entities.LinePanel;
 import frontend.main.FocusController;
 import frontend.main.RightPanel;
 
@@ -26,11 +26,21 @@ public class FocusPanel extends JPanel {
 	
 	private JPanel previous;
 	private RightPanel rp;
+	private JPanel current;
 	
-	public FocusPanel(JPanel p) {
+	public FocusPanel() {
 		super();
+		
 		addBackButton();
 		addLabel();
+	
+	}
+	
+	public void setFocus(JPanel p) {
+		if (current != null) {
+			remove(current);
+		}
+		current = p;
 		add(p);
 	}
 	

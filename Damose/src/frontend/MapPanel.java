@@ -2,35 +2,18 @@ package frontend;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.List;
 
-//import java.awt.peer.ComponentPeer;
 
-//import java.awt.Frame;
-//import java.awt.event.KeyAdapter;
-//import java.awt.event.MouseListener;
-//import java.awt.event.MouseMotionListener;
-//import java.awt.Component;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.MouseInputListener;
-import javax.tools.JavaCompiler;
 
-import org.jxmapviewer.JXMapKit;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
-import backendNOTPUSH.Bus;
 import frontend.utilities.WaypointRenderer;
 
 import org.jxmapviewer.input.CenterMapListener;
