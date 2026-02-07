@@ -80,5 +80,9 @@ public class Linea extends DatoGTF {
 				&& Objects.equals(name, other.name) && Objects.equals(routeId, other.routeId) && type == other.type;
 	}
 	
+	public RouteType getRouteType() {
+		
+		return RouteType.fromCode(type);
+	}
 
 }

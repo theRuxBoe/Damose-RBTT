@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserDB {
@@ -57,6 +58,7 @@ public class UserDB {
 				
 				catch (Exception e) {
 					
+					e.printStackTrace();
 				}
 			}
 		}
@@ -129,4 +131,21 @@ public class UserDB {
 		return false;
 	}
 
+	public Optional<User> findUserByName(String username) {
+		
+		if (username == null) {
+			
+			throw new IllegalArgumentException("Testo nullo non consentito.");
+		}
+		
+		for (User u : usersList) {
+			
+			if (u.getUserName().equals(username)) {
+				
+				return Optional.of(u);
+			}
+		}
+		
+		return Optional.empty();
+	}
 }

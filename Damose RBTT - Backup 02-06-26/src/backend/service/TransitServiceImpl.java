@@ -399,10 +399,12 @@ public class TransitServiceImpl implements TransitService {
 	        GTFSRealTimeClient alertClient = new GTFSRealTimeClient("https://romamobilita.it/sites/default/files/rome_rtgtfs_service_alerts_feed.pb");
 	        return new TransitServiceImpl(parser, tripClient, vehicleClient, alertClient);
 	    }
+	
 	public RealtimeService getRealtimeService() {
 		
 		return this.realtimeService;
 	}
+	
     private static class NomeDirLinea {
         private final String routeId;
         private final String directionName;
