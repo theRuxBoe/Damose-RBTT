@@ -90,7 +90,7 @@ public class FavoriteDB {
 		return Optional.empty();
 	}
 	
-	public synchronized boolean addFavorite(String userId, Fermata fermata, String commento) throws IOException {
+	public synchronized boolean addFavorite(String userId, Fermata fermata, String commento) throws IOException, FavoriteAlreadyExistingException {
 		
 		if (userId == null || fermata == null) {
 			

@@ -64,7 +64,7 @@ public class UserDB {
 		}
 	}
 	
-	public synchronized void createNewAccount(String userName, String password) throws IOException {
+	public synchronized void createNewAccount(String userName, String password) throws IOException, IllegalArgumentException, AccountAlreadyExistsException {
 		
 		if (userName == null || password == null) {
 		    throw new IllegalArgumentException("Testo nullo non consentito.");
@@ -117,7 +117,7 @@ public class UserDB {
 
 	}
 	
-	public synchronized boolean logIn(String userName, String password) {
+	public synchronized boolean logIn(String userName, String password) throws IllegalArgumentException, NoAccountExistsYet {
 		
 		userName = userName.trim();
 		password = password.trim();
@@ -150,7 +150,7 @@ public class UserDB {
 		return false;
 	}
 
-	public Optional<User> findUserByName(String username) {
+	public Optional<User> findUserByName(String username) throws IllegalArgumentException {
 		
 		if (username == null) {
 			

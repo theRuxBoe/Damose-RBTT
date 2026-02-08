@@ -132,6 +132,14 @@ public class GTFSRealTimeClient {
     	    return null;
     	}
     	
+    	VehiclePosition.OccupancyStatus occupancyStatus = null;
+    	
+    	if (vp.hasOccupancyStatus()) {
+    	    occupancyStatus = vp.getOccupancyStatus();
+    	}
+    	
+    	OccupancyLevel occLvl = map(occupancyStatus);
+
     	TripDescriptor td = vp.hasTrip() ? vp.getTrip() : TripDescriptor.getDefaultInstance();
         String tripId = td.hasTripId() ? td.getTripId() : null;
         
@@ -149,8 +157,36 @@ public class GTFSRealTimeClient {
         Integer currentStopSequence = vp.hasCurrentStopSequence() ? vp.getCurrentStopSequence() : null;
         String currentStopId = vp.hasStopId() ? vp.getStopId() : null;
         
-        return new VehiclePositionInfo(vehicleId, vehicleLabel, tripId, lat, lon, bearing, speed, timestamp, currentStopSequence, currentStopId);
+        return new VehiclePositionInfo(vehicleId, vehicleLabel, tripId, lat, lon, bearing, speed, timestamp, currentStopSequence, currentStopId, occLvl);
 
+    }
+    
+    private OccupancyLevel map(VehiclePosition.OccupancyStatus status) {
+    	
+    	if (status == null) {
+    		
+    		return OccupancyLevel.UNKNOWN;
+    	}
+    	
+    	switch (status) {
+    	
+    	case EMPTY:
+    		return OccupancyLevel.EMPTY;
+    	case FEW_SEATS_AVAILABLE:
+    		return OccupancyLevel.MEDIUM;
+    	case MANY_SEATS_AVAILABLE:
+    		return OccupancyLevel.LOW;
+    	case FULL:
+    		return OccupancyLevel.FULL;
+    	case NOT_ACCEPTING_PASSENGERS:
+    		return OccupancyLevel.FULL;
+    	case  STANDING_ROOM_ONLY:
+    		return OccupancyLevel.HIGH;
+    	case  CRUSHED_STANDING_ROOM_ONLY:
+    		return OccupancyLevel.HIGH;
+    	default:
+    		return OccupancyLevel.UNKNOWN;
+    	}
     }
     
     private ServiceAlertInfo parseAlert(FeedEntity entity) {
