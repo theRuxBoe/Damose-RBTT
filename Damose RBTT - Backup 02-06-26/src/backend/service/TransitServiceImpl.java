@@ -268,6 +268,7 @@ public class TransitServiceImpl implements TransitService {
 	        }
 	    }
 
+	    //per ottenere le fermate nell'ordine corretto
 	    orariCorsa.sort(Comparator.comparingInt(OrarioFermata::getStopSequence));
 
 	    //Costruzione risultato
