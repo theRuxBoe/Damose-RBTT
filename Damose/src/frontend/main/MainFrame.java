@@ -1,4 +1,4 @@
-package frontend;
+package frontend.main;
 
 
 import java.awt.BorderLayout;
@@ -11,15 +11,17 @@ import java.net.URLConnection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import backend.service.TransitService;
 import backend.service.TransitServiceImpl;
-import frontend.focus.SearchPanel;
-import frontend.main.RightPanel;
 import frontend.news.ServicePanel;
+import frontend.rightpanel.RightPanel;
+import frontend.rightpanel.SearchPanel;
+import frontend.user.LoginToMainFrame;
 
 public class MainFrame extends JFrame {
 
@@ -52,7 +54,10 @@ public class MainFrame extends JFrame {
 		try {
 			tts = TransitServiceImpl.createDefault();
 		} catch (IOException e) {
-			e.printStackTrace();
+			int x = JOptionPane.showConfirmDialog(basePanel, e.getMessage() + "Do you wish to try again?");
+			if (x == 0) {
+				openTransit();
+			}
 		}
 	}
 	
@@ -79,7 +84,7 @@ public class MainFrame extends JFrame {
 		
 		RightPanel rightPanel = new RightPanel(this);
 		this.rightPanel = rightPanel;
-		basePanel.add(rightPanel, BorderLayout.EAST, 0);
+		basePanel.add(rightPanel, BorderLayout.EAST);
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		
@@ -101,10 +106,10 @@ public class MainFrame extends JFrame {
 	private void setIcon() {
 		ImageIcon img;
 		if (System.getProperty("os.name").startsWith("Windows")) {
-			img = new ImageIcon("res/bus.ico");
+			img = new ImageIcon("src/res/bus.ico");
 		}
 		else {	
-			img = new ImageIcon("res/bus.png");
+			img = new ImageIcon("src/res/busIcon.png");
 		}
 		setIconImage(img.getImage());
 	}

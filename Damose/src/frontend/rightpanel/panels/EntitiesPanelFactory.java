@@ -1,4 +1,4 @@
-package frontend.focus.entities;
+package frontend.rightpanel.panels;
 
 import javax.swing.JPanel;
 
@@ -35,19 +35,19 @@ public class EntitiesPanelFactory {
 		
 	}
 	
-	public JPanel createPanel(Risultato e) {
-		JPanel p = null;
-		if (e instanceof RisultatoFermata) {
-			p = new BusStopPanel((RisultatoFermata) e);
-		}
-		else if (e instanceof RisultatoLinea) {
-			p = new LinePanel((RisultatoLinea) e);
-		}
-		
-		
-		return p;
-		
-	}
+//	public JPanel createPanel(Risultato e) {
+//		JPanel p = null;
+//		if (e instanceof RisultatoFermata) {
+//			p = new BusStopPanel((RisultatoFermata) e);
+//		}
+//		else if (e instanceof RisultatoLinea) {
+//			p = new LinePanel((RisultatoLinea) e);
+//		}
+//		
+//		
+//		return p;
+//		
+//	}
 	
 	public JPanel createPanel(WrapperGenerico wg) {
 		JPanel p = null;

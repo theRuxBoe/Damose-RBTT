@@ -12,105 +12,109 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
 
 import javax.swing.*;
 
-import frontend.LoginToMainFrame;
-import frontend.MainFrame;
+import backend.user.NoAccountExistsYet;
+import backend.user.User;
+import backend.user.UserDB;
+import frontend.main.MainFrame;
 
-public class LoginPanel extends JPanel {
+public class LoginPanel extends UserPanel {
 
-	private String name;
-	private char[] pwd;
-	private MainFrame observer;
-	private GridBagConstraints gbc = new GridBagConstraints();
-	private Color defaultColor = new Color(0x7851a9);
+	private static UserDB db;
 
 	public LoginPanel() {
-		super(new BorderLayout());
-		setLayout(new GridBagLayout());
-		
-		setPreferredSize(new Dimension(300, 300));
-//		setLocation(new Point(800, 300));
-		setBackground(defaultColor);
-		addLabel();
-
-		addInnerPanel();
-
+		super();
+//		setLayout(new GridBagLayout());
+//		
+//		setPreferredSize(new Dimension(300, 300));
+////		setLocation(new Point(800, 300));
+//		setBackground(defaultColor);
+//		try {
+//			UserDB dab = new UserDB();
+//			db = dab;
+//		}
+//		catch (IOException e) {
+//			JOptionPane.showMessageDialog(observer, "There was an error with the DB", "DB error", JOptionPane.ERROR_MESSAGE);
+//		}
+//		
+//		addLabel();
+//
+//		addInnerPanel();
+//
 		addButtons();
-//		this.requestFocus();
+		openDB();
+		
 
 	}
 
-	private void addLabel() {
-		JLabel lab = new JLabel("Damose", JLabel.CENTER);
-		lab.setForeground(Color.WHITE);
-		lab.setFont(new Font("Monospaced", Font.BOLD, 40));
-//		lab.setPreferredSize(new Dimension(100, 100));
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0.5;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		
-		add(lab, gbc);
-	}
+//	private void addLabel() {
+//		JLabel lab = new JLabel("Damose", JLabel.CENTER);
+//		lab.setForeground(Color.WHITE);
+//		lab.setFont(new Font("Monospaced", Font.BOLD, 40));
+////		lab.setPreferredSize(new Dimension(100, 100));
+//		gbc.gridx = 0;
+//		gbc.gridy = 0;
+//		gbc.weightx = 0.5;
+//		gbc.weighty = 0.5;
+//		gbc.fill = GridBagConstraints.HORIZONTAL;
+//		
+//		add(lab, gbc);
+//	}
 
-	private void addInnerPanel() {
-		JPanel innerPanel = new JPanel();
-		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.PAGE_AXIS));
-		innerPanel.setBackground(defaultColor);
-		
-		JTextField name = new JTextField("Name", 20);
-		name.setHorizontalAlignment(JTextField.CENTER);
-		name.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				name.setText("");
-			}
-		});
-
-		JPasswordField pwd = new JPasswordField("Password", 20);
-		pwd.setHorizontalAlignment(JTextField.CENTER);
-		pwd.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				pwd.setText("");
-			}
-		});
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridheight = 4;
-		gbc.weightx = 0.2;
-		gbc.weighty = 0.2;
-		gbc.fill = GridBagConstraints.NONE;
-		
-		innerPanel.add(name);
-		innerPanel.add(pwd);
-		
-		add(innerPanel, gbc);
-	}
+//	private void addInnerPanel() {
+//		JPanel innerPanel = new JPanel();
+//		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.PAGE_AXIS));
+//		innerPanel.setBackground(defaultColor);
+//		
+//		JTextField name = new JTextField("Name", 20);
+//		this.name = name;
+//		name.setHorizontalAlignment(JTextField.CENTER);
+//		name.addFocusListener(new FocusListener() {
+//
+//			@Override
+//			public void focusLost(FocusEvent e) {
+//			}
+//
+//			@Override
+//			public void focusGained(FocusEvent e) {
+//				name.setText("");
+//			}
+//		});
+//
+//		JPasswordField pwd = new JPasswordField("Password", 20);
+//		this.pwd = pwd;
+//		pwd.setHorizontalAlignment(JTextField.CENTER);
+//		pwd.addFocusListener(new FocusListener() {
+//
+//			@Override
+//			public void focusLost(FocusEvent e) {
+//			}
+//
+//			@Override
+//			public void focusGained(FocusEvent e) {
+//				pwd.setText("");
+//			}
+//		});
+//		gbc.gridx = 0;
+//		gbc.gridy = 1;
+//		gbc.gridheight = 4;
+//		gbc.weightx = 0.2;
+//		gbc.weighty = 0.2;
+//		gbc.fill = GridBagConstraints.NONE;
+//		
+//		innerPanel.add(name);
+//		innerPanel.add(pwd);
+//		
+//		add(innerPanel, gbc);
+//	}
 
 	
 
 	private void addButtons() {
-		JPanel p = new JPanel();
-		gbc.gridx = 0;
-		gbc.gridy = 5;
-		gbc.anchor = GridBagConstraints.SOUTH;
 		
-		p.setLayout(new FlowLayout());
-		p.setBackground(defaultColor);
 		JButton log = new JButton("Login");
 		JButton guest = new JButton("Enter as Guest");
 		JButton reg = new JButton("Register");
@@ -119,14 +123,26 @@ public class LoginPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				if (isUserValid()) {
-					observer.update(true);
-					removeItself();
-					removeObserver();
-				} else {
-					JOptionPane.showMessageDialog(p, "I dati inseriti non sono validi !");
+				
+				boolean succesfulLogin = false;
+				try {
+					succesfulLogin = getDB().logIn(getUserName().getText(), new String(getPwdField().getPassword()));
+					
 				}
+				
+				catch (IllegalArgumentException iarg) {
+					JOptionPane.showMessageDialog(LoginPanel.this, iarg.getMessage());
+					
+				}
+				catch (NoAccountExistsYet nyet) {
+					JOptionPane.showMessageDialog(LoginPanel.this, nyet.getMessage());
+				}
+				if (succesfulLogin) {
+				getObserver().update(succesfulLogin);
+				removeItself();
+				removeObserver();
+				}
+				
 				
 				
 			}
@@ -136,8 +152,8 @@ public class LoginPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				observer.update(false);
-//				removeObserver();			//we don't remove the observer because we could login later
+				getObserver().update(false);
+					//we don't remove the observer because we could login later
 				removeItself();
 
 			}
@@ -147,41 +163,37 @@ public class LoginPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LoginToMainFrame.openRegisteringPanel(observer);
+				LoginToMainFrame.openRegisteringPanel(getObserver());
 			}
 		});
 
-		p.add(log);
-		p.add(reg);
-		p.add(guest);
+		getButtonSpace().add(log);
+		getButtonSpace().add(reg);
+		getButtonSpace().add(guest);
 
-		this.add(p, gbc);
+		repaint();
+		revalidate();
+//		this.add(p, gbc);
 	}
 	
 	private void removeItself() {
-		observer.remove(this);
+		getObserver().remove(this);
 	}
 
-	public void addObserver(MainFrame o) {
-		observer = o;
-	}
 
 	public void removeObserver() {
-		observer = null;
+		setObserver(null);
 	}
 
-	private boolean isUserValid() {
+	
+//	private boolean isUserValid() {
+//		db.logIn(name, name)
+//		
+//		return true;
+	
 
-//		if (name.isPresent() && name.getPwd() == this.pwd ) {
-//			this.pwd = new char[10];
-//			return true;
-//		}
-//		return false;
-		return true;
-	}
-
-	public String getName() {
-		return name;
-	}
+//	public getName() {
+//		return name;
+//	}
 
 }

@@ -1,8 +1,6 @@
-package frontend.main;
+package frontend.rightpanel;
 
 import javax.swing.JPanel;
-
-import frontend.focus.FocusPanel;
 
 public class FocusController { // probabilmente posso rimuovere questa classe
 

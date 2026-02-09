@@ -1,4 +1,4 @@
-package frontend;
+package frontend.utilities;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -10,16 +10,17 @@ import javax.swing.JPanel;
 
 import backend.model.DatoGTF;
 import backend.model.Risultato;
+import backend.model.RisultatoFermata;
 import backend.service.TransitServiceImpl.WrapperGenerico;
-//import backendNOTPUSH.Entity;
-import frontend.focus.entities.EntitiesPanelFactory;
+import frontend.rightpanel.panels.BusStopPanel;
+import frontend.rightpanel.panels.EntitiesPanelFactory;
 
-public abstract class ScrollablePanel extends JPanel{
+public abstract class ListToScrollConverter{
 	
 	
 	
 	
-	public JScrollPane setContent(List<JPanel> panels) {
+	public static <W extends JPanel> JScrollPane setContent(List<W> panels) {
 		JPanel support = new JPanel();
 		support.setLayout(new BoxLayout(support, BoxLayout.PAGE_AXIS));
 		for ( JPanel p : panels) {
@@ -28,13 +29,15 @@ public abstract class ScrollablePanel extends JPanel{
 		JScrollPane scroll = new JScrollPane(support);
 //		
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.getHorizontalScrollBar().setUnitIncrement(16);
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
+		
 		return scroll;
 	}
 	
 //	potrebbe diventare inutile questo metodo poiché basta convertSearchedList da cui si recuperano le liste di autobus
 	
-	public <T extends DatoGTF> List<JPanel> convertList2(List<T> input) {
+	public static <T extends DatoGTF> List<JPanel> convertList2(List<T> input) {
 		
 		List<JPanel> panels = new ArrayList<>();
 		EntitiesPanelFactory epf = new EntitiesPanelFactory();
@@ -46,12 +49,12 @@ public abstract class ScrollablePanel extends JPanel{
 		return panels;
 	}
 	
-	public <S extends Risultato> List<JPanel> convertList(List<S> input) {
+	public static List<JPanel> convertList(List<RisultatoFermata> input) {
 		
 		List<JPanel> panels = new ArrayList<>();
 		EntitiesPanelFactory epf = new EntitiesPanelFactory();
-		for (Risultato e : input) {
-			panels.add(epf.createPanel(e));
+		for (RisultatoFermata e : input) {
+			panels.add(new BusStopPanel(e));
 			
 		}
 		
@@ -59,7 +62,7 @@ public abstract class ScrollablePanel extends JPanel{
 	}
 	
 	
-	public List<JPanel> convertSearchedList(List<WrapperGenerico> input) {
+	public static List<JPanel> convertSearchedList(List<WrapperGenerico> input) {
 		
 		List<JPanel> panels = new ArrayList<>();
 		EntitiesPanelFactory epf = new EntitiesPanelFactory();

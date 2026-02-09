@@ -24,7 +24,6 @@ public class PredictionEngine {
 	private final Map<String, Corsa> tripById;
 	private final GTFSRealTimeClient tripClient;
 	private final List<OrarioFermata> allStopTimes;
-	
 
 	
 	public PredictionEngine(List<OrarioFermata> stopTimes, List<Corsa> corse, GTFSRealTimeClient tClient) {

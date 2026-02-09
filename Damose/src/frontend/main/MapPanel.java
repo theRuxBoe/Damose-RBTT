@@ -1,4 +1,4 @@
-package frontend;
+package frontend.main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -14,7 +14,9 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
-import frontend.utilities.WaypointRenderer;
+import frontend.waypoints.WaypointManager;
+
+//import frontend.utilities.WaypointRenderer;
 
 import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
@@ -24,9 +26,7 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 public class MapPanel  extends JPanel{
 	
-	private static JXMapViewer map;
-	private JPanel panel;
-	private WaypointRenderer renderer;
+	private JXMapViewer map;
 
 	public MapPanel() {
 		super(new BorderLayout());
@@ -34,22 +34,9 @@ public class MapPanel  extends JPanel{
 		setPreferredSize(new Dimension(500,500));
 		setMapPanel();
 		
-		WaypointRenderer.addMap(this);
-//		refreshPaint(list);
+		WaypointManager.addMap(this);
 		
 	}
-	
-	
-	
-	
-//	public void refreshPaint(List<Bus> buses) {
-// 		if (renderer == null) {
-//		WaypointRenderer rend = new WaypointRenderer(buses, getMapViewer());
-//		this.renderer = rend;
-// 		}
-// 		renderer.setAndPaintWaypoints(buses);
-// 		
-// 	}
 
 	private void setZooming() {
 		MouseInputListener mice = new PanMouseInputListener(map);
@@ -61,7 +48,7 @@ public class MapPanel  extends JPanel{
 	}
 	
 	
-	public static JXMapViewer getMapViewer() {
+	public JXMapViewer getMapViewer() {
 		return map;
 	}
 
@@ -86,7 +73,7 @@ public class MapPanel  extends JPanel{
 		GeoPosition romeCenter = new GeoPosition(41.890210, 12.492231);
 		map.setZoom(5);
 		map.setAddressLocation(romeCenter);
-		map.setSize(new Dimension(500,500));
+//		map.setSize(new Dimension(500,500));
 		
 //		Adding the mouse listener for panning and zooming
 		

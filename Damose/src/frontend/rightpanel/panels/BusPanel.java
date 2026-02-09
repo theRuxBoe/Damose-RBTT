@@ -1,35 +1,22 @@
-package frontend.focus.entities;
+package frontend.rightpanel.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 //import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;import java.awt.event.ActionEvent;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalTime;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.concurrent.Flow;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import backend.model.Corsa;
 import backend.model.PredizioneArrivo;
-import backend.realtime.VehiclePositionInfo;
-import backend.service.ProvaTransitService;
-import backend.service.TransitService;
-import frontend.MainFrame;
-import frontend.MapPanel;
-import frontend.utilities.WaypointRenderer;
-import frontend.waypoints.BusWaypoint;
 
 //	lo chiamiamo bus panel ma in realtà è un'astrazione di quello che arriva alla fermata
 public class BusPanel extends JPanel {
@@ -49,33 +36,37 @@ public class BusPanel extends JPanel {
 		super();
 		this.b = b;
 		setLayout(new GridBagLayout());
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
+//		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		
 		
 //		
 		
 		addLine();
 		addTime();
+		setMaximumSize(getPreferredSize());
+		setAlignmentX(Component.LEFT_ALIGNMENT);
+//		showOnMap();
 	}
 	
 	
 	private void addLine() {
 		JPanel linep = new JPanel();
+		linep.setLayout(new BorderLayout());
 		JLabel l = new JLabel("" + b.getRouteId(), JLabel.CENTER);
 		l.setForeground(Color.WHITE);
 		l.setFont(new Font("Normal", Font.BOLD, 40));
 		linep.setBackground(Color.RED);
-		linep.add(l);
+		linep.add(l, BorderLayout.CENTER);
 		
 		gbc.insets = new Insets(10, 5, 5, 10);		
 		gbc.weightx = 0.2;
 		gbc.weighty = 0.2;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.gridwidth = 3;
+		gbc.gridwidth =3;
 		gbc.gridheight = 3;
 		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.fill = GridBagConstraints.BOTH;
+//		gbc.fill = GridBagConstraints.BOTH;
 		
 //		Dialog, DialogInput, Monospaced, Serif, or SansSerif
 		
@@ -96,7 +87,7 @@ public class BusPanel extends JPanel {
 		add(p2, gbc);
 		
 		JPanel p3 = new JPanel();
-		JLabel l3 = new JLabel(b.getTripId() + " , Seats : " + "DaTO non disponibile");		//quando daniele aggiungerà i posti potremo metterli qui
+		JLabel l3 = new JLabel(b.getTripId() + " , Seats : " + "N/A");		
 		p3.add(l3);
 		
 		gbc.gridx = 3;
@@ -109,10 +100,13 @@ public class BusPanel extends JPanel {
 
 	private void addTime() {
 		JPanel p = new JPanel();
-		JLabel l = new JLabel("" + LocalTime.from(b.getArrivalTime()) + "minutes (??)");
+		JLabel l = new JLabel(b.getArrivalTime().getMinute() + " min"); //calculateTime(b.getArrivalTime())
 		l.setFont(new Font("Normal", Font.BOLD, 30));
 		
-		l.setForeground(Color.GREEN);
+		if (b.isRealTime()) {
+			l.setForeground(Color.GREEN);
+		}
+		
 		
 		p.add(l);
 		Timer t = new Timer(30000, new ActionListener() {
@@ -120,13 +114,14 @@ public class BusPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VehiclePositionInfo x = MainFrame.getTTS().getVehiclePositionForTripId(b.getTripId()).get();
-					WaypointRenderer.paintWaypoints(new BusWaypoint(new GeoPosition(x.getLat(), x.getLon())));			//uno dei punti su cui intervenire per gestire diversi tipi di mezzo
+//					VehiclePositionInfo x = MainFrame.getTTS().getVehiclePositionForTripId(b.getTripId()).get();
+//					WaypointManager.paintBus(new BusWaypoint(new GeoPosition(x.getLat(), x.getLon())), new WaypointPainter<BusWaypoint>());			//uno dei punti su cui intervenire per gestire diversi tipi di mezzo
 //					MapPanel.getMapViewer().setCenterPosition(b.getPosition());
-					l.setText("" + LocalTime.from(b.getArrivalTime()) + " minutes");
+					l.setText(b.getArrivalTime().getMinute() + " min");
+					
 				}
 				catch (NoSuchElementException exception) {
-					exception.printStackTrace();
+					
 //					dovremmo passare ai dati statici in caso
 				}
 				
@@ -147,7 +142,14 @@ public class BusPanel extends JPanel {
 		
 	}
 	
-	
 
+//	public static void main(String[] args) {
+//		JFrame f = new JFrame();
+//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		f.setLayout(new FlowLayout());
+//		f.add(new BusPanel(new PredizioneArrivo("1234", "716", "45645", "domodossola", LocalTime.now())));
+//		f.setVisible(true);
+//		f.pack();
+//	}
 	
 }

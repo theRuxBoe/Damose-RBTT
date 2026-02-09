@@ -1,4 +1,4 @@
-package frontend.focus;
+package frontend.rightpanel;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import backend.model.Fermata;
-import frontend.ScrollablePanel;
+import frontend.utilities.ListToScrollConverter;
 
-public class FavouritesPanel extends ScrollablePanel{
+public class FavouritesPanel extends JPanel{
 
 	private List<Fermata> favStops;
 	
@@ -20,7 +22,6 @@ public class FavouritesPanel extends ScrollablePanel{
 		setLayout(new BorderLayout());
 		addLabel();
 		
-//		showFavourites();
 //		setPreferredSize(new Dimension(300,1000));
 		
 //		getting favourites from database
@@ -29,10 +30,14 @@ public class FavouritesPanel extends ScrollablePanel{
 //		addFavourites();
 		
 	}
-	private void showFavourites() {
+	public void showFavourites() {
 //		updates the list from the backend
-		this.add(setContent(convertList2(favStops)), BorderLayout.CENTER);
+		JScrollPane p = ListToScrollConverter.setContent(ListToScrollConverter.convertList2(favStops));
+		
+		this.add(p, BorderLayout.CENTER);
 	}
+	
+	
 	
 	private void addLabel() {
 		JLabel lab = new JLabel("Your Stops : ", JLabel.CENTER);
@@ -40,9 +45,7 @@ public class FavouritesPanel extends ScrollablePanel{
 		add(lab, BorderLayout.NORTH);
 	}
 	
-//	private void addFavourites() {
-////		calls the backend to output favourites
-//	}
+
 	
 	
 }

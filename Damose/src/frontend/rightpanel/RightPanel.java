@@ -1,4 +1,4 @@
-package frontend.main;
+package frontend.rightpanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,11 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import frontend.LoginToMainFrame;
-import frontend.MainFrame;
-import frontend.focus.FavouritesPanel;
-import frontend.focus.FocusPanel;
-import frontend.focus.SearchPanel;
+import frontend.main.MainFrame;
+import frontend.user.LoginToMainFrame;
 
 public class RightPanel extends JPanel{
 
@@ -97,6 +94,7 @@ public class RightPanel extends JPanel{
  			FavouritesPanel fpanel = new FavouritesPanel();
  			fav = fpanel;
  			}
+ 		fav.showFavourites();
  		setShowCurrent(fav);
  		}
  	

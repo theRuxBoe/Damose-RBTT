@@ -1,12 +1,11 @@
-package frontend;
+package frontend.user;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
 
 import javax.swing.JFrame;
 
-import frontend.user.LoginPanel;
-import frontend.user.RegisterPanel;
+import frontend.main.MainFrame;
 
 public class LoginToMainFrame {
 
@@ -17,16 +16,17 @@ public class LoginToMainFrame {
 		if (logpane == null ) {
 			LoginPanel l = new LoginPanel();
 			logpane = l;
+			f.setLocation(new Point(800,300));
 			
 		}
 		if (regpane != null) {
 			f.remove(regpane);
 		}
 		
-		logpane.addObserver(f);
+		logpane.setObserver(f);
 		f.setExtendedState(JFrame.NORMAL); 
 //		f.setLocationRelativeTo(null);
-		f.setLocation(new Point(800,300));
+		
 		
 		f.add(logpane, BorderLayout.CENTER, 0);
 		f.pack();
@@ -43,10 +43,10 @@ public class LoginToMainFrame {
 		if (logpane != null) {
 			f.remove(logpane);
 		}
-		regpane.addObserver(f);
+		regpane.setObserver(f);
 		
 		f.setExtendedState(JFrame.NORMAL); 
-		f.setLocation(new Point(800,300));
+//		f.setLocation(new Point(800,300));
 		
 		f.add(regpane, BorderLayout.CENTER, 0);
 		f.pack();

@@ -1,23 +1,27 @@
 package frontend.news;
 
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import backend.realtime.ServiceAlertInfo;
+
 public class NewsPanel extends JPanel{
-		
-	private String line_affected;
-	private String title;
-	private String time_period;
-	private String description;
 	
 	
-	public NewsPanel(News n) {
+	public NewsPanel(ServiceAlertInfo n) {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//		eventually we need some graphic things
-//		getting infos from n to add them to the fields
+		addLabels(n);
 	}
 	
+	private void addLabels(ServiceAlertInfo saf) {
+		add(new JLabel(saf.getHeader()));
+		add(new JLabel(saf.getDescription()));
+		add(new JLabel(saf.getRouteIds().toString()));
+		add(new JLabel(saf.getStartTime() + " - " + saf.getEndTime()));
+		add(new JLabel(saf.getStopIds().toString()));
+	}
 	
 	
 }

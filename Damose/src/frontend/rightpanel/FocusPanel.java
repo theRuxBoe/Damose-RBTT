@@ -1,4 +1,4 @@
-package frontend.focus;
+package frontend.rightpanel;
 
 import java.awt.BorderLayout;
 //import java.awt.Dimension;
@@ -11,17 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 //import javax.swing.border.BevelBorder;
 
-//import org.jxmapviewer.viewer.GeoPosition;
-
-//import backendNOTPUSH.Entity;
-//import frontend.focus.entities.BusPanel;
-//import frontend.focus.entities.BusStopFocus;
-//import frontend.focus.entities.BusStopPanel;
-//import frontend.focus.entities.EntitiesPanelFactory;
-//import frontend.focus.entities.LinePanel;
-import frontend.main.FocusController;
-import frontend.main.RightPanel;
-
 public class FocusPanel extends JPanel {
 	
 	private JPanel previous;
@@ -30,9 +19,8 @@ public class FocusPanel extends JPanel {
 	
 	public FocusPanel() {
 		super();
-		
+		setLayout(new BorderLayout());
 		addBackButton();
-		addLabel();
 	
 	}
 	
@@ -41,11 +29,14 @@ public class FocusPanel extends JPanel {
 			remove(current);
 		}
 		current = p;
-		add(p);
+		add(p, BorderLayout.CENTER);
+		
 	}
 	
 	private void addBackButton() {
-		JButton b = new JButton(" GO BACK");
+		JPanel p = new JPanel();
+		JButton b = new JButton("GO BACK");
+		b.setSize(getPreferredSize());
 		b.addActionListener(new ActionListener() {
 			
 			@Override
@@ -54,7 +45,13 @@ public class FocusPanel extends JPanel {
 				FocusController.openPrevious();
 			}
 		});
-		add(b);
+		
+		JLabel label = new JLabel("You have selected : ", JLabel.CENTER);
+		
+		p.add(b);
+		p.add(label);
+		
+		add(p,BorderLayout.NORTH);
 	}
 
 	public void setRightPanel(RightPanel r) {
@@ -63,14 +60,6 @@ public class FocusPanel extends JPanel {
 		}
 		
 	}
-	
-	private void addLabel() {
-		JLabel label = new JLabel("You have selected : ", JLabel.CENTER);
-		
-		this.add(label, BorderLayout.NORTH);
-	}
-
-	
 	
 	public void setPrevious(JPanel p) {
 		previous = p;
