@@ -227,69 +227,57 @@ public class TransitServiceImpl implements TransitService {
 	    return R * c;
 	}
 	
-	public List<RisultatoFermata> trovaFermatePerLinea(String routeId, String directionName) {
-		
-		List<String> tripsId = new ArrayList<String>();
-		List<RisultatoFermata> risultato = new ArrayList<RisultatoFermata>();
-		Map<String, Fermata> fermateByStopId = new HashMap<String, Fermata>();
-		Map<CodiceNomeFermata, List<String>> fermateConOrari = new LinkedHashMap<>();
-	    List<OrarioFermata> orariFiltrati = new ArrayList<>();
-		
-		for (Corsa c : corse) {
-			
-			if ((c.getRouteId().equals(routeId)) && (c.getDirectionName().equalsIgnoreCase(directionName))) {
-			    tripsId.add(c.getTripId());
-			}
-		}
-		
-		for (Fermata f : fermate) {
+	public List<Fermata> trovaFermatePerLinea(String routeId, String directionName) {
 
-			fermateByStopId.put(f.getStopId(), f);
-		}
-		
+	    List<Fermata> risultato = new ArrayList<>();
 
+	    //Seleziona le corse della linea (direzione opzionale)
+	    List<Corsa> corseLinea = new ArrayList<>();
+	    
+	    for (Corsa c : corse) {
+	        if (!c.getRouteId().equals(routeId)) continue;
+
+	        if ((!directionName.isBlank() || directionName == null) &&
+	            (!c.getDirectionName().isBlank() || c.getDirectionName() == null) &&
+	            !c.getDirectionName().equalsIgnoreCase(directionName)) {
+	            continue;
+	        }
+
+	        corseLinea.add(c);
+	    }
+
+	    if (corseLinea.isEmpty()) {
+	        return risultato;
+	    }
+
+	    //Usa UNA corsa rappresentativa
+	    Corsa corsaRiferimento = corseLinea.get(0);
+	    String tripId = corsaRiferimento.getTripId();
+
+	    //Mappa fermate per stopId
+	    Map<String, Fermata> fermateById = new HashMap<>();
+	    for (Fermata f : fermate) {
+	        fermateById.put(f.getStopId(), f);
+	    }
+
+	    // Orari della corsa selezionata, ordinati
+	    List<OrarioFermata> orariCorsa = new ArrayList<>();
 	    for (OrarioFermata o : orari) {
-	        if (tripsId.contains(o.getTripId())) {
-	            orariFiltrati.add(o);
+	        if (o.getTripId().equals(tripId)) {
+	            orariCorsa.add(o);
 	        }
 	    }
-	    
-	    orariFiltrati.sort(Comparator
-	            .comparing(OrarioFermata::getTripId)
-	            .thenComparingInt(OrarioFermata::getStopSequence));
-		
-		for (OrarioFermata o : orariFiltrati) {
-				
-				Fermata f = fermateByStopId.get(o.getStopId());
-				if (f != null) {
-                    CodiceNomeFermata key = new CodiceNomeFermata(f.getStopId(), f.getName());
-                    
-                    if (!fermateConOrari.containsKey(key)) {
-                    	
-                    	fermateConOrari.put(key, new ArrayList<String>());
-                    }
-                    
-                    fermateConOrari.get(key).add(o.getArrivalTime());
-                }
-		}
-		
-		for (List<String> orariList : fermateConOrari.values()) {
-		        orariList.sort(String::compareTo);
-		    }
-			
-		for (Map.Entry<CodiceNomeFermata, List<String>> entry : fermateConOrari.entrySet()) {
-		    List<String> orariUnici = entry.getValue().stream()
-		        .distinct()
-		        .collect(Collectors.toList());
-		    
-		    risultato.add(new RisultatoFermata(
-		        entry.getKey().getStopId(),
-		        entry.getKey().getName(),
-		        orariUnici
-		    ));
 
-		}
-		
+	    orariCorsa.sort(Comparator.comparingInt(OrarioFermata::getStopSequence));
+
+	    //Costruzione risultato
+	    for (OrarioFermata o : orariCorsa) {
+	        Fermata f = fermateById.get(o.getStopId());
+	        if (f == null) continue;
+
+	        risultato.add(f);
+	    }
+
 	    return risultato;
 	}
 	

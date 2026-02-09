@@ -15,7 +15,7 @@ public interface TransitService {
 	Optional<Fermata> getFermataById(String stopId);
 	List<Linea> cercaLinee(String query);
 	List<Fermata> cercaFermate(String query);
-	List<RisultatoFermata> trovaFermatePerLinea(String routeId, String directionName);
+	List<Fermata> trovaFermatePerLinea(String routeId, String directionName);
     //ServiceQualityMetrics getQualityMetrics(String routeId);
 	List<PredizioneArrivo> prediciArriviPerFermata(String stopId, int limit);
 	Optional<PredizioneArrivo> ottieniProssimoArrivoLineaAllaFermata(String stopId, String routeId, String directionName);
