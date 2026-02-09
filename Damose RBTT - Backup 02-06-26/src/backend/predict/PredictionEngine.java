@@ -24,6 +24,7 @@ public class PredictionEngine {
 	private final Map<String, Corsa> tripById;
 	private final GTFSRealTimeClient tripClient;
 	private final List<OrarioFermata> allStopTimes;
+	private boolean lastOnlineStatus = false;
 
 	
 	public PredictionEngine(List<OrarioFermata> stopTimes, List<Corsa> corse, GTFSRealTimeClient tClient) {
@@ -71,6 +72,7 @@ public class PredictionEngine {
 	 }
 	 
 	public List<PredizioneArrivo> predictNextArrivals(String stopId, int limit, RealtimeSnapshot snap) {
+		
 		    if (limit <= 0) return List.of();
 
 		    List<PredizioneArrivo> predizioni = new ArrayList<>();
@@ -85,8 +87,10 @@ public class PredictionEngine {
 		    if (usedSnap == null && tripClient != null) {
 		        try {
 		            usedSnap = tripClient.fetchRealtime();
+		            this.lastOnlineStatus = true;
 		        } catch (IOException e) {
 		            usedSnap = null;
+		            this.lastOnlineStatus = false;
 		        }
 		    }
 
@@ -170,6 +174,11 @@ public class PredictionEngine {
 		 }
 		 
 		 return Optional.empty();
+	 }
+	 
+	 public boolean isOnline() {
+		 
+		 return this.lastOnlineStatus;
 	 }
 
 }

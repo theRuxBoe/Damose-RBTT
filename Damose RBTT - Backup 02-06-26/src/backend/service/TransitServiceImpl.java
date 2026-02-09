@@ -332,6 +332,11 @@ public class TransitServiceImpl implements TransitService {
 		return predictionEngine.predictNextForLineAtStop(stopId, routeId, directionName, snap);
 	}
 	
+    public boolean isOnline() {
+    	
+    	return predictionEngine.isOnline();
+    }
+	
 	@Override
 	public Optional<VehiclePositionInfo> getVehiclePositionForTripId(String tripId){
 		
