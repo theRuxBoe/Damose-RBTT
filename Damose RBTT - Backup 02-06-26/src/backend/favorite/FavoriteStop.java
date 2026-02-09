@@ -2,13 +2,13 @@ package backend.favorite;
 
 import backend.model.Fermata;
 
-public class Favorite {
+public class FavoriteStop {
 	
 	private String userId;
 	private Fermata fermataSalvata;
 	private String commento;
 	
-	public Favorite(String userId, Fermata fermataSalvata, String commento) {
+	public FavoriteStop(String userId, Fermata fermataSalvata, String commento) {
 		
 		this.userId = userId;
 		this.fermataSalvata = fermataSalvata;

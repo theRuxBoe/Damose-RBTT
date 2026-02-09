@@ -15,31 +15,31 @@ import java.util.Optional;
 import backend.model.Fermata;
 import backend.parser.GTFSStaticParser;
 
-public class FavoriteDB {
+public class FavoriteStopDB {
 
-	private final File favoritesFileDB;
-	private final Map<String, List<Favorite>> favoritesByUserId;
+	private final File favoritesFileDBStops;
+	private final Map<String, List<FavoriteStop>> favoriteStopsByUserId;
 	private final GTFSStaticParser parser;
 
-	public FavoriteDB() throws IOException {
+	public FavoriteStopDB() throws IOException {
 		
 		parser = new GTFSStaticParser();
 		parser.parseAll("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
 		
-		favoritesFileDB = new File("FavoritesFileDB.txt");
+		favoritesFileDBStops = new File("FavoritesFileDBStops.txt");
 		
-		if (!favoritesFileDB.exists()) {
+		if (!favoritesFileDBStops.exists()) {
 			
-			favoritesFileDB.createNewFile();
+			favoritesFileDBStops.createNewFile();
 		}
 		
-		favoritesByUserId = new HashMap<String, List<Favorite>>();
+		favoriteStopsByUserId = new HashMap<String, List<FavoriteStop>>();
 		loadFavoritesFromFile();
 	}
 	
 	private void loadFavoritesFromFile() throws IOException {
 		
-		try (BufferedReader reader = new BufferedReader(new FileReader(favoritesFileDB))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(favoritesFileDBStops))) {
 			
 			String riga;
 			while ((riga = reader.readLine()) != null) {
@@ -64,8 +64,8 @@ public class FavoriteDB {
 					Optional<Fermata> optFermata = getFermataById(fermataId);
 					if (optFermata.isPresent()) {
 						
-						favoritesByUserId.computeIfAbsent(idUtente, k -> new ArrayList<>())
-                        .add(new Favorite(idUtente, optFermata.get(), commento));
+						favoriteStopsByUserId.computeIfAbsent(idUtente, k -> new ArrayList<>())
+                        .add(new FavoriteStop(idUtente, optFermata.get(), commento));
 					}
 				}
 				
@@ -90,7 +90,7 @@ public class FavoriteDB {
 		return Optional.empty();
 	}
 	
-	public synchronized boolean addFavorite(String userId, Fermata fermata, String commento) throws IOException, FavoriteAlreadyExistingException {
+	public synchronized boolean addFavoriteStop(String userId, Fermata fermata, String commento) throws IOException {
 		
 		if (userId == null || fermata == null) {
 			
@@ -101,15 +101,15 @@ public class FavoriteDB {
 		if (commento == null) commento = "";
 		commento = commento.replace("\r", " ").replace("\n", " ").trim();
 		
-		List<Favorite> list = favoritesByUserId.get(userId);
+		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);
 		
 		if (list == null) {
 			
-			list = new ArrayList<Favorite>();
-			favoritesByUserId.put(userId, list);
+			list = new ArrayList<FavoriteStop>();
+			favoriteStopsByUserId.put(userId, list);
 		}
 		
-		for (Favorite f : list) {
+		for (FavoriteStop f : list) {
 			
 			if (f.getFermataSalvata().getStopId().equals(fermata.getStopId())) {
 				
@@ -117,7 +117,7 @@ public class FavoriteDB {
 			}
 		}
 		
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(favoritesFileDB, true))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(favoritesFileDBStops, true))) {
 			
 			writer.write("ID Utente: "+userId);
 			writer.newLine();
@@ -129,31 +129,31 @@ public class FavoriteDB {
 			
 		}
 		
-		list.add(new Favorite(userId, fermata, commento));
+		list.add(new FavoriteStop(userId, fermata, commento));
 		System.out.println("Fermata aggiunta ai Preferiti.");
 		
 		return true;
 	}
 	
-	//trova tutti i Favorites di un determinato utente
-	public synchronized Optional<List<Favorite>> findFavoritesByUserId(String userId) {
+	//trova tutti i FavoriteStops di un determinato utente
+	public synchronized Optional<List<FavoriteStop>> findFavoritesByUserId(String userId) {
 		
-		if (favoritesByUserId.containsKey(userId)) {
+		if (favoriteStopsByUserId.containsKey(userId)) {
 			
-			return Optional.of(List.copyOf(favoritesByUserId.get(userId)));
+			return Optional.of(List.copyOf(favoriteStopsByUserId.get(userId)));
 		}
 		
 		return Optional.empty();
 	}
 	
-	//trova un particolare Favorite di un determinato utente
-	public synchronized Optional<Favorite> findFavoriteByUserIdAndStopId(String userId, String stopId) {
+	//trova un particolare FavoriteStop di un determinato utente
+	public synchronized Optional<FavoriteStop> findFavoriteStopByUserIdAndStopId(String userId, String stopId) {
 		
-		List<Favorite> list = favoritesByUserId.get(userId);
+		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);
 		
 		if (list != null) {
 			
-			for (Favorite f : list) {
+			for (FavoriteStop f : list) {
 				
 				if (f.getFermataSalvata().getStopId().equals(stopId)) {
 					
