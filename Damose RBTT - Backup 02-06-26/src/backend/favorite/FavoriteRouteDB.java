@@ -146,7 +146,7 @@ public class FavoriteRouteDB {
 		return Optional.empty();
 	}
 	
-	//trova un particolare Favorite di un determinato utente
+	//trova un particolare FavoriteRoute di un determinato utente
 	public synchronized Optional<FavoriteRoute> findFavoriteStopByUserIdAndRouteId(String userId, String routeId) {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);

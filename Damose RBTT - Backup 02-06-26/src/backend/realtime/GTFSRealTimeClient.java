@@ -257,16 +257,17 @@ public class GTFSRealTimeClient {
 
         for (FeedEntity e : msg.getEntityList()) {
             TripUpdateInfo info = parseTripUpdate(e, headerMillis);
-            if (info == null) continue;
-            String tId = info.getTripId();
             
-            //evita tripId vuoto: se vuoto, può generare chiave diversa o saltare
-            tripUpdateInfoMap.put(tId, info);
-            if (!info.getDelayByStopSequence().isEmpty()) {
-                delayByTripAndSequence.put(tId, info.getDelayByStopSequence());
-            }
-            if (!info.getDelayByStopId().isEmpty()) {
-                delayByTripAndStopId.put(tId, info.getDelayByStopId());
+            if (info != null) {
+                String tId = info.getTripId();
+                tripUpdateInfoMap.put(tId, info);
+
+                if (!info.getDelayByStopSequence().isEmpty()) {
+                    delayByTripAndSequence.put(tId, info.getDelayByStopSequence());
+                }
+                if (!info.getDelayByStopId().isEmpty()) {
+                    delayByTripAndStopId.put(tId, info.getDelayByStopId());
+                }
             }
             
             VehiclePositionInfo vpi = parseVehiclePosition(e);
@@ -274,7 +275,6 @@ public class GTFSRealTimeClient {
                 if (vpi.getTripId() != null && !vpi.getTripId().isBlank()) {
                     vehiclePositionByTripId.put(vpi.getTripId(), vpi);
                 } else if (vpi.getVehicleId() != null && !vpi.getVehicleId().isBlank()) {
-                    // fallback SOLO se non ho tripId
                     vehiclePositionByVehicleId.put(vpi.getVehicleId(), vpi);
                 }
             }
