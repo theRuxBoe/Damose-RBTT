@@ -14,18 +14,16 @@ import java.util.Optional;
 
 import backend.model.Fermata;
 import backend.parser.GTFSStaticParser;
+import backend.parser.GTFSStaticRepository;
 
 public class FavoriteStopDB {
 
 	private final File favoritesFileDBStops;
 	private final Map<String, List<FavoriteStop>> favoriteStopsByUserId;
-	private final GTFSStaticParser parser;
 
 	public FavoriteStopDB() throws IOException {
 		
-		parser = new GTFSStaticParser();
-		parser.parseAll("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
-		
+        GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
 		favoritesFileDBStops = new File("FavoritesFileDBStops.txt");
 		
 		if (!favoritesFileDBStops.exists()) {
@@ -79,7 +77,7 @@ public class FavoriteStopDB {
 	
 	private Optional<Fermata> getFermataById(String stopId) {
 		
-		for (Fermata f : parser.getFermate()) {
+		for (Fermata f : GTFSStaticRepository.getFermate()) {
 			
 			if (f.getStopId().equals(stopId)) {
 				

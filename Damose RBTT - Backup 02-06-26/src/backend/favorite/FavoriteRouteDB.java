@@ -14,18 +14,17 @@ import java.util.Optional;
 
 import backend.model.Linea;
 import backend.parser.GTFSStaticParser;
+import backend.parser.GTFSStaticRepository;
 
 public class FavoriteRouteDB {
 
 	private final File favoritesFileDBRoutes;
 	private final Map<String, List<FavoriteRoute>> favoriteRoutesByUserId;
-	private final GTFSStaticParser parser;
 
 	public FavoriteRouteDB() throws IOException {
 		
-		parser = new GTFSStaticParser();
-		parser.parseAll("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
-		
+        GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
+        
 		favoritesFileDBRoutes = new File("FavoritesFileDBRoutes.txt");
 		
 		if (!favoritesFileDBRoutes.exists()) {
@@ -79,7 +78,7 @@ public class FavoriteRouteDB {
 	
 	private Optional<Linea> getLineaById(String routeId) {
 		
-		for (Linea l : parser.getLinee()) {
+		for (Linea l : GTFSStaticRepository.getLinee()) {
 			
 			if (l.getRouteId().equals(routeId)) {
 				
@@ -226,5 +225,3 @@ public class FavoriteRouteDB {
 		
 	}
 }
-
-

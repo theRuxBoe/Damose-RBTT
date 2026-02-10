@@ -21,7 +21,6 @@ import backend.realtime.VehiclePositionInfo;
 
 public class TransitServiceImpl implements TransitService {
 	
-	private final GTFSStaticParser parser;
 	private List<Linea> linee;
 	private List<Corsa> corse;
 	private List<OrarioFermata> orari;
@@ -32,13 +31,14 @@ public class TransitServiceImpl implements TransitService {
 	private final PredictionEngine predictionEngine;
 	private final RealtimeService realtimeService;
 	
-	public TransitServiceImpl(GTFSStaticParser parser, GTFSRealTimeClient tClient, GTFSRealTimeClient vClient, GTFSRealTimeClient aClient) {
+	public TransitServiceImpl(GTFSRealTimeClient tClient, GTFSRealTimeClient vClient, GTFSRealTimeClient aClient) throws IOException {
 		
-		this.parser = parser;
-		this.linee = parser.getLinee() != null ? parser.getLinee() : List.of();
-	    this.corse = parser.getCorse() != null ? parser.getCorse() : List.of();
-	    this.orari = parser.getOrari() != null ? parser.getOrari() : List.of();
-	    this.fermate = parser.getFermate() != null ? parser.getFermate() : List.of();
+		GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
+		
+		this.linee = GTFSStaticRepository.getLinee();
+	    this.corse = GTFSStaticRepository.getCorse();
+	    this.orari = GTFSStaticRepository.getOrari();
+	    this.fermate = GTFSStaticRepository.getFermate();
 	    
 	    this.tripClient = tClient;
 	    this.vehicleClient = vClient;
@@ -385,13 +385,12 @@ public class TransitServiceImpl implements TransitService {
 	
 	public static TransitServiceImpl createDefault() throws IOException {
 		
-	        GTFSStaticParser parser = new GTFSStaticParser();
-	        parser.parseAll("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
+	        GTFSStaticRepository.init("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
 	        
 	        GTFSRealTimeClient tripClient = new GTFSRealTimeClient("https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb");
 	        GTFSRealTimeClient vehicleClient = new GTFSRealTimeClient("https://romamobilita.it/sites/default/files/rome_rtgtfs_vehicle_positions_feed.pb");
 	        GTFSRealTimeClient alertClient = new GTFSRealTimeClient("https://romamobilita.it/sites/default/files/rome_rtgtfs_service_alerts_feed.pb");
-	        return new TransitServiceImpl(parser, tripClient, vehicleClient, alertClient);
+	        return new TransitServiceImpl(tripClient, vehicleClient, alertClient);
 	    }
 	
 	public RealtimeService getRealtimeService() {
