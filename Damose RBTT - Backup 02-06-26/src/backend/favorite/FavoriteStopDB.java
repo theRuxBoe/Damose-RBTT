@@ -135,6 +135,22 @@ public class FavoriteStopDB {
 		return true;
 	}
 	
+	public boolean isFavoriteStopPresent(String userId, String stopId) {
+		
+		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);
+		
+		for (FavoriteStop f : list) {
+			
+			if (f.getFermataSalvata().getStopId().equals(stopId)) {
+				
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
+	
 	//trova tutti i FavoriteStops di un determinato utente
 	public synchronized Optional<List<FavoriteStop>> findFavoritesByUserId(String userId) {
 		
@@ -163,6 +179,51 @@ public class FavoriteStopDB {
 		}
 		
 		return Optional.empty();
+		
+	}
+	
+	private void rewriteFile() throws IOException {
+
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(favoritesFileDBStops, false))) {
+
+	        for (Map.Entry<String, List<FavoriteStop>> entry : favoriteStopsByUserId.entrySet()) {
+
+	            for (FavoriteStop f : entry.getValue()) {
+
+	                writer.write("ID Utente: " + f.getUserId());
+	                writer.newLine();
+	                writer.write("Fermata: " + f.getFermataSalvata().getStopId());
+	                writer.newLine();
+	                writer.write("Commento: " + f.getCommento());
+	                writer.newLine();
+	                writer.newLine();
+	            }
+	        }
+	    }
+	}
+	
+	public synchronized Optional<FavoriteStop> deleteFavoriteStop(String userId, String stopId) throws IOException {
+		
+		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);
+		
+		if (list == null) return Optional.empty();
+		
+		Optional<FavoriteStop> toDelete = findFavoriteStopByUserIdAndStopId(userId, stopId);
+		
+		if (toDelete.isEmpty()) {
+			
+			return Optional.empty();
+		}
+			
+		FavoriteStop deleted = toDelete.get();
+		list.remove(deleted);
+		rewriteFile();
+		
+	    if (list.isEmpty()) {
+	        favoriteStopsByUserId.remove(userId);
+	    }
+		
+		return toDelete;
 		
 	}
 }
