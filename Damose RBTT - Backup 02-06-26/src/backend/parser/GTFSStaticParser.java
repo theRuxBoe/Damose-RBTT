@@ -124,6 +124,14 @@ public class GTFSStaticParser {
 		return risultatoOrari;
 	}
 	
+	private boolean isAlreadyUnzipped(Path outputDir) {
+	    return Files.exists(outputDir)
+	        && Files.exists(outputDir.resolve("stops.txt"))
+	        && Files.exists(outputDir.resolve("routes.txt"))
+	        && Files.exists(outputDir.resolve("trips.txt"))
+	        && Files.exists(outputDir.resolve("stop_times.txt"));
+	}
+	
 	public void parseAll(String gtfsUrl) throws IOException {
 		Path baseDir = Path.of(System.getProperty("user.dir"), "data");
 		Path zipPath = baseDir.resolve("rome_gtfs.zip");
@@ -146,9 +154,13 @@ public class GTFSStaticParser {
 	        System.out.println("Scarico GTFS da " + gtfsUrl);
 	        downloadGTFSZip(gtfsUrl, zipPath);
 	    }
-
-	    System.out.println("Estrazione in corso...");
-	    unzipGTFS(zipPath, outputDir);
+	    
+	    if (deveAggiornare || !isAlreadyUnzipped(outputDir)) {
+	    	System.out.println("Estrazione in corso...");
+	    	unzipGTFS(zipPath, outputDir);
+	    }
+	    else System.out.println("Estrazione già eseguita, salto unzip.");
+	    
 
 	    fermate = parseFermate(outputDir.resolve("stops.txt"));
 	    linee = parseLinee(outputDir.resolve("routes.txt"));

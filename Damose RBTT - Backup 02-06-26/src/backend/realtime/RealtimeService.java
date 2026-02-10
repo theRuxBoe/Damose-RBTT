@@ -84,7 +84,7 @@ public class RealtimeService {
                 alerts);
     
     //System.out.println("DEBUG: trip updates count = " + realSnap.getAllTripUpdates().size());
-    realSnap.getAllTripUpdates().keySet().stream().limit(10).forEach(t -> System.out.println("DEBUG: sample tripUpdateId=" + t));
+    //realSnap.getAllTripUpdates().keySet().stream().limit(10).forEach(t -> System.out.println("DEBUG: sample tripUpdateId=" + t));
     
     return realSnap;
     }
