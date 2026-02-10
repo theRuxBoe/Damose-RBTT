@@ -1,6 +1,7 @@
 package frontend.rightpanel;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 //import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +22,7 @@ public class FocusPanel extends JPanel {
 		super();
 		setLayout(new BorderLayout());
 		addBackButton();
-	
+		setMaximumSize(new Dimension(550, 1000));
 	}
 	
 	public void setFocus(JPanel p) {

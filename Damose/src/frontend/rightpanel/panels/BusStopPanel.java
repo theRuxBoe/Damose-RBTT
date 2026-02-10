@@ -24,6 +24,7 @@ import backend.model.RisultatoFermata;
 import frontend.main.MainFrame;
 import frontend.main.MapPanel;
 import frontend.rightpanel.FocusController;
+import frontend.user.FavouritesDBManager;
 import frontend.waypoints.BusWaypoint;
 import frontend.waypoints.WaypointManager;
 
@@ -32,23 +33,19 @@ public class BusStopPanel extends JPanel {
 
 
 	
-//	private GeoPosition position;
 	private Fermata stop;
 	
 	
 	public BusStopPanel(Fermata bs) {
 		super();
-//		setLayout(new BorderLayout());
 		setLayout(new FlowLayout(FlowLayout.LEFT));
-//		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		
 		
 		stop = bs;
-//		this.position = new GeoPosition(bs.getLat(), bs.getLon());
 		addLabelsData();
 		addListener();
 		setMaximumSize(getPreferredSize());
-		setAlignmentX(Component.LEFT_ALIGNMENT);
+//		setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 	}
 	
@@ -76,17 +73,23 @@ public class BusStopPanel extends JPanel {
 	
 	private void addLabelsData() {
 		JPanel labpane = new JPanel();
-		JLabel data = new JLabel(stop.getName() + " - " + stop.getStopId());
+		JLabel data = new JLabel(stop.getName() + " - " + stop.getStopId(), JLabel.LEFT);
 		data.setFont(new Font("Serif", Font.PLAIN, 30));
-		labpane.add(data,BorderLayout.NORTH);
-		if (MainFrame.isLogged() == true) {
+		labpane.add(data);
+		if (MainFrame.isLogged()) {
 			labpane.add(createFavouriteButton());
 		}
-		add(labpane, BorderLayout.NORTH);
+		labpane.setMaximumSize(getPreferredSize());
+		add(labpane);
+		
 	}
 	
 	private JButton createFavouriteButton() {
-		JButton b = new JButton("☆");
+		String s = "☆";
+		JButton b = new JButton(s);
+		b.setBorderPainted(false);
+		b.setFocusPainted(false);
+		b.setContentAreaFilled(false);
 		b.setSize(new Dimension(10,10));
 		b.addActionListener(new ActionListener() {
 			
@@ -94,6 +97,7 @@ public class BusStopPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (b.getText() == "☆") {
 					b.setText("★");
+					FavouritesDBManager.addToFavourites(stop);
 //					this will put the stop into the favourites area
 				}
 				else {

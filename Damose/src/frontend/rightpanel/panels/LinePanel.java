@@ -13,9 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 
+import backend.model.Fermata;
 import backend.model.Linea;
 import backend.model.RisultatoFermata;
 import frontend.main.MainFrame;
+import frontend.user.FavouritesDBManager;
 import frontend.utilities.ListToScrollConverter;
 
 public class LinePanel extends JPanel { 
@@ -44,33 +46,45 @@ public class LinePanel extends JPanel {
 		JPanel p = new JPanel();
 		JLabel data = new JLabel("  " + line.getName() + " - " + line.getDescription());
 		data.setFont(new Font("Serif", Font.BOLD, 30));
-		JButton b = new JButton("☆");
+		if (MainFrame.isLogged()) {
+			p.add(createFavouriteButton());
+		}
 		
+		
+		p.add(data);
+		add(p, BorderLayout.NORTH);
+	}
+	
+	private JButton createFavouriteButton() {
+		String s = "☆";
+		JButton b = new JButton(s);
 		b.setSize(new Dimension(10,10));
+		b.setBorderPainted(false);
+		b.setFocusPainted(false);
+		b.setContentAreaFilled(false);
 		b.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (b.getText() == "☆") {
 					b.setText("★");
+					FavouritesDBManager.addToFavourites(line);
 //					this will put the stop into the favourites area
 				}
 				else {
 					b.setText("☆");
 //					this will kick the stop from the favourites
+					FavouritesDBManager.remove(line);
 				}
 			}
 		});
-		
-		p.add(data);
-		p.add(b);
-		add(p, BorderLayout.NORTH);
+		return b;
 	}
 	
 	private void addScrollPanel() {
-		List<RisultatoFermata> j = MainFrame.getTTS().trovaFermatePerLinea(line.getRouteId(), line.getDescription());
+		List<Fermata> j = MainFrame.getTTS().trovaFermatePerLinea(line.getRouteId(), line.getDescription());
 		JScrollPane x = ListToScrollConverter.setContent(ListToScrollConverter.convertList(j));
-		x.setPreferredSize(new Dimension(400,100));
+		x.setMaximumSize(getPreferredSize());
 		add(x, BorderLayout.WEST);
 		
 	}

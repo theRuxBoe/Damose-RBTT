@@ -30,7 +30,8 @@ public class MainFrame extends JFrame {
 	private RightPanel rightPanel;
 	private boolean panelsCreated = false;
 	private JPanel basePanel;
-	private static boolean online;
+//	private static boolean online;
+	private static String u;
 	
 	
 	public MainFrame() {
@@ -65,12 +66,13 @@ public class MainFrame extends JFrame {
 		return tts;
 	}
 	
-	public static boolean isConnected(){
-		return online;
-	}
+//	public static boolean isConnected(){
+//		return online;
+//	}
 	
-	public void update(boolean log) {
+	public void update(boolean log, String user) {
 		logged = log;
+		u = user;
 		if (!panelsCreated) {
 			panelsCreated = true;
 			createDefaultPanels();
@@ -154,6 +156,9 @@ public class MainFrame extends JFrame {
  	
  	
 
+ 	public static String getCurrentUser() {
+ 		return u;
+ 	}
  		
  	public static boolean isLogged() {
  		return logged;

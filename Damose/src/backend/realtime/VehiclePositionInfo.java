@@ -12,8 +12,9 @@ public class VehiclePositionInfo {
     private final Long timestamp;
     private final Integer currentStopSequence; //stopSequence della fermata su cui transita attualmente il bus
     private final String currentStopId; //stopId della fermata su cui transita attualmente il bus
+    private final OccupancyLevel occupancyLevel; //indica quanto è affollato il veicolo
     
-    public VehiclePositionInfo(String vId, String vLabel, String tId, double lat, double lon, Double bear, Double sp, Long tstamp, Integer curStopSeq, String curSId) {
+    public VehiclePositionInfo(String vId, String vLabel, String tId, double lat, double lon, Double bear, Double sp, Long tstamp, Integer curStopSeq, String curSId, OccupancyLevel occLvl) {
     	
     	this.vehicleId = vId;
     	this.vehicleLabel = vLabel;
@@ -25,6 +26,7 @@ public class VehiclePositionInfo {
     	this.timestamp = tstamp;
     	this.currentStopSequence = curStopSeq;
     	this.currentStopId = curSId;
+    	this.occupancyLevel = occLvl;
     	
     }
 
@@ -66,6 +68,11 @@ public class VehiclePositionInfo {
 
 	public String getCurrentStopId() {
 		return currentStopId;
+	}
+	
+	public OccupancyLevel getOccupancyLevel() {
+		
+		return this.occupancyLevel;
 	}
     
 }

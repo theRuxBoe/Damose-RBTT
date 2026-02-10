@@ -58,6 +58,16 @@ public class SearchPanel extends JPanel {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String x = SearchPanel.this.getText();
 					if (x.length() != 0 && !x.equals("Search")) {
@@ -70,18 +80,6 @@ public class SearchPanel extends JPanel {
 						showResults(risultato);
 					}
 				}
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		JButton b = new JButton("🔎");
@@ -124,15 +122,16 @@ public class SearchPanel extends JPanel {
 //			resultPanel.setPreferredSize(new Dimension(450,800));
 			resultPanel.setPreferredSize(new Dimension(500,700));
 		}
-		
+		if (!res.isEmpty()) {
 		JScrollPane scrollResult = ListToScrollConverter.setContent(ListToScrollConverter.convertSearchedList(res));
+		
 		scrollResult.setPreferredSize(new Dimension(500,500));
 		this.scrollResult = scrollResult;
 		
 		resultPanel.add(scrollResult, BorderLayout.NORTH);
 		
 		add(resultPanel, BorderLayout.CENTER);
-		
+		}
 		repaint();
 		revalidate();
 	

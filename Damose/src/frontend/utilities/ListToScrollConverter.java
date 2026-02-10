@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 	import javax.swing.JScrollPane;
 
 import backend.model.DatoGTF;
+import backend.model.Fermata;
 import backend.model.Risultato;
 import backend.model.RisultatoFermata;
 import backend.service.TransitServiceImpl.WrapperGenerico;
@@ -21,6 +22,8 @@ public abstract class ListToScrollConverter{
 	
 	
 	public static <W extends JPanel> JScrollPane setContent(List<W> panels) {
+		if (panels.isEmpty()) 
+			{return null;}
 		JPanel support = new JPanel();
 		support.setLayout(new BoxLayout(support, BoxLayout.PAGE_AXIS));
 		for ( JPanel p : panels) {
@@ -37,7 +40,7 @@ public abstract class ListToScrollConverter{
 	
 //	potrebbe diventare inutile questo metodo poiché basta convertSearchedList da cui si recuperano le liste di autobus
 	
-	public static <T extends DatoGTF> List<JPanel> convertList2(List<T> input) {
+	public static <T extends DatoGTF> List<JPanel> convertList(List<T> input) {
 		
 		List<JPanel> panels = new ArrayList<>();
 		EntitiesPanelFactory epf = new EntitiesPanelFactory();
@@ -48,18 +51,18 @@ public abstract class ListToScrollConverter{
 		
 		return panels;
 	}
-	
-	public static List<JPanel> convertList(List<RisultatoFermata> input) {
-		
-		List<JPanel> panels = new ArrayList<>();
-		EntitiesPanelFactory epf = new EntitiesPanelFactory();
-		for (RisultatoFermata e : input) {
-			panels.add(new BusStopPanel(e));
-			
-		}
-		
-		return panels;
-	}
+//	TODO da rivedere questo doppio metodo
+//	public static List<JPanel> convertList(List<Fermata> input) {
+//		
+//		List<JPanel> panels = new ArrayList<>();
+//		EntitiesPanelFactory epf = new EntitiesPanelFactory();
+//		for (Fermata e : input) {
+//			panels.add(new BusStopPanel(e));
+//			
+//		}
+//		
+//		return panels;
+//	}
 	
 	
 	public static List<JPanel> convertSearchedList(List<WrapperGenerico> input) {
@@ -73,6 +76,7 @@ public abstract class ListToScrollConverter{
 		
 		return panels;
 	}
+	
 	
 	
 }

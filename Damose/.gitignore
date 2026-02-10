@@ -1,2 +1,5 @@
 /bin/
 /target/
+/data/
+/.project/
+/pom.xml/

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserDB {
@@ -57,18 +58,30 @@ public class UserDB {
 				
 				catch (Exception e) {
 					
+					e.printStackTrace();
 				}
 			}
 		}
 	}
 	
-	public synchronized void createNewAccount(String userName, String password) throws IOException {
+	public synchronized void createNewAccount(String userName, String password) throws IOException, IllegalArgumentException, AccountAlreadyExistsException {
 		
 		if (userName == null || password == null) {
 		    throw new IllegalArgumentException("Testo nullo non consentito.");
 		}
 		
 		userName = userName.trim();
+		password = password.trim();
+		
+		if (password.isEmpty()) {
+			
+			throw new IllegalArgumentException("La password non può essere vuota");
+		}
+		
+		if (password.length() < 8) {
+			
+			throw new IllegalArgumentException("La password deve contenere almeno 8 caratteri.");
+		}
 		
         if (userName.length() == 0) {
             throw new IllegalArgumentException("Nome vuoto non consentito.");
@@ -104,7 +117,15 @@ public class UserDB {
 
 	}
 	
-	public synchronized boolean logIn(String userName, String password){
+	public synchronized boolean logIn(String userName, String password) throws IllegalArgumentException, NoAccountExistsYet {
+		
+		userName = userName.trim();
+		password = password.trim();
+		
+		if (userName.isEmpty()|| password.isEmpty()) {
+			System.out.println("Login fallito. Il nome utente o la password sono errati.");
+		    return false;
+		}
 		
 		if (userName == null || password == null) {
 		    throw new IllegalArgumentException("Testo nullo non consentito.");
@@ -129,4 +150,21 @@ public class UserDB {
 		return false;
 	}
 
+	public Optional<User> findUserByName(String username) throws IllegalArgumentException {
+		
+		if (username == null) {
+			
+			throw new IllegalArgumentException("Testo nullo non consentito.");
+		}
+		
+		for (User u : usersList) {
+			
+			if (u.getUserName().equals(username)) {
+				
+				return Optional.of(u);
+			}
+		}
+		
+		return Optional.empty();
+	}
 }

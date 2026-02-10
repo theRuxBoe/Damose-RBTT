@@ -21,8 +21,10 @@ public class ServicePanel extends JPanel{
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setBorder(new BevelBorder(BevelBorder.RAISED));
+		
 		addLabel();
-//		addNews();
+		setMaximumSize(new Dimension(400, 1000));
+		addNews();
 		
 	}
 	

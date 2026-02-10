@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+import backend.favorite.FavoriteRouteDB;
 import backend.user.NoAccountExistsYet;
 import backend.user.User;
 import backend.user.UserDB;
@@ -45,71 +46,11 @@ public class LoginPanel extends UserPanel {
 //		addInnerPanel();
 //
 		addButtons();
-		openDB();
+		
 		
 
 	}
 
-//	private void addLabel() {
-//		JLabel lab = new JLabel("Damose", JLabel.CENTER);
-//		lab.setForeground(Color.WHITE);
-//		lab.setFont(new Font("Monospaced", Font.BOLD, 40));
-////		lab.setPreferredSize(new Dimension(100, 100));
-//		gbc.gridx = 0;
-//		gbc.gridy = 0;
-//		gbc.weightx = 0.5;
-//		gbc.weighty = 0.5;
-//		gbc.fill = GridBagConstraints.HORIZONTAL;
-//		
-//		add(lab, gbc);
-//	}
-
-//	private void addInnerPanel() {
-//		JPanel innerPanel = new JPanel();
-//		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.PAGE_AXIS));
-//		innerPanel.setBackground(defaultColor);
-//		
-//		JTextField name = new JTextField("Name", 20);
-//		this.name = name;
-//		name.setHorizontalAlignment(JTextField.CENTER);
-//		name.addFocusListener(new FocusListener() {
-//
-//			@Override
-//			public void focusLost(FocusEvent e) {
-//			}
-//
-//			@Override
-//			public void focusGained(FocusEvent e) {
-//				name.setText("");
-//			}
-//		});
-//
-//		JPasswordField pwd = new JPasswordField("Password", 20);
-//		this.pwd = pwd;
-//		pwd.setHorizontalAlignment(JTextField.CENTER);
-//		pwd.addFocusListener(new FocusListener() {
-//
-//			@Override
-//			public void focusLost(FocusEvent e) {
-//			}
-//
-//			@Override
-//			public void focusGained(FocusEvent e) {
-//				pwd.setText("");
-//			}
-//		});
-//		gbc.gridx = 0;
-//		gbc.gridy = 1;
-//		gbc.gridheight = 4;
-//		gbc.weightx = 0.2;
-//		gbc.weighty = 0.2;
-//		gbc.fill = GridBagConstraints.NONE;
-//		
-//		innerPanel.add(name);
-//		innerPanel.add(pwd);
-//		
-//		add(innerPanel, gbc);
-//	}
 
 	
 
@@ -123,10 +64,12 @@ public class LoginPanel extends UserPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				openDB();
 				boolean succesfulLogin = false;
+				String user = getUserName().getText();
 				try {
-					succesfulLogin = getDB().logIn(getUserName().getText(), new String(getPwdField().getPassword()));
+					
+					succesfulLogin = getDB().logIn(user, new String(getPwdField().getPassword()));
 					
 				}
 				
@@ -138,7 +81,10 @@ public class LoginPanel extends UserPanel {
 					JOptionPane.showMessageDialog(LoginPanel.this, nyet.getMessage());
 				}
 				if (succesfulLogin) {
-				getObserver().update(succesfulLogin);
+				FavouritesDBManager dbm = new FavouritesDBManager();
+				dbm.openDBs();
+					
+				getObserver().update(succesfulLogin, user);
 				removeItself();
 				removeObserver();
 				}
@@ -152,7 +98,7 @@ public class LoginPanel extends UserPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getObserver().update(false);
+				getObserver().update(false, null);
 					//we don't remove the observer because we could login later
 				removeItself();
 
@@ -173,7 +119,6 @@ public class LoginPanel extends UserPanel {
 
 		repaint();
 		revalidate();
-//		this.add(p, gbc);
 	}
 	
 	private void removeItself() {
@@ -186,14 +131,5 @@ public class LoginPanel extends UserPanel {
 	}
 
 	
-//	private boolean isUserValid() {
-//		db.logIn(name, name)
-//		
-//		return true;
-	
-
-//	public getName() {
-//		return name;
-//	}
 
 }

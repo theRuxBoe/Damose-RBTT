@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import backend.model.Fermata;
+import backend.user.User;
+import backend.user.UserDB;
+import frontend.main.MainFrame;
+import frontend.user.FavouritesDBManager;
 import frontend.utilities.ListToScrollConverter;
 
 public class FavouritesPanel extends JPanel{
@@ -22,19 +26,16 @@ public class FavouritesPanel extends JPanel{
 		setLayout(new BorderLayout());
 		addLabel();
 		
-//		setPreferredSize(new Dimension(300,1000));
 		
-//		getting favourites from database
-//		favourites = ....
-//		setContent(favourites);
-//		addFavourites();
 		
 	}
 	public void showFavourites() {
-//		updates the list from the backend
-		JScrollPane p = ListToScrollConverter.setContent(ListToScrollConverter.convertList2(favStops));
+		JScrollPane x = ListToScrollConverter.setContent(FavouritesDBManager.getFavourites(MainFrame.getCurrentUser()));
+		if (x != null) {
+			this.add(x, BorderLayout.CENTER);
+		}
 		
-		this.add(p, BorderLayout.CENTER);
+		
 	}
 	
 	
