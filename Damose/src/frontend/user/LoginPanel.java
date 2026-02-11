@@ -45,6 +45,7 @@ public class LoginPanel extends UserPanel {
 //
 //		addInnerPanel();
 //
+		openDB();
 		addButtons();
 		
 		
@@ -57,14 +58,14 @@ public class LoginPanel extends UserPanel {
 	private void addButtons() {
 		
 		JButton log = new JButton("Login");
-		JButton guest = new JButton("Enter as Guest");
-		JButton reg = new JButton("Register");
+		JButton guest = new JButton("Entra come ospite");
+		JButton reg = new JButton("Registrati");
 
 		log.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				openDB();
+				
 				boolean succesfulLogin = false;
 				String user = getUserName().getText();
 				try {
@@ -101,6 +102,7 @@ public class LoginPanel extends UserPanel {
 				getObserver().update(false, null);
 					//we don't remove the observer because we could login later
 				removeItself();
+				
 
 			}
 		});

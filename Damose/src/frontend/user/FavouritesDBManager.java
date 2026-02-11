@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import backend.favorite.FavoriteAlreadyExistingException;
 import backend.favorite.FavoriteRoute;
 import backend.favorite.FavoriteRouteDB;
 import backend.favorite.FavoriteStop;
@@ -43,16 +44,18 @@ public class FavouritesDBManager {
 
 		Optional<List<FavoriteStop>> st = stops.findFavoritesByUserId(user);
 		List<DatoGTF> result = new ArrayList<>();
-		if (!rt.isEmpty() || !st.isEmpty()) {
+		if (!rt.isEmpty()) {
 			List<FavoriteRoute> routesFav = rt.get();
-			List<FavoriteStop> stopsFav = st.get();
-
 			for (FavoriteRoute fr : routesFav) {
 				result.add(fr.getLineaSalvata());
 			}
+		}
+		if (!st.isEmpty()) {
+			List<FavoriteStop> stopsFav = st.get();
 			for (FavoriteStop fs : stopsFav) {
 				result.add(fs.getFermataSalvata());
 			}
+		
 		}
 
 		return ListToScrollConverter.convertList(result);
@@ -67,6 +70,10 @@ public class FavouritesDBManager {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Non è stato possibile connettersi al database, riprovare più tardi");
 		}
+	
+		catch (FavoriteAlreadyExistingException excep) {
+			JOptionPane.showMessageDialog(null, excep.getMessage());
+		}
 	}
 
 	public static void addToFavourites(Linea l) {
@@ -74,15 +81,36 @@ public class FavouritesDBManager {
 			routes.addFavoriteRoute(MainFrame.getCurrentUser(), l, null);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Non è stato possibile connettersi al database, riprovare più tardi");
+		
+		}
+			catch (FavoriteAlreadyExistingException excep) {
+				JOptionPane.showMessageDialog(null, excep.getMessage());
 		}
 	}
 
 	public static void remove(Fermata f) {
-		
+		try {
+		stops.deleteFavoriteStop(MainFrame.getCurrentUser(), f.getStopId());
+		}
+		catch (IOException ex) {
+			JOptionPane.showMessageDialog(null, ex.getMessage());
+		}
 	}
 
 	public static void remove(Linea l) {
-
+		try {
+			routes.deleteFavoriteRoute(MainFrame.getCurrentUser(), l.getRouteId());
+			}
+			catch (IOException ex) {
+				JOptionPane.showMessageDialog(null, ex.getMessage());
+			}
 	}
 
+	public static boolean isPresent(Linea l) {
+		return routes.isFavoriteRoutePresent(MainFrame.getCurrentUser(), l.getRouteId());
+	}
+	
+	public static boolean isPresent(Fermata f) {
+		return stops.isFavoriteStopPresent(MainFrame.getCurrentUser(), f.getStopId());
+	}
 }

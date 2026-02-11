@@ -42,7 +42,7 @@ public class UserPanel extends JPanel{
 	public UserPanel() {
 		super();
 		setLayout(new GridBagLayout());
-		setPreferredSize(new Dimension(300, 300));
+//		setMaximumSize(new Dimension(300, 300));
 		setBackground(defaultColor);
 		
 		
@@ -60,7 +60,6 @@ public class UserPanel extends JPanel{
 		JLabel lab = new JLabel("Damose", JLabel.CENTER);
 		lab.setForeground(Color.WHITE);
 		lab.setFont(new Font("Monospaced", Font.BOLD, 40));
-//		lab.setPreferredSize(new Dimension(100, 100));
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 0.5;
@@ -111,73 +110,16 @@ public class UserPanel extends JPanel{
 		buttonSpace = p;
 		this.add(p, gbc);
 		
-//		JButton log = new JButton("Login");
-//		JButton guest = new JButton("Enter as Guest");
-//		JButton reg = new JButton("Register");
-//
-//		log.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				
-//				boolean succesfulLogin = false;
-//				try {
-//					succesfulLogin = db.logIn(name.getText(), new String(pwd.getPassword()));
-//					observer.update(succesfulLogin);
-//					removeItself();
-//					removeObserver();
-//				}
-//				
-//				catch (IllegalArgumentException iarg) {
-//					JOptionPane.showMessageDialog(LoginPanel.this, iarg.getMessage());
-//					
-//				}
-//				catch (NoAccountExistsYet nyet) {
-//					JOptionPane.showMessageDialog(LoginPanel.this, nyet.getMessage());
-//				}
-//				
-////				
-//				
-//				
-//				
-//				
-//			}
-//		});
-//
-//		guest.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				observer.update(false);
-//					//we don't remove the observer because we could login later
-//				removeItself();
-//
-//			}
-//		});
-//
-//		reg.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				LoginToMainFrame.openRegisteringPanel(observer);
-//			}
-//		});
-//
-//		p.add(log);
-//		p.add(reg);
-//		p.add(guest);
-
-		
 	}
 
 	public void openDB() {
-		if (this.db == null) {
+		if (db == null) {
 		try {
 			UserDB dab = new UserDB();
 			db = dab;
 		}
 		catch (IOException e) {
-			JOptionPane.showMessageDialog(observer, "There was an error with the DB", "DB error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(observer, "There was an error with the DB");
 		}
 		}
 	}

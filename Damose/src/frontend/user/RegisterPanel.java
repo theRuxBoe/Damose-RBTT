@@ -22,78 +22,18 @@ import backend.user.AccountAlreadyExistsException;
 import backend.user.UserDB;
 import frontend.main.MainFrame;
 
-public class RegisterPanel extends UserPanel{//extends LoginPanel {
+public class RegisterPanel extends UserPanel{
 
 	
 	public RegisterPanel() {
 		super();
-//		setLayout(new GridBagLayout());
-//		
-//		setPreferredSize(new Dimension(300, 300));
-////		setLocation(new Point(800, 300));
-//		setBackground(defaultcolor);
-		
-//		addLabel();
-//		addInputField();
-//		openDB();
 		
 		addButtons();
 		
 	}
 	
-//	private void addLabel() {
-//		JLabel dam = new JLabel("Damose", JLabel.CENTER);
-//		dam.setForeground(Color.WHITE);
-//		dam.setFont(new Font("Monospaced", Font.BOLD, 40));
-////		dam.setPreferredSize(new Dimension(100,100));
-////		gbc.insets = new Insets(5,5,5,5);
-//		gbc.gridx = 0;
-//		gbc.gridy = 0;
-//		gbc.weightx = 0.5;
-//		gbc.weighty = 0.5;
-//		gbc.fill = GridBagConstraints.HORIZONTAL;
-//		
-//		add(dam, gbc);
-//	}
-//	
-//	private void addInputField() {
-//		JPanel p = new JPanel();
-//		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
-//		gbc.gridx = 0;
-//		gbc.gridy = 1;
-//		gbc.gridheight = 4;
-//		gbc.weightx = 0.2;
-//		gbc.weighty = 0.2;
-//		gbc.fill = GridBagConstraints.NONE;
-//		
-//		JLabel n = new JLabel("Name : ");
-//		n.setForeground(Color.WHITE);
-//		JTextField inputname = new JTextField(20);
-//		this.name = inputname;
-//		p.add(n);
-//		p.add(inputname);
-//		
-//		JLabel pwd = new JLabel("Enter password : ");
-//		pwd.setForeground(Color.WHITE);
-//		JPasswordField inpwd = new JPasswordField(20);
-//		this.pwd= inpwd;
-//		
-//		p.add(pwd);
-//		p.add(inpwd);
-//		
-////		in futuro possiamo aggiungere una verifica della password
-////		p.add(x);
-////		p.add(inpwd);
-//		
-//		p.setBackground(defaultcolor);
-//		add(p, gbc);
-//		
-//	}
 	
 	private void addButtons() {
-//		JPanel p = new JPanel();
-//		p.setBackground(defaultColor);
-//		p.setBackground(Color.BLACK);
 		
 		JButton back = new JButton("Back");
 		back.addActionListener(new ActionListener() {
@@ -101,7 +41,6 @@ public class RegisterPanel extends UserPanel{//extends LoginPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				LoginToMainFrame.openLogin(getObserver());
-//				RegisterPanel.clear();
 			}
 		});
 		
@@ -132,21 +71,11 @@ public class RegisterPanel extends UserPanel{//extends LoginPanel {
 			}
 		});
 		
-//		p.add(back);
-//		p.add(reg);
-//		gbc.gridx = 0;
-//		gbc.gridy = 5;
-//		gbc.anchor = GridBagConstraints.SOUTH;
-		
 		getButtonSpace().add(back);
 		getButtonSpace().add(reg);
 		repaint();
 		revalidate();
 		
-//		this.add(p, gbc);
 	}
 	
-//	public void addObserver(MainFrame f) {
-//		observer = f;
-//	}
 }

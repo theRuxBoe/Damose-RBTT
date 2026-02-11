@@ -15,31 +15,29 @@ import java.util.NoSuchElementException;
 import javax.swing.*;
 
 import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.WaypointPainter;
 
 import backend.model.PredizioneArrivo;
+import backend.model.RouteType;
+import backend.realtime.OccupancyLevel;
+import backend.realtime.VehiclePositionInfo;
+import frontend.main.MainFrame;
+import frontend.waypoints.BusWaypoint;
+import frontend.waypoints.WaypointManager;
 
 //	lo chiamiamo bus panel ma in realtà è un'astrazione di quello che arriva alla fermata
 public class BusPanel extends JPanel {
 	
-	private GeoPosition position;
 	private PredizioneArrivo b ;
-	private int id;
-	private int line;
-	private String direction;
-	private int seats_available;
-	private int estimatedTime;
 	private GridBagConstraints gbc = new GridBagConstraints();
+	private RouteType type;
 	
-//		forse conviene tenere in memoria il bus piuttosto che copiare ogni campo ???
 	
 	public BusPanel(PredizioneArrivo b) {
 		super();
 		this.b = b;
+		this.type = MainFrame.getTTS().cercaLinee(b.getRouteId()).getFirst().getRouteType();
 		setLayout(new GridBagLayout());
-//		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		
-		
-//		
 		
 		addLine();
 		addTime();
@@ -87,7 +85,8 @@ public class BusPanel extends JPanel {
 		add(p2, gbc);
 		
 		JPanel p3 = new JPanel();
-		JLabel l3 = new JLabel(b.getTripId() + " , Seats : " + "N/A");		
+		String occ = b.isRealTime() ? MainFrame.getTTS().getVehiclePositionForTripId(b.getTripId()).get().getOccupancyLevel().toString() : "Non disponibili";
+		JLabel l3 = new JLabel(b.getTripId() + " , Posti : " + occ);		
 		p3.add(l3);
 		
 		gbc.gridx = 3;
@@ -109,22 +108,22 @@ public class BusPanel extends JPanel {
 		
 		
 		p.add(l);
-		Timer t = new Timer(30000, new ActionListener() {
+		Timer t = new Timer(40000, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-//					VehiclePositionInfo x = MainFrame.getTTS().getVehiclePositionForTripId(b.getTripId()).get();
-//					WaypointManager.paintBus(new BusWaypoint(new GeoPosition(x.getLat(), x.getLon())), new WaypointPainter<BusWaypoint>());			//uno dei punti su cui intervenire per gestire diversi tipi di mezzo
-//					MapPanel.getMapViewer().setCenterPosition(b.getPosition());
-					l.setText(b.getArrivalTime().getMinute() + " min");
+					VehiclePositionInfo x = MainFrame.getTTS().getVehiclePositionForTripId(b.getTripId()).get();
+					GeoPosition geop = new GeoPosition(x.getLat(), x.getLon());
+					
+					WaypointManager.paintBus(new BusWaypoint(geop), new WaypointPainter<BusWaypoint>(), type);			//uno dei punti su cui intervenire per gestire diversi tipi di mezzo
+					
 					
 				}
 				catch (NoSuchElementException exception) {
 					
-//					dovremmo passare ai dati statici in caso
 				}
-				
+				l.setText(b.getArrivalTime().getMinute() + " min");
 				repaint();
 				revalidate();
 				

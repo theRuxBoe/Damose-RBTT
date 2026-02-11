@@ -16,40 +16,29 @@ public class LoginToMainFrame {
 		if (logpane == null ) {
 			LoginPanel l = new LoginPanel();
 			logpane = l;
-			f.setLocation(new Point(800,300));
+			f.getCardPanel().add(logpane, "Login Panel");
 			
-		}
-		if (regpane != null) {
-			f.remove(regpane);
 		}
 		
 		logpane.setObserver(f);
-		f.setExtendedState(JFrame.NORMAL); 
-//		f.setLocationRelativeTo(null);
+		f.getCardLayout().show(f.getCardPanel(), "Login Panel");
 		
 		
-		f.add(logpane, BorderLayout.CENTER, 0);
-		f.pack();
 		f.repaint();
 		f.revalidate();
-//		
 	}
 	
 	public static void openRegisteringPanel(MainFrame f) {
 		if( regpane == null) {
 			RegisterPanel r = new RegisterPanel();
 			regpane = r;
+			f.getCardPanel().add(regpane, "Register Panel");
 		}
-		if (logpane != null) {
-			f.remove(logpane);
-		}
+		
 		regpane.setObserver(f);
+		f.getCardLayout().show(f.getCardPanel(), "Register Panel");
 		
-		f.setExtendedState(JFrame.NORMAL); 
-//		f.setLocation(new Point(800,300));
-		
-		f.add(regpane, BorderLayout.CENTER, 0);
-		f.pack();
+//		f.pack();
 		f.repaint();
 		f.revalidate();
 	}

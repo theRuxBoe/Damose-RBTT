@@ -1,6 +1,7 @@
 package frontend.rightpanel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -31,7 +32,6 @@ public class SearchPanel extends JPanel {
 		super();
 		setLayout(new BorderLayout());
 		addSearcher();
-		
 	}
 	
 	
@@ -123,6 +123,7 @@ public class SearchPanel extends JPanel {
 			resultPanel.setPreferredSize(new Dimension(500,700));
 		}
 		if (!res.isEmpty()) {
+			
 		JScrollPane scrollResult = ListToScrollConverter.setContent(ListToScrollConverter.convertSearchedList(res));
 		
 		scrollResult.setPreferredSize(new Dimension(500,500));

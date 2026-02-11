@@ -14,18 +14,17 @@ import java.util.Optional;
 
 import backend.model.Linea;
 import backend.parser.GTFSStaticParser;
+import backend.parser.GTFSStaticRepository;
 
 public class FavoriteRouteDB {
 
 	private final File favoritesFileDBRoutes;
 	private final Map<String, List<FavoriteRoute>> favoriteRoutesByUserId;
-	private final GTFSStaticParser parser;
 
 	public FavoriteRouteDB() throws IOException {
 		
-		parser = new GTFSStaticParser();
-		parser.parseAll("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
-		
+        GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
+        
 		favoritesFileDBRoutes = new File("FavoritesFileDBRoutes.txt");
 		
 		if (!favoritesFileDBRoutes.exists()) {
@@ -79,7 +78,7 @@ public class FavoriteRouteDB {
 	
 	private Optional<Linea> getLineaById(String routeId) {
 		
-		for (Linea l : parser.getLinee()) {
+		for (Linea l : GTFSStaticRepository.getLinee()) {
 			
 			if (l.getRouteId().equals(routeId)) {
 				
@@ -135,6 +134,22 @@ public class FavoriteRouteDB {
 		return true;
 	}
 	
+	public boolean isFavoriteRoutePresent(String userId, String routeId) {
+		
+		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
+		if (!list.isEmpty()) {
+		for (FavoriteRoute f : list) {
+			
+			if (f.getLineaSalvata().getRouteId().equals(routeId)) {
+				
+				return true;
+			}
+		}
+		}
+		
+		return false;
+	}
+	
 	//trova tutti i Favorites di un determinato utente
 	public synchronized Optional<List<FavoriteRoute>> findFavoriteRouteByUserId(String userId) {
 		
@@ -147,7 +162,7 @@ public class FavoriteRouteDB {
 	}
 	
 	//trova un particolare FavoriteRoute di un determinato utente
-	public synchronized Optional<FavoriteRoute> findFavoriteStopByUserIdAndRouteId(String userId, String routeId) {
+	public synchronized Optional<FavoriteRoute> findFavoriteRouteByUserIdAndRouteId(String userId, String routeId) {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
 		
@@ -165,5 +180,49 @@ public class FavoriteRouteDB {
 		return Optional.empty();
 		
 	}
-}
+	
+	private void rewriteFile() throws IOException {
 
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(favoritesFileDBRoutes, false))) {
+
+	        for (Map.Entry<String, List<FavoriteRoute>> entry : favoriteRoutesByUserId.entrySet()) {
+
+	            for (FavoriteRoute f : entry.getValue()) {
+
+	                writer.write("ID Utente: " + f.getUserId());
+	                writer.newLine();
+	                writer.write("Linea: " + f.getLineaSalvata().getRouteId());
+	                writer.newLine();
+	                writer.write("Commento: " + f.getCommento());
+	                writer.newLine();
+	                writer.newLine();
+	            }
+	        }
+	    }
+	}
+	
+	public synchronized Optional<FavoriteRoute> deleteFavoriteRoute(String userId, String routeId) throws IOException {
+		
+		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
+		
+		if (list == null) return Optional.empty();
+		
+		Optional<FavoriteRoute> toDelete = findFavoriteRouteByUserIdAndRouteId(userId, routeId);
+		
+		if (toDelete.isEmpty()) {
+			
+			return Optional.empty();
+		}
+			
+		FavoriteRoute deleted = toDelete.get();
+		list.remove(deleted);
+		rewriteFile();
+		
+	    if (list.isEmpty()) {
+	        favoriteRoutesByUserId.remove(userId);
+	    }
+		
+		return toDelete;
+		
+	}
+}

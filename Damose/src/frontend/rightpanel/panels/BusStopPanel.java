@@ -40,12 +40,11 @@ public class BusStopPanel extends JPanel {
 		super();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		
 		stop = bs;
 		addLabelsData();
 		addListener();
 		setMaximumSize(getPreferredSize());
-//		setAlignmentX(Component.LEFT_ALIGNMENT);
+		setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 	}
 	
@@ -73,19 +72,20 @@ public class BusStopPanel extends JPanel {
 	
 	private void addLabelsData() {
 		JPanel labpane = new JPanel();
-		JLabel data = new JLabel(stop.getName() + " - " + stop.getStopId(), JLabel.LEFT);
-		data.setFont(new Font("Serif", Font.PLAIN, 30));
-		labpane.add(data);
 		if (MainFrame.isLogged()) {
 			labpane.add(createFavouriteButton());
 		}
+		JLabel data = new JLabel(stop.getName() + " - " + stop.getStopId(), JLabel.LEFT);
+		data.setFont(new Font("Serif", Font.PLAIN, 30));
+		labpane.add(data);
+		
 		labpane.setMaximumSize(getPreferredSize());
 		add(labpane);
 		
 	}
 	
 	private JButton createFavouriteButton() {
-		String s = "☆";
+		String s = FavouritesDBManager.isPresent(stop) ? "★" : "☆";
 		JButton b = new JButton(s);
 		b.setBorderPainted(false);
 		b.setFocusPainted(false);
@@ -103,6 +103,7 @@ public class BusStopPanel extends JPanel {
 				else {
 					b.setText("☆");
 //					this will kick the stop from the favourites
+					FavouritesDBManager.remove(stop);
 				}
 			}
 		});

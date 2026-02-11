@@ -26,6 +26,7 @@ public abstract class ListToScrollConverter{
 			{return null;}
 		JPanel support = new JPanel();
 		support.setLayout(new BoxLayout(support, BoxLayout.PAGE_AXIS));
+		
 		for ( JPanel p : panels) {
 			support.add(p);
 		}

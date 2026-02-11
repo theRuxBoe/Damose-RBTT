@@ -1,5 +1,6 @@
 package frontend.news;
 
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.BoxLayout;
@@ -19,7 +20,6 @@ public class NewsPanel extends JPanel{
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));	
 		addLabels(n);
-//		setMaximumSize(getPreferredSize());
 	}
 	
 	private void addLabels(ServiceAlertInfo saf) {

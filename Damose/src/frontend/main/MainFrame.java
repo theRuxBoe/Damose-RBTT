@@ -2,6 +2,8 @@ package frontend.main;
 
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -11,6 +13,7 @@ import java.net.URLConnection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -28,26 +31,33 @@ public class MainFrame extends JFrame {
 	private static boolean logged;
 	private static TransitServiceImpl tts;
 	private RightPanel rightPanel;
-	private boolean panelsCreated = false;
 	private JPanel basePanel;
-//	private static boolean online;
+	private JPanel cardPanel;
+	private CardLayout cardLayout = new CardLayout();
+	
 	private static String u;
 	
 	
 	public MainFrame() {
 		super("Damose - Rome Bus Transit Tracker");
-		setLocationRelativeTo(null);
-		setLayout(new BorderLayout());
+//		setLocationRelativeTo(null);
+		
+		JPanel p = new JPanel(cardLayout);
+		cardPanel = p;
+		add(p);
+		
+		openTransit();
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		
+		createDefaultPanels();
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setIcon();
 		
 		
 		
-		openTransit();
 		LoginToMainFrame.openLogin(this);
+		checkConnection();
 		
-		
-		pack();
 		setVisible(true);	
 	}
 	
@@ -55,7 +65,7 @@ public class MainFrame extends JFrame {
 		try {
 			tts = TransitServiceImpl.createDefault();
 		} catch (IOException e) {
-			int x = JOptionPane.showConfirmDialog(basePanel, e.getMessage() + "Do you wish to try again?");
+			int x = JOptionPane.showConfirmDialog(null, e.getMessage() + "Do you wish to try again?");
 			if (x == 0) {
 				openTransit();
 			}
@@ -66,32 +76,30 @@ public class MainFrame extends JFrame {
 		return tts;
 	}
 	
-//	public static boolean isConnected(){
-//		return online;
-//	}
+	private void checkConnection() {
+		if (!getTTS().isOnline()) {
+			JOptionPane.showMessageDialog(this, "Sei offline!");
+		}
+	}
+	
 	
 	public void update(boolean log, String user) {
 		logged = log;
 		u = user;
-		if (!panelsCreated) {
-			panelsCreated = true;
-			createDefaultPanels();
-			
-			
-			
-		}
 		if (rightPanel != null) {
 			basePanel.remove(rightPanel);
 		}
+		
 		
 		RightPanel rightPanel = new RightPanel(this);
 		this.rightPanel = rightPanel;
 		basePanel.add(rightPanel, BorderLayout.EAST);
 		
-		setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		
+		cardLayout.show(cardPanel, "Main Panel");
 		
-		
+		repaint();
+		revalidate();
 		if (log) { 
 			
 			rightPanel.openFavouritePanel();
@@ -101,8 +109,6 @@ public class MainFrame extends JFrame {
 			rightPanel.openSearchPanel();
 		}
 		
-		repaint();
-		revalidate();
 	}
 	
 	private void setIcon() {
@@ -116,30 +122,30 @@ public class MainFrame extends JFrame {
 		setIconImage(img.getImage());
 	}
 
-
+	public JPanel getCardPanel() {
+		return	cardPanel;	}
 	
+	private void addBasePanel() {
+		JPanel mPanel = new JPanel();
+		mPanel.setLayout(new BorderLayout());
+		this.basePanel = mPanel;
+		cardPanel.add(mPanel, "Main Panel");
+	}
 	
  	private void createDefaultPanels() {
- 		JPanel basePanel = new JPanel();
-		basePanel.setLayout(new BorderLayout());
-		this.basePanel = basePanel;
-		add(basePanel, BorderLayout.CENTER);
  		
+ 		addBasePanel();
 		
 		MapPanel mapPanel = new MapPanel();
 		ServicePanel servicePanel = new ServicePanel();
-		
-		
-		
-		
-		basePanel.add(mapPanel, BorderLayout.CENTER, 0);
-		basePanel.add(servicePanel, BorderLayout.WEST, 0);
-		
-		
-		
+		basePanel.add(servicePanel, BorderLayout.WEST);
+		basePanel.add(mapPanel, BorderLayout.CENTER);
 		
 	}
  	
+ 	public JPanel getBasePanel() {
+ 		return basePanel;
+ 	}
  	
  	public void switchCurrentRightPanel() {
  		
@@ -154,7 +160,9 @@ public class MainFrame extends JFrame {
  		
  	}
  	
- 	
+ 	public CardLayout getCardLayout() {
+ 		return cardLayout;
+ 	}
 
  	public static String getCurrentUser() {
  		return u;

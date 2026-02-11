@@ -51,7 +51,7 @@ public class BusStopFocus extends JPanel  {
 	}
 	
 	private JButton createFavouriteButton() {
-		String s = "☆";
+		String s = FavouritesDBManager.isPresent(stop) ? "★" : "☆";
 		JButton b = new JButton(s);
 		b.setBorderPainted(false);
 		b.setFocusPainted(false);
@@ -64,11 +64,10 @@ public class BusStopFocus extends JPanel  {
 				if (b.getText() == "☆") {
 					b.setText("★");
 					FavouritesDBManager.addToFavourites(stop);
-//					this will put the stop into the favourites area
 				}
 				else {
 					b.setText("☆");
-//					this will kick the stop from the favourites
+					FavouritesDBManager.remove(stop);
 				}
 			}
 		});
@@ -78,7 +77,7 @@ public class BusStopFocus extends JPanel  {
 	private void addLabelsData() {
 		JPanel labpane = new JPanel();
 		labpane.setLayout(new FlowLayout(FlowLayout.LEFT));
-		JLabel data = new JLabel(stop.getName() + " - " + stop.getStopId(), JLabel.LEFT);
+		JLabel data = new JLabel(stop.getName(), JLabel.LEFT);
 		data.setFont(new Font("Serif", Font.PLAIN, 30));
 		labpane.add(data);
 		if (MainFrame.isLogged()) {
@@ -96,8 +95,10 @@ public class BusStopFocus extends JPanel  {
 		
 		
 		JScrollPane x = ListToScrollConverter.setContent(ListToScrollConverter.convertList(arriving));
+		if (x != null) {
 		x.setPreferredSize(new Dimension(500,500));
-		this.add(x);
+		this.add(x);}
+		
 	}
 
 	private void showOnMap() {

@@ -21,6 +21,7 @@ import org.jxmapviewer.viewer.WaypointRenderer;
 
 import backend.model.DatoGTF;
 import backend.model.Fermata;
+import backend.model.RouteType;
 import frontend.main.MapPanel;
 
 
@@ -37,6 +38,13 @@ public class WaypointManager {
 //	private static BusRenderer busRenderer = new BusRenderer();
 	private static BufferedImage stopImg;
 	private static BufferedImage busImg;
+	private static BufferedImage tramImg;
+	private static BufferedImage trainImg;
+	private static BufferedImage metroImg;
+	
+	
+	
+	
 
 	
 	public static void addMap(MapPanel p) {
@@ -73,28 +81,77 @@ public class WaypointManager {
 	
 	
 	
-	public static void paintBus(BusWaypoint waypoint, WaypointPainter<BusWaypoint> painter) {
-		if (busImg == null) {
-			try {  busImg = ImageIO.read(WaypointManager.class.getResource("/res/waypoints/bus.png")); 
-					}
-			catch (IOException e) {}
-		}
+	public static void paintBus(BusWaypoint waypoint, WaypointPainter<BusWaypoint> painter, RouteType type) {
+		
 		Set<BusWaypoint> waypoints = new HashSet<>();
 		waypoints.add(waypoint);
+		BufferedImage img = selectImage(type);
+		if (img != null) {
+			if (img == busImg && busImg == null) {
+				try {  busImg = ImageIO.read(WaypointManager.class.getResource("/res/waypoints/bus.png")); 
+						}
+				catch (IOException e) {}
+			}
+			else if (img == tramImg && tramImg == null) {
+				try {  tramImg = ImageIO.read(WaypointManager.class.getResource("/res/waypoints/tram.png")); 
+				}
+				catch (IOException e) {}
+			}
+			else if (img == metroImg && metroImg == null) {
+				try {  metroImg = ImageIO.read(WaypointManager.class.getResource("/res/waypoints/metro.png")); 
+				}
+				catch (IOException e) {}
+			}
+			else if(img == trainImg && trainImg == null) {
+				try {  trainImg = ImageIO.read(WaypointManager.class.getResource("/res/waypoints/train.png")); 
+				}
+				catch (IOException e) {}
+			}
+			
+			
+			
+			
+			
 		painter.setWaypoints(waypoints);
 		painter.setRenderer((gra, map, w) -> {
 			Point2D point = map.getTileFactory().geoToPixel(w.getPosition(), map.getZoom());
-			int x = (int)point.getX() - busImg.getWidth() / 2;
-	        int y = (int)point.getY() - busImg.getHeight();
+			int x = (int) point.getX() - img.getWidth() / 2;
+	        int y = (int) point.getY() - img.getHeight();
 			gra.setFont(new Font("Serif", Font.PLAIN, 30));
-			gra.drawImage(busImg.getScaledInstance(64,64 , BufferedImage.SCALE_DEFAULT), x, y, null);
+			gra.drawImage(img, x, y, null);
 		}
 		);
 	    map.getMapViewer().setOverlayPainter(painter);
-	    map.getMapViewer().repaint();
+//	    map.getMapViewer().repaint();
+		}
 	}
 	
 	
+	private static BufferedImage selectImage(RouteType type) {
+			
+			BufferedImage x;
+	        switch (type) {
+	        case TRAM:
+	        	x = tramImg;
+	            break;
+	        case METRO:
+	        	x = metroImg;
+	            break;
+	        case TRAIN:
+	        	x = trainImg;
+	            break;
+	        case BUS:
+	        	x = busImg;
+	        	break;
+	        
+	        default:
+	        	x = null;
+	        	break;
+	        }
+		return x;
+	}
+		
+		
 	
 
 }

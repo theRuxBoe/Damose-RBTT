@@ -7,11 +7,13 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 import frontend.main.MainFrame;
+import frontend.user.LoginPanel;
 import frontend.user.LoginToMainFrame;
 
 public class RightPanel extends JPanel{
@@ -25,8 +27,9 @@ public class RightPanel extends JPanel{
 	public RightPanel(MainFrame m) {
 		super();
 		setBackground(new Color(0x7851a9));
-		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(500,100));
+//		setLayout(new BorderLayout());
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setMaximumSize(getPreferredSize());
 		setBorder(new BevelBorder(BevelBorder.RAISED));
 		f = m;
 		addTopButton();
@@ -35,38 +38,43 @@ public class RightPanel extends JPanel{
 	}
 	
 	private void addTopButton() {
-		JPanel p = new JPanel();
-		p.setLayout(new FlowLayout());
+		JButton button = new JButton();
+//		button.setBorderPainted(false);
+//		button.setFocusPainted(false);
+//		button.setContentAreaFilled(false);
+		button.setAlignmentX(CENTER_ALIGNMENT);
 		if (MainFrame.isLogged()) {
-			JButton favButton = new JButton("Search Bus");
-			favButton.addActionListener(new ActionListener() {
+			button.setText("Ricerca");
+			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					if (favButton.getText() == "Search Bus") {
-					 	favButton.setText("Favourites");
+					if (button.getText() == "Ricerca") {
+					 	button.setText("Preferiti");
 					}
 					else {
-						favButton.setText("Search Bus");
+						button.setText("Ricerca");
 					}
 					f.switchCurrentRightPanel();
 				}
 			});
-			p.add(favButton);
+			
 		}
 		else {
-			JButton logButton = new JButton("Login");
-			logButton.addActionListener(new ActionListener() {
+			button.setText("Login");
+			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
+//					f.getContentPane().add(new LoginPanel(), "Login Panel");
+					
 					LoginToMainFrame.openLogin(f);
 					repaint();
 					revalidate();
 			}
 		});
-		p.add(logButton);
 		}
-		this.add(p, BorderLayout.NORTH);
+		add(button);
 	}
 	
 		
