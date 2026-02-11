@@ -1,6 +1,7 @@
 package backend.parser;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import backend.model.*;
 
@@ -11,6 +12,7 @@ public class GTFSStaticRepository {
     private static List<Linea> linee;
     private static List<Corsa> corse;
     private static List<OrarioFermata> orari;
+    private static Map<String, ServiceCalendar> serviziCalendario;
 
     private GTFSStaticRepository() {}
     
@@ -24,13 +26,14 @@ public class GTFSStaticRepository {
         linee = parser.getLinee();
         corse = parser.getCorse();
         orari = parser.getOrari();
+        serviziCalendario = parser.getCalendarMap();
 
         initialized = true;
     }
     
     private static void ensureInit() {
         if (!initialized) {
-            throw new IllegalStateException("GTFSStaticRepository non inizializzato");
+            throw new IllegalStateException("GTFSStaticRepository non inizializzato.");
         }
     }
     
@@ -56,6 +59,12 @@ public class GTFSStaticRepository {
     	
     	ensureInit();
     	return corse;
+    }
+    
+    public static Map<String, ServiceCalendar> getCalendarMap() {
+    	
+    	ensureInit();
+    	return serviziCalendario;
     }
     
     public static void initIfNeeded(String url) throws IOException {

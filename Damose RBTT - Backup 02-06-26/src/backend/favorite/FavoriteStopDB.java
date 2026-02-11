@@ -137,6 +137,8 @@ public class FavoriteStopDB {
 		
 		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);
 		
+		if (list.isEmpty()) return false;
+		
 		for (FavoriteStop f : list) {
 			
 			if (f.getFermataSalvata().getStopId().equals(stopId)) {

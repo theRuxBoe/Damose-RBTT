@@ -7,48 +7,31 @@ import java.util.Objects;
 public class RisultatoLinea extends Risultato {
 	
 	private String routeId, directionName;
-	private List<String> arrivals;
 	
-	public RisultatoLinea(String routeId, String directionName, List<String> arrivals) {
+	public RisultatoLinea(String routeId, String directionName) {
 		
 		this.routeId = routeId;
 		this.directionName = directionName;
-		this.arrivals = arrivals;
+		
 	}
 	
 	@Override 
 	public String toString() {
 		
-		return "Linea " + routeId + " direzione " + directionName + " -> " + arrivals;
+		return "Linea " + routeId + " direzione " + directionName;
 	}
 
 	public String getRouteId() {
 		return routeId;
 	}
 
-	public void setRouteId(String routeId) {
-		this.routeId = routeId;
-	}
-
 	public String getDirectionName() {
 		return directionName;
 	}
 
-	public void setDirectionName(String directionName) {
-		this.directionName = directionName;
-	}
-
-	public List<String> getArrivals() {
-		return arrivals;
-	}
-
-	public void setArrivals(List<String> arrivals) {
-		this.arrivals = arrivals;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(arrivals, directionName, routeId);
+		return Objects.hash(directionName, routeId);
 	}
 
 	@Override
@@ -60,12 +43,7 @@ public class RisultatoLinea extends Risultato {
 		if (getClass() != obj.getClass())
 			return false;
 		RisultatoLinea other = (RisultatoLinea) obj;
-		return Objects.equals(arrivals, other.arrivals) && Objects.equals(directionName, other.directionName)
-				&& Objects.equals(routeId, other.routeId);
-	}
-	
-	public void sortArrivals() {
-	    Collections.sort(arrivals);
+		return Objects.equals(directionName, other.directionName) && Objects.equals(routeId, other.routeId);
 	}
 
 }

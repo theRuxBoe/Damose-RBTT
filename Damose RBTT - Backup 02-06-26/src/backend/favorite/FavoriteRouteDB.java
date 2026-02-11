@@ -138,6 +138,8 @@ public class FavoriteRouteDB {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
 		
+		if (list.isEmpty()) return false;
+		
 		for (FavoriteRoute f : list) {
 			
 			if (f.getLineaSalvata().getRouteId().equals(routeId)) {

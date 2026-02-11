@@ -1,5 +1,6 @@
 package backend.model;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -10,9 +11,10 @@ public class PredizioneArrivo extends DatoGTF {
 	private LocalTime arrivalTime;
 	private boolean realTime;
 	private int delaySeconds;
+	private LocalDateTime orarioCompleto;
 	
 	//costruttore per arrivi in tempo reale
-	public PredizioneArrivo(String sId, String rId, String tId, String dN, LocalTime at, boolean rT, int del) {
+	public PredizioneArrivo(String sId, String rId, String tId, String dN, LocalTime at, boolean rT, int del, LocalDateTime oc) {
 		
 		this.stopId = sId;
 		this.routeId = rId;
@@ -21,12 +23,7 @@ public class PredizioneArrivo extends DatoGTF {
 		this.realTime = rT;
 		this.delaySeconds = del;
 		this.directionName = dN;
-	}
-	
-	//costruttore per arrivi con dati statici
-	public PredizioneArrivo(String sId, String rId, String tId, String dN, LocalTime at) {
-		
-		this(sId, rId, tId, dN, at, false, 0);
+		this.orarioCompleto = oc;
 	}
 
 	public String getStopId() {
@@ -61,6 +58,11 @@ public class PredizioneArrivo extends DatoGTF {
 	public int getDelayMinutes() {
 		
 		return Math.round(delaySeconds/60f);
+	}
+	
+	public LocalDateTime getOrarioCompleto() {
+		
+		return this.orarioCompleto;
 	}
 
 	@Override
