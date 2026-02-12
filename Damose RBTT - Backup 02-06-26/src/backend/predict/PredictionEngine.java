@@ -19,6 +19,7 @@ import backend.model.*;
 import backend.realtime.GTFSRealTimeClient;
 import backend.realtime.RealtimeSnapshot;
 import backend.realtime.TripUpdateInfo;
+import backend.service.RouteMetricsDB;
 
 public class PredictionEngine {
 	
@@ -243,9 +244,83 @@ public class PredictionEngine {
 		 return Optional.empty();
 	 }
 	 
+	 public void analyzeService(RealtimeSnapshot snap, RouteMetricsDB database) throws IOException {
+		 
+		    RealtimeSnapshot usedSnap = snap;
+		    if (usedSnap == null && tripClient != null) {
+		        try {
+		            usedSnap = tripClient.fetchRealtime();
+		            this.lastOnlineStatus = true;
+		        } catch (IOException e) {
+		            usedSnap = null;
+		            this.lastOnlineStatus = false;
+		        }
+		    }
+		    
+		    Map<String, TripUpdateInfo> availableTripUpdates = usedSnap.getAllTripUpdates();
+		    
+		    if (usedSnap == null) return;
+		    
+		    if (!availableTripUpdates.isEmpty()) {
+		    	
+		    	for (TripUpdateInfo info : availableTripUpdates.values()) {
+		    		
+		    		if (info.isCancelled() == true) {
+		    			database.updateRouteScore(info.getRouteId(), -3);
+		    			continue;
+		    		}
+		    		
+	    			// Per valutare la corsa ORA, prendiamo il ritardo della prima fermata utile (la prossima).
+	                int ritardoSecondi = 0;
+	                boolean ritardoTrovato = false;
+	                
+	                // Ricerca nella mappa per StopSequence (più affidabile)
+	                if (!info.getDelayByStopSequence().isEmpty()) {
+	                    // Prendiamo il ritardo dell'ultima fermata aggiornata (spesso il più accurato)
+	                    ritardoSecondi = info.getDelayByStopSequence().values().stream()
+	                                         .findFirst().orElse(0);
+	                    ritardoTrovato = true;
+	                }
+	                
+	                // Se non c'è nella mappa StopSequence, si ricerca nella mappa per StopId -> ritardo puramente rappresentativo
+	                if (!ritardoTrovato && !info.getDelayByStopId().isEmpty()) {
+	                    ritardoSecondi = info.getDelayByStopId().values().stream()
+	                                         .findFirst().orElse(0);
+	                }
+
+	                double minutiDiRitardo = ritardoSecondi / 60.0;
+		    		
+	                if (minutiDiRitardo < 5) {
+	                	
+	                	database.updateRouteScore(info.getRouteId(), +1);
+	                }
+	                
+	                else if (minutiDiRitardo >= 5 && minutiDiRitardo < 20) {
+	                	
+	                	database.updateRouteScore(info.getRouteId(), -1);
+	                }
+	                
+	                else if (minutiDiRitardo >= 20 && minutiDiRitardo < 40) {
+	                	
+	                	database.updateRouteScore(info.getRouteId(), -2);
+	                }
+	                
+	                else if (minutiDiRitardo > 40) {
+	                	
+	                	database.updateRouteScore(info.getRouteId(), -3);
+	                }
+		    		
+		    	}
+		    	
+		    	database.saveRouteMetricsDBIfDirty();
+		    }
+	 }
+	 
 	 public boolean isOnline() {
 		 
 		 return this.lastOnlineStatus;
 	 }
+	 
+	 
 
 }

@@ -35,6 +35,8 @@ public class TransitServiceImpl implements TransitService {
 	private final GTFSRealTimeClient alertClient;
 	private final PredictionEngine predictionEngine;
 	private final RealtimeService realtimeService;
+
+	private final RouteMetricsDB routeMetricsDB;
 	
 	public TransitServiceImpl(GTFSRealTimeClient tClient, GTFSRealTimeClient vClient, GTFSRealTimeClient aClient) throws IOException {
 		
@@ -51,12 +53,33 @@ public class TransitServiceImpl implements TransitService {
 	    this.alertClient = aClient;
 	    this.predictionEngine = new PredictionEngine(orari, corse, serviziCalendario, tClient);
 	    this.realtimeService = new RealtimeService(tClient, vClient, aClient);
+	    
+	    this.routeMetricsDB = new RouteMetricsDB();
+	}
+	
+	@Override
+	public void aggiornaStatisticheQualita() {
+		
+		RealtimeSnapshot snap = null;
+
+		try {
+			snap = realtimeService.fetchCombinedSnapshot();
+			predictionEngine.analyzeService(snap, routeMetricsDB);
+		} catch (IOException e) {
+			System.out.println("Impossibile aggiornare le statistiche sulla qualità del servizio: errore di connessione.");
+		}
+	}
+	
+	@Override
+	public Map<String, RouteMetricsDB.InfoLinea> ottieniStatisticheServizio() {
+		
+		return routeMetricsDB.getAllRouteMetrics();
 	}
 	
 	@Override
 	public List<RisultatoLinea> trovaLineePerIdFermata(String stopId) throws IllegalArgumentException {
 	    
-		if (stopId.isBlank() || stopId == null) {
+		if (stopId == null || stopId.isBlank()) {
 			
 			throw new IllegalArgumentException("Input invalido.");
 		}
@@ -98,7 +121,7 @@ public class TransitServiceImpl implements TransitService {
 	@Override
 	public List<RisultatoLinea> trovaLineePerNomeFermata(String nomeFermata) throws IllegalArgumentException {
 		
-		if (nomeFermata.isBlank() || nomeFermata == null) {
+		if (nomeFermata == null || nomeFermata.isBlank()) {
 			
 			throw new IllegalArgumentException("Input invalido.");
 		}
@@ -327,7 +350,7 @@ public class TransitServiceImpl implements TransitService {
 	@Override
 	public List<PredizioneArrivo> prediciArriviPerFermata(String stopId, int limit) throws IllegalArgumentException {
 		
-		if (stopId.isBlank() || stopId == null) {
+		if (stopId == null || stopId.isBlank()) {
 			
 			throw new IllegalArgumentException("Input invalido.");
 		}

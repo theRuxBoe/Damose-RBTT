@@ -16,7 +16,7 @@ public class RealtimeManualTest {
 		
 		for (String f : stops) {
 			
-			List<PredizioneArrivo> predizioni = service.prediciArriviPerFermata(f, 5);
+			List<PredizioneArrivo> predizioni = service.prediciArriviPerFermata(f, 10);
 			
 			System.out.println("Predizioni (" + predizioni.size() + "):");
             for (PredizioneArrivo p : predizioni) {
@@ -32,7 +32,6 @@ public class RealtimeManualTest {
                     }
                 }
             }
-		}
-		
+		}		
 	}
 }
