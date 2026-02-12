@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import backend.model.*;
@@ -37,6 +40,7 @@ public class TransitServiceImpl implements TransitService {
 	private final RealtimeService realtimeService;
 
 	private final RouteMetricsDB routeMetricsDB;
+	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(); //timer automatico per eseguire periodicamente il controllo qualità del servizio
 	
 	public TransitServiceImpl(GTFSRealTimeClient tClient, GTFSRealTimeClient vClient, GTFSRealTimeClient aClient) throws IOException {
 		
@@ -55,19 +59,34 @@ public class TransitServiceImpl implements TransitService {
 	    this.realtimeService = new RealtimeService(tClient, vClient, aClient);
 	    
 	    this.routeMetricsDB = new RouteMetricsDB();
+	    
+	    startAutomaticMonitoring();
 	}
 	
-	@Override
-	public void aggiornaStatisticheQualita() {
+	public void stopService() {
+	    System.out.println("Arresto del servizio di monitoraggio...");
+	    scheduler.shutdown(); //per spegnere il timer
+	}
+	
+	private void startAutomaticMonitoring() {
 		
-		RealtimeSnapshot snap = null;
+		scheduler.scheduleAtFixedRate( () -> {
+	        try {
+	            System.out.println("[AUTO-MONITOR] Avvio analisi qualità servizio...");
+	            
+	            //ottiene lo snapshot più recente in quel momento
+	            RealtimeSnapshot snap = realtimeService.fetchCombinedSnapshot();
+	            
+	            //analisi del servizio
+	            predictionEngine.analyzeService(snap, this.routeMetricsDB);
+	            
+	            System.out.println("[AUTO-MONITOR] Analisi completata e salvata.");
 
-		try {
-			snap = realtimeService.fetchCombinedSnapshot();
-			predictionEngine.analyzeService(snap, routeMetricsDB);
-		} catch (IOException e) {
-			System.out.println("Impossibile aggiornare le statistiche sulla qualità del servizio: errore di connessione.");
-		}
+	        } catch (Exception e) {
+	
+	            System.err.println("[AUTO-MONITOR] Errore durante l'aggiornamento: " + e.getMessage());
+	        }
+	    }, 0, 30, TimeUnit.MINUTES);
 	}
 	
 	@Override
