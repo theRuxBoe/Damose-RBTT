@@ -7,12 +7,27 @@ import java.util.Map;
 import java.util.OptionalLong;
 import java.util.List;
 
+/**
+ * The Class RealtimeService -> it merges snapshots, each of which has TripUpdateInfo, VehiclePositionInfo and ServiceAlertInfo respectively.
+ */
 public class RealtimeService {
 	
+	/** The trip client (a GTFSRealTimeClient with the URL linked to the trip update protobuf). */
 	private final GTFSRealTimeClient tripClient;    
+    
+    /** The vehicle client (a GTFSRealTimeClient with the URL linked to the vehicle position protobuf). */
     private final GTFSRealTimeClient vehicleClient; 
+    
+    /** The alert client (a GTFSRealTimeClient with the URL linked to the alert protobuf). */
     private final GTFSRealTimeClient alertClient;   
 
+    /**
+     * Instantiates a new realtime service.
+     *
+     * @param tripClient the trip client
+     * @param vehicleClient the vehicle client
+     * @param alertClient the alert client
+     */
     public RealtimeService(GTFSRealTimeClient tripClient,
                            GTFSRealTimeClient vehicleClient,
                            GTFSRealTimeClient alertClient) {
@@ -21,6 +36,12 @@ public class RealtimeService {
         this.alertClient = alertClient;
     }
     
+    /**
+     * Method that fetches and merges the realtime snapshots.
+     *
+     * @return the realtime snapshot
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public RealtimeSnapshot fetchCombinedSnapshot() throws IOException {
 
         RealtimeSnapshot tripSnap = null;
@@ -83,12 +104,14 @@ public class RealtimeService {
                 vehiclePositionByVehicleId,
                 alerts);
     
-    //System.out.println("DEBUG: trip updates count = " + realSnap.getAllTripUpdates().size());
-    //realSnap.getAllTripUpdates().keySet().stream().limit(10).forEach(t -> System.out.println("DEBUG: sample tripUpdateId=" + t));
-    
     return realSnap;
     }
 
+    /**
+     * Unified connectivity control method
+     *
+     * @return true, if successful
+     */
     public boolean checkAllConnectivity() {
         return tripClient.checkConnectivity() || vehicleClient.checkConnectivity() || alertClient.checkConnectivity();
     }

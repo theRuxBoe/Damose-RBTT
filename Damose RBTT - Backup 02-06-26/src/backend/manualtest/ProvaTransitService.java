@@ -1,14 +1,23 @@
-package backend.service;
+package backend.manualtest;
 
 import backend.model.Fermata;
 import backend.model.Linea;
 import backend.model.RisultatoLinea;
+import backend.service.TransitServiceImpl;
 
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The Class ProvaTransitService.
+ */
 public class ProvaTransitService {
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args) {
         try {
             // Crea il service completo con GTFS aggiornati
@@ -73,11 +82,8 @@ public class ProvaTransitService {
 
             System.out.println("\n=== TEST COMPLETATO ===");
 
-            System.out.println("\n=== Test: getFermataById('79315') ===");
-            service.getFermataById("79315").ifPresentOrElse(
-                f -> System.out.println("Fermata trovata: " + f),
-                () -> System.out.println("Fermata non trovata.")
-            );
+            System.out.println("\n=== Test: getFermata('79315') ===");
+            System.out.println(service.getFermata("79315"));
             
             System.out.println("\n=== Test: ricercaGenerica('CADUTI LIBERAZIONE') ===");
             service.ricercaGenerica("").forEach(f ->

@@ -1,18 +1,28 @@
-package backend.realtime;
+package backend.manualtest;
 
 import java.util.List;
 import java.util.Optional;
 
 import backend.model.PredizioneArrivo;
+import backend.realtime.VehiclePositionInfo;
 import backend.service.TransitServiceImpl;
 
+/**
+ * The Class RealtimeManualTest.
+ */
 public class RealtimeManualTest {
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws Exception the exception
+	 */
 	public static void main(String[] args) throws Exception {
 		
 		TransitServiceImpl service = TransitServiceImpl.createDefault();
 		
-		String[] stops = {"80610"};
+		String[] stops = {"70218"};
 		
 		for (String f : stops) {
 			

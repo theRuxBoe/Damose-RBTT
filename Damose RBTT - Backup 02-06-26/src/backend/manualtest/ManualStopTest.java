@@ -1,4 +1,4 @@
-package backend.realtime;
+package backend.manualtest;
 
 import backend.service.TransitServiceImpl;
 import backend.service.TransitService;
@@ -12,7 +12,17 @@ import backend.realtime.VehiclePositionInfo;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The Class ManualStopTest.
+ */
 public class ManualStopTest {
+    
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] args) throws Exception {
         // --- creazione (modifica gli URL se necessario) ---
         GTFSRealTimeClient tripClient = new GTFSRealTimeClient("https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb");

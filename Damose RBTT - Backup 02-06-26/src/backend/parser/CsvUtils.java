@@ -9,8 +9,18 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Class CsvUtils -> it is a utility class for the GTFSStaticParser
+ */
 public class CsvUtils {
 	
+	/**
+	 * Reads a CSV file and returns a list containing the words for each line.
+	 *
+	 * @param path the path
+	 * @return the list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static List<String[]> readCSV(Path path) throws IOException {
 		
 		List<String[]> righe = new ArrayList<String[]>();
@@ -35,6 +45,13 @@ public class CsvUtils {
 		return righe;
 	}
 	
+	/**
+	 * Reads a CSV file from a url.
+	 *
+	 * @param fileUrl the file url
+	 * @return the list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static List<String[]> readCSVFromUrl(String fileUrl) throws IOException {
 		List<String[]> righe = new ArrayList<>();
 		URL url = new URL(fileUrl);

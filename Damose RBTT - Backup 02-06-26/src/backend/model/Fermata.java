@@ -2,11 +2,25 @@ package backend.model;
 
 import java.util.Objects;
 
+/**
+ * The Class Fermata -> identifies a certain stop
+ */
 public class Fermata extends DatoGTF {
 	
+	/** The stop name and the stop id */
 	private String stopId, name;
+	
+	/** The stop coordinates */
 	private double lat, lon;
 	
+	/**
+	 * Instantiates a new stop.
+	 *
+	 * @param sId the stop id
+	 * @param n the name
+	 * @param lat the lat
+	 * @param lon the lon
+	 */
 	public Fermata(String sId, String n, double lat, double lon) {
 		
 		this.stopId = sId;
@@ -15,43 +29,58 @@ public class Fermata extends DatoGTF {
 		this.lon = lon;
 	}
 
+	/**
+	 * Gets the stop id.
+	 *
+	 * @return the stop id
+	 */
 	public String getStopId() {
 		return stopId;
 	}
 
-	public void setStopId(String stopId) {
-		this.stopId = stopId;
-	}
-
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	/**
+	 * Gets the lat.
+	 *
+	 * @return the lat
+	 */
 	public double getLat() {
 		return lat;
 	}
 
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
-
+	/**
+	 * Gets the lon.
+	 *
+	 * @return the lon
+	 */
 	public double getLon() {
 		return lon;
 	}
 
-	public void setLon(double lon) {
-		this.lon = lon;
-	}
-
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(lat, lon, name, stopId);
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -66,6 +95,11 @@ public class Fermata extends DatoGTF {
 				&& Objects.equals(name, other.name) && Objects.equals(stopId, other.stopId);
 	}
 	
+	/**
+	 * To string.
+	 *
+	 * @return the stop name + the stop id in String format
+	 */
 	@Override
 	public String toString() {
 		

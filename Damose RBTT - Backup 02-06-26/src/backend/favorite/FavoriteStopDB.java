@@ -16,11 +16,22 @@ import backend.model.Fermata;
 import backend.parser.GTFSStaticParser;
 import backend.parser.GTFSStaticRepository;
 
+/**
+ * The Class FavoriteStopDB -> represents a database (a text file) containing all the users' saved stops.
+ */
 public class FavoriteStopDB {
 
+	/** The favorites file DB stops. */
 	private final File favoritesFileDBStops;
+	
+	/** The favorite stops indexed by user id. */
 	private final Map<String, List<FavoriteStop>> favoriteStopsByUserId;
 
+	/**
+	 * Instantiates a new favorite stop DB.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public FavoriteStopDB() throws IOException {
 		
         GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
@@ -35,6 +46,11 @@ public class FavoriteStopDB {
 		loadFavoritesFromFile();
 	}
 	
+	/**
+	 * Loads saved favorite stops from the database file to fill the favoriteStopsByUserId map when a new instance of FavoriteStopDB is created.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void loadFavoritesFromFile() throws IOException {
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(favoritesFileDBStops))) {
@@ -75,6 +91,12 @@ public class FavoriteStopDB {
 		}
 	}
 	
+	/**
+	 * Gets the stop by id.
+	 *
+	 * @param stopId the stop id
+	 * @return the stop by id
+	 */
 	private Optional<Fermata> getFermataById(String stopId) {
 		
 		for (Fermata f : GTFSStaticRepository.getFermate()) {
@@ -88,6 +110,15 @@ public class FavoriteStopDB {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Adds the saved favorite stop in the database and in the map.
+	 *
+	 * @param userId the user id
+	 * @param fermata the fermata
+	 * @param commento the commento
+	 * @return true, if successful
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public synchronized boolean addFavoriteStop(String userId, Fermata fermata, String commento) throws IOException {
 		
 		if (userId == null || fermata == null) {
@@ -133,11 +164,18 @@ public class FavoriteStopDB {
 		return true;
 	}
 	
+	/**
+	 * Checks if a saved user's favorite stop is present.
+	 *
+	 * @param userId the user id
+	 * @param stopId the stop id
+	 * @return true, if is favorite stop present
+	 */
 	public boolean isFavoriteStopPresent(String userId, String stopId) {
 		
 		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);
 		
-		if (list.isEmpty()) return false;
+		if (list == null || list.isEmpty()) return false;
 		
 		for (FavoriteStop f : list) {
 			
@@ -151,7 +189,12 @@ public class FavoriteStopDB {
 		return false;
 	}
 	
-	//trova tutti i FavoriteStops di un determinato utente
+	/**
+	 * Finds all the user's saved favorite stops by user id.
+	 *
+	 * @param userId the user id
+	 * @return the optional
+	 */
 	public synchronized Optional<List<FavoriteStop>> findFavoritesByUserId(String userId) {
 		
 		if (favoriteStopsByUserId.containsKey(userId)) {
@@ -162,6 +205,13 @@ public class FavoriteStopDB {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Finds a certain saved favorite stop by user id and stop id.
+	 *
+	 * @param userId the user id
+	 * @param stopId the stop id
+	 * @return the optional
+	 */
 	//trova un particolare FavoriteStop di un determinato utente
 	public synchronized Optional<FavoriteStop> findFavoriteStopByUserIdAndStopId(String userId, String stopId) {
 		
@@ -182,6 +232,11 @@ public class FavoriteStopDB {
 		
 	}
 	
+	/**
+	 * Rewrites file once a favorite is deleted from the database.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void rewriteFile() throws IOException {
 
 	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(favoritesFileDBStops, false))) {
@@ -202,6 +257,14 @@ public class FavoriteStopDB {
 	    }
 	}
 	
+	/**
+	 * Deletes a saved favorite stop.
+	 *
+	 * @param userId the user id
+	 * @param stopId the stop id
+	 * @return the optional
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public synchronized Optional<FavoriteStop> deleteFavoriteStop(String userId, String stopId) throws IOException {
 		
 		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);

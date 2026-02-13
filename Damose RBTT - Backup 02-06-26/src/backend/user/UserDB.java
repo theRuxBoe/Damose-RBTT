@@ -6,16 +6,27 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * The Class UserDB -> represents a database (a txt file) containing all the user accounts.
+ */
 public class UserDB {
 	
+	/** The users file DB. */
 	private final File usersFileDB;
-	private final List<User> usersList;
 	
+	/** The users indexed by their user id in a map. */
+	private final Map<String, User> usersById;
+	
+	/**
+	 * Instantiates a new user DB.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public UserDB() throws IOException {
 		
 		usersFileDB = new File("UsersFileDB.txt");
@@ -25,11 +36,15 @@ public class UserDB {
 			usersFileDB.createNewFile();
 		}
 		
-		usersList = new ArrayList<User>();
+		this.usersById = new HashMap<String, User>();
 		loadUsersFromFile();
 	}
 	
-	//popola la lista degli utenti dal file quando si crea l'istanza UserDB
+	/**
+	 * Loads saved users from the database file to fill the usersById map when a new instance of UserDB is created.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void loadUsersFromFile() throws IOException {
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(usersFileDB))) {
@@ -41,7 +56,7 @@ public class UserDB {
 				String nomeRiga = reader.readLine();
 				String passwordRiga = reader.readLine();
 				
-				reader.readLine(); //salta riga vuota
+				reader.readLine(); // Salta riga vuota
 				
 				if (idRiga == null || nomeRiga == null || passwordRiga == null) {
 					
@@ -53,7 +68,7 @@ public class UserDB {
 					String id = idRiga.substring(idRiga.indexOf(":")+1).trim();
 					String nome = nomeRiga.substring(nomeRiga.indexOf(":")+1).trim();
 					String hashedPassword = passwordRiga.substring(passwordRiga.indexOf(":")+1).trim();
-					usersList.add(new User(id, nome, hashedPassword));
+					usersById.put(id, new User(id, nome, hashedPassword));
 				}
 				
 				catch (Exception e) {
@@ -64,6 +79,15 @@ public class UserDB {
 		}
 	}
 	
+	/**
+	 * Creates a new user account and it adds it in the DB and in the usersById.
+	 *
+	 * @param userName the user name
+	 * @param password the password
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IllegalArgumentException the illegal argument exception
+	 * @throws AccountAlreadyExistsException the account already exists exception
+	 */
 	public synchronized void createNewAccount(String userName, String password) throws IOException, IllegalArgumentException, AccountAlreadyExistsException {
 		
 		if (userName == null || password == null) {
@@ -87,15 +111,15 @@ public class UserDB {
             throw new IllegalArgumentException("Nome vuoto non consentito.");
         }
 		
-		if (!usersList.isEmpty()) {
+		if (!usersById.isEmpty()) {
 			
-			for (User u : usersList) {
+			for (User u : usersById.values()) {
 				
 				if (u.getUserName().equals(userName)) {
 					
 					throw new AccountAlreadyExistsException("Esiste già un account con questo nome utente. Accedi o crea un nuovo account.");
 				}
-			}
+			
 		}
 		
 		String id = UUID.randomUUID().toString();
@@ -113,10 +137,21 @@ public class UserDB {
 			
 		}
 		
-		usersList.add(newUser);
+		usersById.put(id, newUser); 
+		
+		}
 
 	}
 	
+	/**
+	 * Log in method.
+	 *
+	 * @param userName the user name
+	 * @param password the password
+	 * @return true, if successful
+	 * @throws IllegalArgumentException the illegal argument exception
+	 * @throws NoAccountExistsYet the no account exists yet
+	 */
 	public synchronized boolean logIn(String userName, String password) throws IllegalArgumentException, NoAccountExistsYet {
 		
 		userName = userName.trim();
@@ -131,12 +166,12 @@ public class UserDB {
 		    throw new IllegalArgumentException("Testo nullo non consentito.");
 		}
 		
-		if (usersList.isEmpty()) {
+		if (usersById.isEmpty()) {
 			
 			throw new NoAccountExistsYet("Non esiste ancora nessun account inserito. Creane uno.");
 		}
 		
-		for (User u : usersList) {
+		for (User u : usersById.values()) {
 			
 			if  (u.getUserName().equals(userName) && u.checkPassword(password)) {
 				
@@ -150,14 +185,21 @@ public class UserDB {
 		return false;
 	}
 
+	/**
+	 * Finds a user by his username.
+	 *
+	 * @param username the username
+	 * @return the optional
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public Optional<User> findUserByName(String username) throws IllegalArgumentException {
 		
-		if (username == null) {
+		if (username == null || username.isBlank()) {
 			
 			throw new IllegalArgumentException("Testo nullo non consentito.");
 		}
 		
-		for (User u : usersList) {
+		for (User u : usersById.values()) {
 			
 			if (u.getUserName().equals(username)) {
 				

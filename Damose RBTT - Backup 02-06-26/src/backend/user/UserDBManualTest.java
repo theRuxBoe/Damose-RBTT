@@ -1,7 +1,16 @@
 package backend.user;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserDBManualTest.
+ */
 public class UserDBManualTest {
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args) {
 
         try {

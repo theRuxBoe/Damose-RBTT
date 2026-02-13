@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -26,22 +27,63 @@ import backend.realtime.RealtimeSnapshot;
 import backend.realtime.ServiceAlertInfo;
 import backend.realtime.VehiclePositionInfo;
 
+/**
+ * The Class TransitServiceImpl -> the class which acts as the main API for the frontend developer.
+ */
 public class TransitServiceImpl implements TransitService {
 	
+	/** The routes list. */
 	private List<Linea> linee;
+	
+	/** The trips list. */
 	private List<Corsa> corse;
+	
+	/** The routes indexed by route id. */
+	private Map<String, Linea> lineeByRouteId;
+	
+	/** The stops indexed by stop id. */
+	private Map<String, Fermata> fermateByStopId;
+	
+	/** The times. */
 	private List<OrarioFermata> orari;
+	
+	/** The stops. */
 	private List<Fermata> fermate;
+	
+	/** The calendar service map. */
 	private Map<String, ServiceCalendar> serviziCalendario;
+	
+	/** The trip client. */
 	private final GTFSRealTimeClient tripClient;
+	
+	/** The vehicle client. */
 	private final GTFSRealTimeClient vehicleClient;
+	
+	/** The alert client. */
 	private final GTFSRealTimeClient alertClient;
+	
+	/** The prediction engine. */
 	private final PredictionEngine predictionEngine;
+	
+	/** The realtime service. */
 	private final RealtimeService realtimeService;
 
+	/** The route metrics DB. */
 	private final RouteMetricsDB routeMetricsDB;
+	
+	/** The scheduler. */
 	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(); //timer automatico per eseguire periodicamente il controllo qualità del servizio
 	
+	/**
+	 * Instantiates a new transit service impl. 
+	 * Once the transit service impl is instantiated, it will automatically do a routes service quality analysis every 30 minutes as long as the software is running.
+	 * The timer can be manually stopped through a public method.
+	 *
+	 * @param tClient the trip client
+	 * @param vClient the vehicle client
+	 * @param aClient the alert client
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public TransitServiceImpl(GTFSRealTimeClient tClient, GTFSRealTimeClient vClient, GTFSRealTimeClient aClient) throws IOException {
 		
 		GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
@@ -61,23 +103,107 @@ public class TransitServiceImpl implements TransitService {
 	    this.routeMetricsDB = new RouteMetricsDB();
 	    
 	    startAutomaticMonitoring();
+	    Map<String, Linea> routeMap = new HashMap<String, Linea>();
+	    Map<String, Fermata> stopMap = new HashMap<String, Fermata>();
+	    
+	    for (Linea l : linee) {
+	    	
+	    	routeMap.put(l.getRouteId(), l);
+	    }
+	    
+	    for (Fermata f : fermate) {
+	    	
+	    	stopMap.put(f.getStopId(), f);
+	    }
+	    
+	    this.fermateByStopId = stopMap;
+	    this.lineeByRouteId = routeMap;
+	    
 	}
 	
+	/**
+	 * Gets the rating of a specific route.
+	 *
+	 * @param routeId the route id
+	 * @return the rating of a route
+	 */
+	public RatingRoute getValutazioneLinea(String routeId) {
+		
+		return routeMetricsDB.getRating(routeId);
+	}
+	
+	/**
+	 * Gets the route.
+	 *
+	 * @param routeId the route id
+	 * @return the route
+	 * @throws IllegalArgumentException the illegal argument exception
+	 * @throws NoSuchElementException the no such element exception
+	 */
+	@Override
+	public Linea getLinea(String routeId) throws IllegalArgumentException, NoSuchElementException {
+		
+		if (routeId == null || routeId.isBlank()) {
+			
+			throw new IllegalArgumentException("Input invalido.");
+		}
+		
+		Linea l = lineeByRouteId.get(routeId);
+		
+		if (l == null) {
+			
+			throw new NoSuchElementException("RouteId non esistente");
+		}
+		
+		return l;
+	}
+	
+	/**
+	 * Gets the stop.
+	 *
+	 * @param stopId the stop id
+	 * @return the stop
+	 * @throws IllegalArgumentException the illegal argument exception
+	 * @throws NoSuchElementException the no such element exception
+	 */
+	@Override
+	public Fermata getFermata(String stopId) throws IllegalArgumentException, NoSuchElementException {
+		
+		if (stopId == null || stopId.isBlank()) {
+			
+			throw new IllegalArgumentException("Input invalido.");
+		}
+		
+		Fermata f = fermateByStopId.get(stopId);
+		
+		if (f == null) {
+			
+			throw new NoSuchElementException("RouteId non esistente");
+		}
+		
+		return f;
+	}
+	
+	/**
+	 * Method to manually stop the automatic routes service quality analysis.
+	 */
 	public void stopService() {
 	    System.out.println("Arresto del servizio di monitoraggio...");
-	    scheduler.shutdown(); //per spegnere il timer
+	    scheduler.shutdown(); // Per spegnere il timer
 	}
 	
+	/**
+	 * Starts the automatic routes service quality analysis. It will be repeated every 30 minutes, until the software is closed.
+	 */
 	private void startAutomaticMonitoring() {
 		
 		scheduler.scheduleAtFixedRate( () -> {
 	        try {
 	            System.out.println("[AUTO-MONITOR] Avvio analisi qualità servizio...");
 	            
-	            //ottiene lo snapshot più recente in quel momento
+	            // Ottiene lo snapshot più recente in quel momento
 	            RealtimeSnapshot snap = realtimeService.fetchCombinedSnapshot();
 	            
-	            //analisi del servizio
 	            predictionEngine.analyzeService(snap, this.routeMetricsDB);
 	            
 	            System.out.println("[AUTO-MONITOR] Analisi completata e salvata.");
@@ -89,12 +215,24 @@ public class TransitServiceImpl implements TransitService {
 	    }, 0, 30, TimeUnit.MINUTES);
 	}
 	
+	/**
+	 * Gets a map with quality of service statistics for all routes indexed by route id.
+	 *
+	 * @return the map
+	 */
 	@Override
 	public Map<String, RouteMetricsDB.InfoLinea> ottieniStatisticheServizio() {
 		
 		return routeMetricsDB.getAllRouteMetrics();
 	}
 	
+	/**
+	 * Find the routes that pass through that stop by the stop id.
+	 *
+	 * @param stopId the stop id
+	 * @return the list of the routes
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	@Override
 	public List<RisultatoLinea> trovaLineePerIdFermata(String stopId) throws IllegalArgumentException {
 	    
@@ -137,6 +275,13 @@ public class TransitServiceImpl implements TransitService {
 		
 	}
 	
+	/**
+	 * Find the routes that pass through that stop by the stop name
+	 *
+	 * @param nomeFermata the stop name
+	 * @return the list of RisultatoLinea object
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	@Override
 	public List<RisultatoLinea> trovaLineePerNomeFermata(String nomeFermata) throws IllegalArgumentException {
 		
@@ -193,20 +338,13 @@ public class TransitServiceImpl implements TransitService {
 		
 	}
 	
-	@Override
-	public Optional<Fermata> getFermataById(String stopId) {
-		
-		for (Fermata f : fermate) {
-			
-			if (f.getStopId().equals(stopId)) {
-				
-				return Optional.of(f);
-			}
-		}
-		
-		return Optional.empty();
-	}
-	
+	/**
+	 * General route search.
+	 *
+	 * @param query the query
+	 * @return the routes' list
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	@Override
 	public List<Linea> cercaLinee(String query) throws IllegalArgumentException {
 		
@@ -228,6 +366,13 @@ public class TransitServiceImpl implements TransitService {
 		
 	}
 	
+	/**
+	 * General stop search.
+	 *
+	 * @param query the query
+	 * @return the list
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	@Override
 	public List<Fermata> cercaFermate(String query) throws IllegalArgumentException {
 		
@@ -248,6 +393,13 @@ public class TransitServiceImpl implements TransitService {
 		return risultato;
 	}
 	
+	/**
+	 * Checks if the trip is active today.
+	 *
+	 * @param tripId the trip id
+	 * @param serviceId the service id
+	 * @return true, if is trip active today
+	 */
 	private boolean isTripActiveToday(String tripId, String serviceId) {
 		
 		LocalDate today = LocalDate.now();
@@ -257,6 +409,14 @@ public class TransitServiceImpl implements TransitService {
 		return true;
 	}
 	
+	/**
+	 * Helper method which finds the trip that serves the greatest number of stops today,
+	 * in order to use it as a reference trip for the method trovaFermatePerLinea
+	 *
+	 * @param routeId the route id
+	 * @param directionName the direction name
+	 * @return the string
+	 */
 	private String trovaMigliorTripId(String routeId, String directionName) {
 	    String migliorTrip = null;
 	    int maxFermate = -1;
@@ -267,7 +427,7 @@ public class TransitServiceImpl implements TransitService {
 	    	fermatePerCorsa.put(o.getTripId(), fermatePerCorsa.getOrDefault(o.getTripId(), 0) + 1);
 	    }
 	    
-	    //trova la corsa con il numero più alto di fermate
+	    // Trova la corsa con il numero più alto di fermate
 	    for (Corsa c : corse) {
 	        if (c.getRouteId().equals(routeId) && c.getDirectionName().equalsIgnoreCase(directionName)) {
 	            if (isTripActiveToday(c.getTripId(), c.getServiceId())) {
@@ -283,8 +443,17 @@ public class TransitServiceImpl implements TransitService {
 	    return migliorTrip;
 	}
 	
+	/**
+	 * calculate the distance in kilometers between two stops.
+	 *
+	 * @param lat1 the lat 1
+	 * @param lon1 the lon 1
+	 * @param lat2 the lat 2
+	 * @param lon2 the lon 2
+	 * @return the double
+	 */
 	private static double calcolaDistanzaKm(double lat1, double lon1, double lat2, double lon2) {
-	    final int R = 6371; // raggio medio della Terra in km
+	    final int R = 6371; // Raggio medio della Terra in km
 
 	    double dLat = Math.toRadians(lat2 - lat1);
 	    double dLon = Math.toRadians(lon2 - lon1);
@@ -298,6 +467,14 @@ public class TransitServiceImpl implements TransitService {
 	    return R * c;
 	}
 	
+	/**
+	 * Find the path of stops served by a route.
+	 *
+	 * @param routeId the route id
+	 * @param directionName the direction name
+	 * @return the stop list
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public List<Fermata> trovaFermatePerLinea(String routeId, String directionName) throws IllegalArgumentException {
 
 		if (routeId == null || routeId.isBlank() || directionName.isBlank() || directionName == null) {
@@ -313,7 +490,7 @@ public class TransitServiceImpl implements TransitService {
 	        fermateByStopId.put(f.getStopId(), f);
 	    }
 
-	    //Recuperiamo tutti gli orari di quella corsa specifico
+	    // Recuperiamo tutti gli orari di quella corsa specifica
 	    List<OrarioFermata> sequenzaOrari = new ArrayList<>();
 	    for (OrarioFermata o : orari) {
 	        if (o.getTripId().equals(tripIdRiferimento)) {
@@ -321,7 +498,7 @@ public class TransitServiceImpl implements TransitService {
 	        }
 	    }
 
-	    //Ordiniamo la sequenza in base allo stopSequence
+	    // Ordiniamo la sequenza in base allo stop sequence
 	    sequenzaOrari.sort(new Comparator<OrarioFermata>() {
 	        @Override
 	        public int compare(OrarioFermata o1, OrarioFermata o2) {
@@ -341,6 +518,13 @@ public class TransitServiceImpl implements TransitService {
 
 	}
 	
+	/**
+	 * General search that returns a list of WrapperGenerico objects, which can contain a route or a stop.
+	 *
+	 * @param in the input string
+	 * @return the results list
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public List<WrapperGenerico> ricercaGenerica(String in) throws IllegalArgumentException {
 		
 		if (in.isBlank() || in == null) {
@@ -366,6 +550,14 @@ public class TransitServiceImpl implements TransitService {
 		return risultato;
 	}
 	
+	/**
+	 * Gets the next real-time or static arrivals of trips for a given stop and in an arbitrary quantity
+	 *
+	 * @param stopId the stop id
+	 * @param limit the limit
+	 * @return the predicted arrivals list
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	@Override
 	public List<PredizioneArrivo> prediciArriviPerFermata(String stopId, int limit) throws IllegalArgumentException {
 		
@@ -386,6 +578,14 @@ public class TransitServiceImpl implements TransitService {
 		return risultati;
 	}
 	
+	/**
+	 * Gets the next arrival at a given stop on a given route.
+	 *
+	 * @param stopId the stop id
+	 * @param routeId the route id
+	 * @param directionName the direction name
+	 * @return the optional
+	 */
 	@Override
 	public Optional<PredizioneArrivo> ottieniProssimoArrivoLineaAllaFermata(String stopId, String routeId, String directionName) {
 		
@@ -400,11 +600,22 @@ public class TransitServiceImpl implements TransitService {
 		return predictionEngine.predictNextForLineAtStop(stopId, routeId, directionName.trim(), snap);
 	}
 	
+    /**
+     * Checks if the system is online.
+     *
+     * @return true, if is online
+     */
     public boolean isOnline() {
     	
-    	return predictionEngine.isOnline();
+    	return realtimeService.checkAllConnectivity();
     }
 	
+	/**
+	 * Gets the vehicle position for trip id.
+	 *
+	 * @param tripId the trip id
+	 * @return the vehicle position for trip id
+	 */
 	@Override
 	public Optional<VehiclePositionInfo> getVehiclePositionForTripId(String tripId){
 		
@@ -416,6 +627,12 @@ public class TransitServiceImpl implements TransitService {
 		}
 	}
 	
+	/**
+	 * Gets the alerts for stop id.
+	 *
+	 * @param stopId the stop id
+	 * @return the alerts for stop id
+	 */
 	@Override
 	public List<ServiceAlertInfo> getAlertsForStopId(String stopId) {
 		
@@ -428,6 +645,12 @@ public class TransitServiceImpl implements TransitService {
 		}
 	}
 	
+	/**
+	 * Gets the alerts for route id.
+	 *
+	 * @param routeId the route id
+	 * @return the alerts for route id
+	 */
 	@Override
 	public List<ServiceAlertInfo> getAlertsForRouteId(String routeId) {
 		
@@ -440,6 +663,11 @@ public class TransitServiceImpl implements TransitService {
 		}
 	}
 
+	/**
+	 * Gets all the alerts.
+	 *
+	 * @return all the alerts
+	 */
 	public List<ServiceAlertInfo> getAllAlerts() {
 		
 		try {
@@ -451,6 +679,12 @@ public class TransitServiceImpl implements TransitService {
 		}
 	}
 	
+	/**
+	 * Default method to instantiate the transit service impl with the proper URLs to the Roma Mobilita site for the clients.
+	 *
+	 * @return the transit service impl
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static TransitServiceImpl createDefault() throws IOException {
 		
 	        GTFSStaticRepository.init("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
@@ -461,30 +695,62 @@ public class TransitServiceImpl implements TransitService {
 	        return new TransitServiceImpl(tripClient, vehicleClient, alertClient);
 	    }
 	
+	/**
+	 * Gets the realtime service.
+	 *
+	 * @return the realtime service
+	 */
 	public RealtimeService getRealtimeService() {
 		
 		return this.realtimeService;
 	}
     
+    /**
+     * The inner Class WrapperGenerico, an object which can contain or a route or a stop.
+     */
     public static class WrapperGenerico {
     	
-    	private String type;
-    	private DatoGTF item;
+    	/** The type indicates if the item is a route or a stop. */
+	    private String type;
     	
-    	WrapperGenerico(String t, DatoGTF i) {
+	    /** The item (can be a route or a stop). */
+	    private DatoGTF item;
+    	
+    	/**
+	     * Instantiates a new wrapper generico.
+	     *
+	     * @param t the type
+	     * @param i the item
+	     */
+	    WrapperGenerico(String t, DatoGTF i) {
     		
     		this.type = t;
     		this.item = i;
     	}
 
+		/**
+		 * Gets the type.
+		 *
+		 * @return the type
+		 */
 		public String getType() {
 			return type;
 		}
 
+		/**
+		 * Gets the item.
+		 *
+		 * @return the item
+		 */
 		public DatoGTF getItem() {
 			return item;
 		}
 		
+		/**
+		 * To string.
+		 *
+		 * @return the string
+		 */
 		@Override
 		public String toString() {
 			

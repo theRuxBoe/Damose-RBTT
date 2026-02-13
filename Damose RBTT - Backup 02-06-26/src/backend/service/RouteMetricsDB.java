@@ -17,12 +17,25 @@ import backend.model.Fermata;
 import backend.model.Linea;
 import backend.parser.GTFSStaticRepository;
 
+/**
+ * The Class RouteMetricsDB -> represents a database (text file) containing information on the quality of service of each route recorded in the static data.
+ */
 public class RouteMetricsDB {
 	
+	/** The Route metrics DB file. */
 	private final File RouteMetricsDB;
+	
+	/** The Route metrics indexed by route id map. */
 	private final Map<String, InfoLinea> RouteMetricsByRouteId;
+	
+	/** The boolean dirty, which indicates if the file needs to be uploaded. */
 	private boolean dirty;
 	
+	/**
+	 * Instantiates a new route metrics DB.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public RouteMetricsDB() throws IOException {
 		
 		GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
@@ -40,6 +53,11 @@ public class RouteMetricsDB {
 		dirty = false;
 	}
 	
+	/**
+	 * Initializes the file if it has never been created before.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void initialize() throws IOException {
 		
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(RouteMetricsDB))) {
@@ -53,6 +71,11 @@ public class RouteMetricsDB {
 		}
 	}
 	
+	/**
+	 * Loads the saved routes service quality infos from the database file to fill the RouteMetricsByRouteId map when an instance of RouteMetricsDB is created.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void loadMetricsFromFile() throws IOException {
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(RouteMetricsDB))) {
@@ -83,6 +106,12 @@ public class RouteMetricsDB {
 		}
 	}
 	
+	/**
+	 * Gets the route by its id.
+	 *
+	 * @param routeId the route id
+	 * @return the linea by id
+	 */
 	private Optional<Linea> getLineaById(String routeId) {
 		
 		for (Linea l : GTFSStaticRepository.getLinee()) {
@@ -96,6 +125,13 @@ public class RouteMetricsDB {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Updates a route's service quality score.
+	 *
+	 * @param routeId the route id
+	 * @param amount the amount
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void updateRouteScore(String routeId, int amount) throws IOException {
 			
 			InfoLinea il = RouteMetricsByRouteId.get(routeId);
@@ -108,6 +144,11 @@ public class RouteMetricsDB {
 			}
 	}
 	
+	/**
+	 * It updates the DB by rewriting it if the boolean dirty is true.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void saveRouteMetricsDBIfDirty() throws IOException {
 		
 		if (dirty == true) {
@@ -118,6 +159,11 @@ public class RouteMetricsDB {
 		
 	}
 	
+	/**
+	 * Rewrites the file with the updated routes service quality scores.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void rewriteFile() throws IOException {
 		
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(RouteMetricsDB, false))) {
@@ -135,11 +181,24 @@ public class RouteMetricsDB {
 		}
 	}
 	
+	/**
+	 * Gets a copy of a map with all route metrics.
+	 *
+	 * @return the all route metrics
+	 */
 	public Map<String, InfoLinea> getAllRouteMetrics() {
 		
 		return Map.copyOf(this.RouteMetricsByRouteId);
 	}
 	
+	/**
+	 * Gets the route score.
+	 *
+	 * @param routeId the route id
+	 * @return the route score
+	 * @throws IllegalArgumentException the illegal argument exception
+	 * @throws NoSuchElementException the no such element exception
+	 */
 	public Integer getRouteScore(String routeId) throws IllegalArgumentException, NoSuchElementException {
 		
 		if (routeId == null || routeId.isBlank()) {
@@ -158,11 +217,35 @@ public class RouteMetricsDB {
 	
 	}
 	
+	/**
+	 * Gets the rating of a route.
+	 *
+	 * @param routeId the route id
+	 * @return the rating
+	 */
+	public RatingRoute getRating(String routeId) {
+		
+		Integer score = getRouteScore(routeId);
+		return RatingRoute.fromScore(score);
+	}
+	
+	/**
+	 * The inner Class InfoLinea -> a wrapper object with a Linea object and an integer indicating the route's service quality score.
+	 */
 	public static class InfoLinea {
 		
+		/** The route. */
 		private Linea linea;
+		
+		/** The score. */
 		private Integer score;
 		
+		/**
+		 * Instantiates a new info linea.
+		 *
+		 * @param l the l
+		 * @param score the score
+		 */
 		public InfoLinea(Linea l, Integer score) {
 			
 			this.linea = l;
@@ -170,16 +253,31 @@ public class RouteMetricsDB {
 			
 		}
 		
+		/**
+		 * Gets the route.
+		 *
+		 * @return the route
+		 */
 		public Linea getLinea() {
 			
 			return this.linea;
 		}
 		
+		/**
+		 * Gets the score.
+		 *
+		 * @return the score
+		 */
 		public Integer getScore() {
 			
 			return this.score;
 		}
 		
+		/**
+		 * Sets the score.
+		 *
+		 * @param s the new score
+		 */
 		private void setScore(Integer s) {
 			
 			this.score = s;

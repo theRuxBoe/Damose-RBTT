@@ -3,11 +3,26 @@ package backend.model;
 import java.time.LocalTime;
 import java.util.Objects;
 
+/**
+ * The Class OrarioFermata -> identifies a certain stop time.
+ */
 public class OrarioFermata extends DatoGTF {
 	
+	/** The trip id, the stop id, the arrival time and the departure time. */
 	private String tripId, stopId, arrivalTime, departureTime;
+	
+	/** The stop sequence. */
 	private int stopSequence;
 	
+	/**
+	 * Instantiates a new stop time.
+	 *
+	 * @param tId the t id
+	 * @param sId the s id
+	 * @param at the at
+	 * @param dt the dt
+	 * @param sSq the s sq
+	 */
 	public OrarioFermata(String tId, String sId, String at, String dt, int sSq) {
 		
 		this.tripId = tId;
@@ -18,56 +33,77 @@ public class OrarioFermata extends DatoGTF {
 		
 	}
 
+	/**
+	 * Gets the trip id.
+	 *
+	 * @return the trip id
+	 */
 	public String getTripId() {
 		return tripId;
 	}
 
-	public void setTripId(String tripId) {
-		this.tripId = tripId;
-	}
-
+	/**
+	 * Gets the stop id.
+	 *
+	 * @return the stop id
+	 */
 	public String getStopId() {
 		return stopId;
 	}
 
-	public void setStopId(String stopId) {
-		this.stopId = stopId;
-	}
-
+	/**
+	 * Gets the arrival time.
+	 *
+	 * @return the arrival time
+	 */
 	public String getArrivalTime() {
 		return arrivalTime;
 	}
 
-	public void setArrivalTime(String arrivalTime) {
-		this.arrivalTime = arrivalTime;
-	}
-
+	/**
+	 * Gets the departure time.
+	 *
+	 * @return the departure time
+	 */
 	public String getDepartureTime() {
 		return departureTime;
 	}
-
-	public void setDepartureTime(String departureTime) {
-		this.departureTime = departureTime;
-	}
 	
+	/**
+	 * Gets the arrival as time.
+	 *
+	 * @return the arrival as time
+	 */
 	public LocalTime getArrivalAsTime() {
 		
 		return LocalTime.parse(arrivalTime);
 	}
 
+	/**
+	 * Gets the stop sequence.
+	 *
+	 * @return the stop sequence
+	 */
 	public int getStopSequence() {
 		return stopSequence;
 	}
 
-	public void setStopSequence(int stopSequence) {
-		this.stopSequence = stopSequence;
-	}
-
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(arrivalTime, departureTime, stopId, tripId);
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
