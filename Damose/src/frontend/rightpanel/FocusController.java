@@ -1,16 +1,35 @@
 package frontend.rightpanel;
 
-import javax.swing.JPanel;
+import frontend.main.MainFrame;
+import frontend.rightpanel.panels.StopFocus;
 
-public class FocusController { // probabilmente posso rimuovere questa classe
+/**
+ * The Class FocusController connects the {@link RightPanel}
+ * with the {@link FocusPanel} so the focus panel doesn't need to
+ * know the right panel, it just needs to remember the previous panel
+ * displayed.
+ */
+public class FocusController {
 
-	private static RightPanel rxPane;
+	/** The {@link RightPanel}. */
+ private static RightPanel rxPane;
 	
-	public static void openFocus(JPanel p) {
-		rxPane.openFocusPanel(p);
+	/**
+	 * Opens the {@link FocusPanel} with the given {@link StopFocus}.
+	 *
+	 * @param stopfocus the stop focus to be displayed
+	 */
+	public static void openFocus(StopFocus stopfocus) {
+		rxPane.openFocusPanel(stopfocus);
 		
 	}
 	
+	/**
+	 * Registers the current right panel instanced by the
+	 * {@link MainFrame}.
+	 *
+	 * @param r the right panel
+	 */
 	public static void setRightPanel(RightPanel r) {
 		if ( rxPane != null) {
 			rxPane = null;
@@ -18,7 +37,10 @@ public class FocusController { // probabilmente posso rimuovere questa classe
 		rxPane = r;
 	}
 	
+	/**
+	 * Opens the previous panel from the {@link FocusPanel}.
+	 */
 	public static void openPrevious() {
-		rxPane.setShowCurrent(rxPane.getFocus().getPrevious());
+		rxPane.setAndShowCurrent(rxPane.getFocus().getPrevious());
 	}
 }

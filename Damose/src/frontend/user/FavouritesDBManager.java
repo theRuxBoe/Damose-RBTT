@@ -16,18 +16,27 @@ import backend.favorite.FavoriteStopDB;
 import backend.model.DatoGTF;
 import backend.model.Fermata;
 import backend.model.Linea;
-import frontend.main.MainFrame;
 import frontend.utilities.ListToScrollConverter;
 
+/**
+ * The Class FavouritesDBManager controls the access to the database
+ * of favourites lines and stops
+ */
 public class FavouritesDBManager {
 
-	private static FavoriteRouteDB routes;
+	/** The favourite routes. */
+	private static FavoriteRouteDB lines;
+	
+	/** The favourites stops. */
 	private static FavoriteStopDB stops;
 
+	/**
+	 * Opens the two favourites databases.
+	 */
 	public void openDBs() {
-		if (routes == null && stops == null) {
+		if (lines == null && stops == null) {
 			try {
-				routes = new FavoriteRouteDB();
+				lines = new FavoriteRouteDB();
 				stops = new FavoriteStopDB();
 
 			}
@@ -39,14 +48,20 @@ public class FavouritesDBManager {
 
 	}
 
+	/**
+	 * Gets a list of favorites as panels for the user given in input.
+	 *
+	 * @param user the user
+	 * @return the favourites' panels
+	 */
 	public static List<JPanel> getFavourites(String user) {
-		Optional<List<FavoriteRoute>> rt = routes.findFavoriteRouteByUserId(user);
+		Optional<List<FavoriteRoute>> rt = lines.findFavoriteRouteByUserId(user);
 
 		Optional<List<FavoriteStop>> st = stops.findFavoritesByUserId(user);
 		List<DatoGTF> result = new ArrayList<>();
 		if (!rt.isEmpty()) {
-			List<FavoriteRoute> routesFav = rt.get();
-			for (FavoriteRoute fr : routesFav) {
+			List<FavoriteRoute> linesFav = rt.get();
+			for (FavoriteRoute fr : linesFav) {
 				result.add(fr.getLineaSalvata());
 			}
 		}
@@ -64,9 +79,14 @@ public class FavouritesDBManager {
 		
 	}
 
+	/**
+	 * Adds a stop the to favourites bus stops.
+	 *
+	 * @param f the bus stop
+	 */
 	public static void addToFavourites(Fermata f) {
 		try {
-			stops.addFavoriteStop(MainFrame.getCurrentUser(), f, null);
+			stops.addFavoriteStop(LoginToMainFrame.getCurrentUser(), f, null);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Non è stato possibile connettersi al database, riprovare più tardi");
 		}
@@ -76,9 +96,14 @@ public class FavouritesDBManager {
 		}
 	}
 
+	/**
+	 * Adds a line the to favourites lines.
+	 *
+	 * @param l the line
+	 */
 	public static void addToFavourites(Linea l) {
 		try {
-			routes.addFavoriteRoute(MainFrame.getCurrentUser(), l, null);
+			lines.addFavoriteRoute(LoginToMainFrame.getCurrentUser(), l, null);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Non è stato possibile connettersi al database, riprovare più tardi");
 		
@@ -88,29 +113,51 @@ public class FavouritesDBManager {
 		}
 	}
 
+	/**
+	 * Removes a specific bus stop.
+	 *
+	 * @param f the stop
+	 */
 	public static void remove(Fermata f) {
 		try {
-		stops.deleteFavoriteStop(MainFrame.getCurrentUser(), f.getStopId());
+		stops.deleteFavoriteStop(LoginToMainFrame.getCurrentUser(), f.getStopId());
 		}
 		catch (IOException ex) {
 			JOptionPane.showMessageDialog(null, ex.getMessage());
 		}
 	}
 
+	/**
+	 * Removes a specific route.
+	 *
+	 * @param l the line
+	 */
 	public static void remove(Linea l) {
 		try {
-			routes.deleteFavoriteRoute(MainFrame.getCurrentUser(), l.getRouteId());
+			lines.deleteFavoriteRoute(LoginToMainFrame.getCurrentUser(), l.getRouteId());
 			}
 			catch (IOException ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage());
 			}
 	}
 
+	/**
+	 * Checks if a line is present.
+	 *
+	 * @param l the line
+	 * @return true, if the line is present in the DB
+	 */
 	public static boolean isPresent(Linea l) {
-		return routes.isFavoriteRoutePresent(MainFrame.getCurrentUser(), l.getRouteId());
+		return lines.isFavoriteRoutePresent(LoginToMainFrame.getCurrentUser(), l.getRouteId());
 	}
 	
+	/**
+	 * Checks if a stop is present.
+	 *
+	 * @param f the stop
+	 * @return true, if the stop is present in the DB
+	 */
 	public static boolean isPresent(Fermata f) {
-		return stops.isFavoriteStopPresent(MainFrame.getCurrentUser(), f.getStopId());
+		return stops.isFavoriteStopPresent(LoginToMainFrame.getCurrentUser(), f.getStopId());
 	}
 }

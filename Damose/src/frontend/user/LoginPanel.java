@@ -1,53 +1,29 @@
 package frontend.user;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
-import backend.favorite.FavoriteRouteDB;
 import backend.user.NoAccountExistsYet;
-import backend.user.User;
-import backend.user.UserDB;
-import frontend.main.MainFrame;
 
+/**
+ * The Class LoginPanel provides a graphic interface
+ * for the user to insert his data to access
+ * the program with a registered account.
+ * 
+ */
 public class LoginPanel extends UserPanel {
 
-	private static UserDB db;
 
+	/**
+	 * Instantiates a new login panel and opens the users' database.
+	 */
 	public LoginPanel() {
 		super();
-//		setLayout(new GridBagLayout());
-//		
-//		setPreferredSize(new Dimension(300, 300));
-////		setLocation(new Point(800, 300));
-//		setBackground(defaultColor);
-//		try {
-//			UserDB dab = new UserDB();
-//			db = dab;
-//		}
-//		catch (IOException e) {
-//			JOptionPane.showMessageDialog(observer, "There was an error with the DB", "DB error", JOptionPane.ERROR_MESSAGE);
-//		}
-//		
-//		addLabel();
-//
-//		addInnerPanel();
-//
 		openDB();
 		addButtons();
-		
 		
 
 	}
@@ -55,6 +31,20 @@ public class LoginPanel extends UserPanel {
 
 	
 
+	/**
+	 * Adds three buttons (login, register and enter as guest) to the panel in the bottom of the screen.
+	 * <p>
+	 * The login button calls the database to verify the user's name and password,
+	 * then opens the database for favourites lines and stops, and finally updates the 
+	 * MainFrame with the successful login information .
+	 * <p>
+	 * The register button calls the static method from Login to MainFrame class
+	 * to open the register panel.
+	 * <p>
+	 * The enter as guest button calls the Main Frame telling it
+	 * the user isn't logged.
+	 *
+	 */
 	private void addButtons() {
 		
 		JButton log = new JButton("Login");
@@ -66,11 +56,11 @@ public class LoginPanel extends UserPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				boolean succesfulLogin = false;
-				String user = getUserName().getText();
+				boolean successfulLogin = false;
+				String user = getUsername().getText();
 				try {
 					
-					succesfulLogin = getDB().logIn(user, new String(getPwdField().getPassword()));
+					successfulLogin = getDB().logIn(user, new String(getPwdField().getPassword()));
 					
 				}
 				
@@ -81,11 +71,11 @@ public class LoginPanel extends UserPanel {
 				catch (NoAccountExistsYet nyet) {
 					JOptionPane.showMessageDialog(LoginPanel.this, nyet.getMessage());
 				}
-				if (succesfulLogin) {
+				if (successfulLogin) {
 				FavouritesDBManager dbm = new FavouritesDBManager();
 				dbm.openDBs();
 					
-				getObserver().update(succesfulLogin, user);
+				LoginToMainFrame.updateFromLogin(successfulLogin, user);
 				removeItself();
 				removeObserver();
 				}
@@ -99,7 +89,7 @@ public class LoginPanel extends UserPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getObserver().update(false, null);
+				LoginToMainFrame.updateFromLogin(false, null);
 					//we don't remove the observer because we could login later
 				removeItself();
 				
@@ -123,11 +113,17 @@ public class LoginPanel extends UserPanel {
 		revalidate();
 	}
 	
+	/**
+	 * Removes itself from the observer.
+	 */
 	private void removeItself() {
-		getObserver().remove(this);
+		getObserver().getFrame().remove(this);
 	}
 
 
+	/**
+	 * Removes the observer.
+	 */
 	public void removeObserver() {
 		setObserver(null);
 	}

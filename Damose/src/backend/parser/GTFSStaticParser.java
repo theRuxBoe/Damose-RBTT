@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -13,6 +17,7 @@ import backend.model.Corsa;
 import backend.model.Fermata;
 import backend.model.Linea;
 import backend.model.OrarioFermata;
+import backend.model.ServiceCalendar;
 
 public class GTFSStaticParser {
 	
@@ -20,6 +25,7 @@ public class GTFSStaticParser {
 	private List<Linea> linee;
 	private List<Corsa> corse;
 	private List<OrarioFermata> orari;
+	private Map<String, ServiceCalendar> serviziCalendario;
 	
 	private Path downloadGTFSZip(String url, Path destinazione) throws IOException {
 		
@@ -68,6 +74,29 @@ public class GTFSStaticParser {
 		}
 		
 		return risultatoFermate;
+	}
+	
+	private Map<String, ServiceCalendar> parseServiceCalendar(Path file) throws IOException {
+		
+		Map<String, ServiceCalendar> calendarMap = new HashMap<String, ServiceCalendar>();
+		List<String[]> righe = CsvUtils.readCSV(file);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
+		for (String[] riga : righe) {
+			
+			String serviceId = riga[0];
+			String dateString = riga[1];
+			int exceptionType = Integer.parseInt(riga[2]);
+			
+			// Aggiungiamo la data solo se il tipo è 1 (Servizio Attivo)
+	        if (exceptionType == 1) {
+	            LocalDate date = LocalDate.parse(dateString, dtf);
+	            calendarMap.putIfAbsent(serviceId, new ServiceCalendar(serviceId));
+	            calendarMap.get(serviceId).addDate(date);
+	        }
+		}
+		
+		return calendarMap;
+		
 	}
 	
 	private List<Linea> parseLinee(Path file) throws IOException {
@@ -129,7 +158,8 @@ public class GTFSStaticParser {
 	        && Files.exists(outputDir.resolve("stops.txt"))
 	        && Files.exists(outputDir.resolve("routes.txt"))
 	        && Files.exists(outputDir.resolve("trips.txt"))
-	        && Files.exists(outputDir.resolve("stop_times.txt"));
+	        && Files.exists(outputDir.resolve("stop_times.txt"))
+	        && Files.exists(outputDir.resolve("calendar_dates.txt"));
 	}
 	
 	public void parseAll(String gtfsUrl) throws IOException {
@@ -166,9 +196,10 @@ public class GTFSStaticParser {
 	    linee = parseLinee(outputDir.resolve("routes.txt"));
 	    corse = parseCorse(outputDir.resolve("trips.txt"));
 	    orari = parseOrari(outputDir.resolve("stop_times.txt"));
+	    serviziCalendario = parseServiceCalendar(outputDir.resolve("calendar_dates.txt"));
 
 	    System.out.println("Parsing completato: " + fermate.size() + " fermate, "
-	                       + linee.size() + " linee, " + corse.size() + " corse.");
+	                       + linee.size() + " linee, " + corse.size() + " corse, " + serviziCalendario.size()+ " servizi calendario.");
 	}
 
 	public List<Fermata> getFermate() {
@@ -185,6 +216,11 @@ public class GTFSStaticParser {
 
 	public List<OrarioFermata> getOrari() {
 		return orari;
+	}
+	
+	public Map<String, ServiceCalendar> getCalendarMap() {
+		
+		return serviziCalendario;
 	}
 	
 }

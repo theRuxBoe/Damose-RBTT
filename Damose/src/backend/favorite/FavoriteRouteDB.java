@@ -137,14 +137,15 @@ public class FavoriteRouteDB {
 	public boolean isFavoriteRoutePresent(String userId, String routeId) {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
-		if (!list.isEmpty()) {
+		
+		if (list.isEmpty()) return false;
+		
 		for (FavoriteRoute f : list) {
 			
 			if (f.getLineaSalvata().getRouteId().equals(routeId)) {
 				
 				return true;
 			}
-		}
 		}
 		
 		return false;

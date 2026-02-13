@@ -136,7 +136,9 @@ public class FavoriteStopDB {
 	public boolean isFavoriteStopPresent(String userId, String stopId) {
 		
 		List<FavoriteStop> list = favoriteStopsByUserId.get(userId);
-		if (!list.isEmpty()) {
+		
+		if (list.isEmpty()) return false;
+		
 		for (FavoriteStop f : list) {
 			
 			if (f.getFermataSalvata().getStopId().equals(stopId)) {
@@ -145,7 +147,7 @@ public class FavoriteStopDB {
 			}
 			
 		}
-		}
+		
 		return false;
 	}
 	

@@ -1,31 +1,44 @@
 package frontend.rightpanel;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-//import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-//import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-//import javax.swing.border.BevelBorder;
 
+import frontend.rightpanel.panels.StopFocus;
+
+/**
+ * The Class FocusPanel shows the selected stop from
+ * the search panel.
+ * It also keeps a link to the panel that
+ * called it, so when the back button is
+ * pressed it doesn't trash the search result.
+ * 
+ */
 public class FocusPanel extends JPanel {
 	
+	/** The previous opened panel. */
 	private JPanel previous;
-	private RightPanel rp;
-	private JPanel current;
 	
+	
+	/** The current {@link StopFocus} displayed. */
+	private StopFocus current;
+	
+	/**
+	 * Instantiates a new focus panel.
+	 */
 	public FocusPanel() {
 		super();
 		setLayout(new BorderLayout());
 		addBackButton();
-		setMaximumSize(new Dimension(550, 1000));
 	}
 	
-	public void setFocus(JPanel p) {
+	/**
+	 * Sets the current displayed {@link StopFocus} panel.
+	 *
+	 * @param p the {@link StopFocus} panel
+	 */
+	public void setFocus(StopFocus p) {
 		if (current != null) {
 			remove(current);
 		}
@@ -34,38 +47,37 @@ public class FocusPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * Adds the back button to return to the previous panel.
+	 */
 	private void addBackButton() {
 		JPanel p = new JPanel();
-		JButton b = new JButton("GO BACK");
+		JButton b = new JButton("↩");
 		b.setSize(getPreferredSize());
-		b.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-//				rp.setShowCurrent(previous);
-				FocusController.openPrevious();
-			}
-		});
-		
-		JLabel label = new JLabel("You have selected : ", JLabel.CENTER);
+		b.addActionListener(e -> { FocusController.openPrevious(); });
+				
 		
 		p.add(b);
-		p.add(label);
 		
 		add(p,BorderLayout.NORTH);
 	}
 
-	public void setRightPanel(RightPanel r) {
-		if (rp == null) {
-			this.rp = r;
-		}
-		
-	}
 	
+	
+	/**
+	 * Sets the previous {@link JPanel}.
+	 *
+	 * @param p the new previous panel
+	 */
 	public void setPrevious(JPanel p) {
 		previous = p;
 	}
 	
+	/**
+	 * Gets the previous panel
+	 *
+	 * @return the previous panel
+	 */
 	public JPanel getPrevious() {
 		return previous;
 	}
