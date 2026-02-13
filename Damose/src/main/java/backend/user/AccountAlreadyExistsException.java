@@ -1,0 +1,7 @@
+package main.java.backend.user;
+
+public class AccountAlreadyExistsException extends RuntimeException {
+    public AccountAlreadyExistsException(String message) {
+        super(message);
+    }
+}
