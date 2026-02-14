@@ -90,35 +90,24 @@ public class UserDB {
 	 */
 	public synchronized void createNewAccount(String userName, String password) throws IOException, IllegalArgumentException, AccountAlreadyExistsException {
 		
-		if (userName == null || password == null) {
+		if (userName == null || userName.isBlank()  || password.isBlank() || password == null) {
 		    throw new IllegalArgumentException("Testo nullo non consentito.");
 		}
 		
 		userName = userName.trim();
 		password = password.trim();
 		
-		if (password.isEmpty()) {
-			
-			throw new IllegalArgumentException("La password non può essere vuota");
-		}
-		
 		if (password.length() < 8) {
 			
 			throw new IllegalArgumentException("La password deve contenere almeno 8 caratteri.");
 		}
-		
-        if (userName.length() == 0) {
-            throw new IllegalArgumentException("Nome vuoto non consentito.");
-        }
-		
-		if (!usersById.isEmpty()) {
 			
-			for (User u : usersById.values()) {
+		for (User u : usersById.values()) {
 				
-				if (u.getUserName().equals(userName)) {
+			if (u.getUserName().equals(userName)) {
 					
-					throw new AccountAlreadyExistsException("Esiste già un account con questo nome utente. Accedi o crea un nuovo account.");
-				}
+				throw new AccountAlreadyExistsException("Esiste già un account con questo nome utente. Accedi o crea un nuovo account.");
+			}
 			
 		}
 		
@@ -138,8 +127,6 @@ public class UserDB {
 		}
 		
 		usersById.put(id, newUser); 
-		
-		}
 
 	}
 	

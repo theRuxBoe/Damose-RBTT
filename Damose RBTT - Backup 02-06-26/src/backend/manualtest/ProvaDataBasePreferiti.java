@@ -30,7 +30,7 @@ public class ProvaDataBasePreferiti {
 			UserDB userDB = new UserDB();
 			
 			System.out.println("Creazione account");
-			userDB.createNewAccount("", "");
+			userDB.createNewAccount("Patatina", "brotato699");
 			Optional<User> o1 = userDB.findUserByName("Patatina");
 			User u1 = null;
 			

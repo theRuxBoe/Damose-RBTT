@@ -195,7 +195,7 @@ public class FavoriteStopDB {
 	 * @param userId the user id
 	 * @return the optional
 	 */
-	public synchronized Optional<List<FavoriteStop>> findFavoritesByUserId(String userId) {
+	public synchronized Optional<List<FavoriteStop>> findFavoriteStopsByUserId(String userId) {
 		
 		if (favoriteStopsByUserId.containsKey(userId)) {
 			

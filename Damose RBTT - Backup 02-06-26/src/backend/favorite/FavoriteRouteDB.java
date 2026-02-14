@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import backend.model.Linea;
+import backend.model.RisultatoLinea;
 import backend.parser.GTFSStaticRepository;
 
 /**
@@ -59,11 +60,12 @@ public class FavoriteRouteDB {
 				
 				String idUtenteRiga = riga;
 				String lineaRiga = reader.readLine();
+				String direzioneLinea = reader.readLine();
 				String commRiga = reader.readLine();
 				
-				reader.readLine(); //salta riga vuota
+				reader.readLine(); // Salta riga vuota
 				
-				if (lineaRiga == null || commRiga == null) {
+				if (idUtenteRiga == null || lineaRiga == null || commRiga == null || direzioneLinea == null) {
 					
 					break;
 				}
@@ -72,9 +74,10 @@ public class FavoriteRouteDB {
 					
 					String idUtente = idUtenteRiga.substring(idUtenteRiga.indexOf(":")+1).trim();
 					String routeId = lineaRiga.substring(lineaRiga.indexOf(":")+1).trim();
+					String directionName = direzioneLinea.substring(direzioneLinea.indexOf(":")+1).trim();
 					String commento = commRiga.substring(commRiga.indexOf(":")+1).trim();
 					
-					Optional<Linea> optLinea = getLineaById(routeId);
+					Optional<RisultatoLinea> optLinea = getLineaById(routeId, directionName);
 					if (optLinea.isPresent()) {
 						
 						favoriteRoutesByUserId.computeIfAbsent(idUtente, k -> new ArrayList<>())
@@ -91,18 +94,18 @@ public class FavoriteRouteDB {
 	}
 	
 	/**
-	 * Gets the route by its id.
+	 * Gets the route by its id and direction name.
 	 *
 	 * @param routeId the route id
 	 * @return the route by id
 	 */
-	private Optional<Linea> getLineaById(String routeId) {
+	private Optional<RisultatoLinea> getLineaById(String routeId, String directionName) {
 		
-		for (Linea l : GTFSStaticRepository.getLinee()) {
+		for (RisultatoLinea rl : GTFSStaticRepository.getRisultatiLinea()) {
 			
-			if (l.getRouteId().equals(routeId)) {
+			if (rl.getRouteId().equals(routeId)&&(rl.getDirectionName().equals(directionName))) {
 				
-				return Optional.of(l);
+				return Optional.of(rl);
 			}
 		}
 		
@@ -118,7 +121,7 @@ public class FavoriteRouteDB {
 	 * @return true, if successful
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public synchronized boolean addFavoriteRoute(String userId, Linea linea, String commento) throws IOException {
+	public synchronized boolean addFavoriteRoute(String userId, RisultatoLinea linea, String commento) throws IOException {
 		
 		if (userId == null || linea == null) {
 			
@@ -139,9 +142,9 @@ public class FavoriteRouteDB {
 		
 		for (FavoriteRoute f : list) {
 			
-			if (f.getLineaSalvata().getRouteId().equals(linea.getRouteId())) {
+			if (f.getLineaSalvata().getRouteId().equals(linea.getRouteId())&&(f.getLineaSalvata().getDirectionName().equals(linea.getDirectionName()))) {
 				
-				throw new FavoriteAlreadyExistingException("Hai già aggiunto questa linea ai tuoi Preferiti");
+				throw new FavoriteAlreadyExistingException("Hai già aggiunto questa linea con questa direzione ai tuoi Preferiti");
 			}
 		}
 		
@@ -151,6 +154,8 @@ public class FavoriteRouteDB {
 			writer.newLine();
 			writer.write("Linea: "+linea.getRouteId());
 			writer.newLine();
+			writer.write("Direzione: "+linea.getDirectionName());
+			writer.newLine();
 			writer.write("Commento: "+commento);
 			writer.newLine();
 			writer.newLine();
@@ -158,7 +163,7 @@ public class FavoriteRouteDB {
 		}
 		
 		list.add(new FavoriteRoute(userId, linea, commento));
-		System.out.println("Linea aggiunta ai Preferiti.");
+		System.out.println("Linea con questa direzione aggiunta ai Preferiti.");
 		
 		return true;
 	}
@@ -170,7 +175,7 @@ public class FavoriteRouteDB {
 	 * @param routeId the route id
 	 * @return true, if is favorite route present
 	 */
-	public boolean isFavoriteRoutePresent(String userId, String routeId) {
+	public boolean isFavoriteRoutePresent(String userId, String routeId, String directionName) {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
 		
@@ -178,7 +183,7 @@ public class FavoriteRouteDB {
 		
 		for (FavoriteRoute f : list) {
 			
-			if (f.getLineaSalvata().getRouteId().equals(routeId)) {
+			if (f.getLineaSalvata().getRouteId().equals(routeId)&(f.getLineaSalvata().getDirectionName().equals(directionName))) {
 				
 				return true;
 			}
@@ -194,7 +199,7 @@ public class FavoriteRouteDB {
 	 * @return the optional
 	 */
 
-	public synchronized Optional<List<FavoriteRoute>> findFavoriteRouteByUserId(String userId) {
+	public synchronized Optional<List<FavoriteRoute>> findFavoriteRoutesByUserId(String userId) {
 		
 		if (favoriteRoutesByUserId.containsKey(userId)) {
 			
@@ -212,7 +217,7 @@ public class FavoriteRouteDB {
 	 * @return the optional
 	 */
 	//trova un particolare FavoriteRoute di un determinato utente
-	public synchronized Optional<FavoriteRoute> findFavoriteRouteByUserIdAndRouteId(String userId, String routeId) {
+	public synchronized Optional<FavoriteRoute> findFavoriteRouteByUserIdRouteIdDirName(String userId, String routeId, String directionName) {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
 		
@@ -220,7 +225,7 @@ public class FavoriteRouteDB {
 			
 			for (FavoriteRoute f : list) {
 				
-				if (f.getLineaSalvata().getRouteId().equals(routeId)) {
+				if (f.getLineaSalvata().getRouteId().equals(routeId)&&f.getLineaSalvata().getDirectionName().equals(directionName)) {
 					
 					return Optional.of(f);
 				}
@@ -248,6 +253,8 @@ public class FavoriteRouteDB {
 	                writer.newLine();
 	                writer.write("Linea: " + f.getLineaSalvata().getRouteId());
 	                writer.newLine();
+	    			writer.write("Direzione: "+f.getLineaSalvata().getDirectionName());
+	    			writer.newLine();
 	                writer.write("Commento: " + f.getCommento());
 	                writer.newLine();
 	                writer.newLine();
@@ -264,13 +271,13 @@ public class FavoriteRouteDB {
 	 * @return the optional
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public synchronized Optional<FavoriteRoute> deleteFavoriteRoute(String userId, String routeId) throws IOException {
+	public synchronized Optional<FavoriteRoute> deleteFavoriteRoute(String userId, String routeId, String directionName) throws IOException {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
 		
 		if (list == null) return Optional.empty();
 		
-		Optional<FavoriteRoute> toDelete = findFavoriteRouteByUserIdAndRouteId(userId, routeId);
+		Optional<FavoriteRoute> toDelete = findFavoriteRouteByUserIdRouteIdDirName(userId, routeId, directionName);
 		
 		if (toDelete.isEmpty()) {
 			

@@ -1,6 +1,6 @@
 package backend.favorite;
 
-import backend.model.Linea;
+import backend.model.RisultatoLinea;
 
 /**
  * The Class FavoriteRoute -> identifies an object representing a favorite route saved by a certain user.
@@ -11,7 +11,7 @@ public class FavoriteRoute extends Favorite {
 	private String userId;
 	
 	/** The saved route. */
-	private Linea lineaSalvata;
+	private RisultatoLinea lineaSalvata;
 	
 	/** The comment (it can be blank). */
 	private String commento;
@@ -23,7 +23,7 @@ public class FavoriteRoute extends Favorite {
 	 * @param lineaSalvata the linea salvata
 	 * @param commento the commento
 	 */
-	public FavoriteRoute(String userId, Linea lineaSalvata, String commento) {
+	public FavoriteRoute(String userId, RisultatoLinea lineaSalvata, String commento) {
 		
 		this.userId = userId;
 		this.lineaSalvata = lineaSalvata;
@@ -44,7 +44,7 @@ public class FavoriteRoute extends Favorite {
 	 *
 	 * @return the saved route
 	 */
-	public Linea getLineaSalvata() {
+	public RisultatoLinea getLineaSalvata() {
 		return lineaSalvata;
 	}
 
