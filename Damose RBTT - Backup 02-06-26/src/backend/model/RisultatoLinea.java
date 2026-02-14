@@ -7,10 +7,11 @@ import java.util.Objects;
 /**
  * The Class RisultatoLinea -> a wrapper with a Linea object and an additional field which indentifies the route's direction name.
  */
-public class RisultatoLinea extends Risultato {
+public class RisultatoLinea extends DatoGTF {
 	
 	/** The direction name. */
-	private String routeId, directionName;
+	private Linea linea;
+	private String directionName;
 	
 	/**
 	 * Instantiates a new risultato linea.
@@ -18,9 +19,9 @@ public class RisultatoLinea extends Risultato {
 	 * @param routeId the route id
 	 * @param directionName the direction name
 	 */
-	public RisultatoLinea(String routeId, String directionName) {
+	public RisultatoLinea(Linea linea, String directionName) {
 		
-		this.routeId = routeId;
+		this.linea = linea;
 		this.directionName = directionName;
 		
 	}
@@ -33,7 +34,7 @@ public class RisultatoLinea extends Risultato {
 	@Override 
 	public String toString() {
 		
-		return "Linea " + routeId + " direzione " + directionName;
+		return "Linea " + linea.toString() + " direzione " + directionName;
 	}
 
 	/**
@@ -41,8 +42,8 @@ public class RisultatoLinea extends Risultato {
 	 *
 	 * @return the route id
 	 */
-	public String getRouteId() {
-		return routeId;
+	public Linea getLinea() {
+		return linea;
 	}
 
 	/**
@@ -53,33 +54,43 @@ public class RisultatoLinea extends Risultato {
 	public String getDirectionName() {
 		return directionName;
 	}
-
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
-	@Override
-	public int hashCode() {
-		return Objects.hash(directionName, routeId);
+	
+	public String getRouteId() {
+		
+		return linea.getRouteId();
 	}
-
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
+	
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RisultatoLinea other = (RisultatoLinea) obj;
-		return Objects.equals(directionName, other.directionName) && Objects.equals(routeId, other.routeId);
-	}
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        // Usa il routeId per l'hashcode della linea per essere sicuro
+        result = prime * result + ((linea == null) ? 0 : linea.getRouteId().hashCode());
+        result = prime * result + ((directionName == null) ? 0 : directionName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        
+        RisultatoLinea other = (RisultatoLinea) obj;
+        
+        // Controllo sulla Linea (basandoci sul RouteID che è univoco)
+        if (linea == null) {
+            if (other.linea != null) return false;
+        } else if (!linea.getRouteId().equals(other.linea.getRouteId()))
+            return false;
+            
+        // Controllo sulla Direzione
+        if (directionName == null) {
+            if (other.directionName != null) return false;
+        } else if (!directionName.equals(other.directionName))
+            return false;
+            
+        return true;
+    }
 
 }

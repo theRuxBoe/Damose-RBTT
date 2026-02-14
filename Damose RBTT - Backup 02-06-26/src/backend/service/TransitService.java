@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import backend.model.*;
 import backend.realtime.ServiceAlertInfo;
@@ -52,7 +53,7 @@ public interface TransitService {
 	 * @param query the query
 	 * @return the list
 	 */
-	List<Linea> cercaLinee(String query);
+	List<RisultatoLinea> cercaLinee(String query);
 	
 	/**
 	 * General stop search.

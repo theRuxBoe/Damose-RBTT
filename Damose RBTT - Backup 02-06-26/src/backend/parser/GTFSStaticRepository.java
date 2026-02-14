@@ -2,6 +2,7 @@ package backend.parser;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import backend.model.*;
 
@@ -29,6 +30,9 @@ public class GTFSStaticRepository {
     
     /** The service calendar map indexed by service id. */
     private static Map<String, ServiceCalendar> serviziCalendario;
+    
+    /** A set of wrapper object containing a route and its direction. */
+    private static Set<RisultatoLinea> risultatiLinea;
 
     /**
      * Instantiates a new GTFS static repository.
@@ -52,6 +56,7 @@ public class GTFSStaticRepository {
         corse = parser.getCorse();
         orari = parser.getOrari();
         serviziCalendario = parser.getCalendarMap();
+        risultatiLinea = parser.getRisultatiLinea();
 
         initialized = true;
     }
@@ -118,6 +123,17 @@ public class GTFSStaticRepository {
     	
     	ensureInit();
     	return serviziCalendario;
+    }
+    
+    /**
+     * Gets the set of RisultatoLinea wrappers
+     *
+     * @return the set of RisultatoLinea wrappers
+     */
+    public static Set<RisultatoLinea> getRisultatiLinea() {
+    	
+    	ensureInit();
+    	return risultatiLinea;
     }
     
     /**
