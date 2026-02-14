@@ -1,7 +1,7 @@
 package main.java.frontend.user;
 
-import main.java.frontend.main.MainFrame;
-import main.java.frontend.main.RightPanelToMainFrameController;
+import main.java.frontend.MainFrame;
+import main.java.frontend.RightPanelToMainFrameController;
 
 /**
  * The Class LoginToMainFrame is used to switch to the login panel or to the register panel 
@@ -23,6 +23,7 @@ public class LoginToMainFrame {
 	/** The current user (could be null if no user is logged in). */
 	private static String user;
 	
+	/** The current {@link MainFrame} */
 	private static MainFrame frame;
 
 	/**
@@ -57,7 +58,7 @@ public class LoginToMainFrame {
 			frame.getFrame().getContentPane().add(regpane, "Register Panel");
 		}
 
-//		regpane.setObserver(fr);
+		regpane.setObserver(frame);
 		frame.getCardLayout().show(frame.getFrame().getContentPane(), "Register Panel");
 
 		frame.getFrame().repaint();

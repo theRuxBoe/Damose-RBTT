@@ -14,7 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import main.java.backend.service.TransitServiceImpl.WrapperGenerico;
-import main.java.frontend.main.BackendController;
+import main.java.frontend.BackendController;
 import main.java.frontend.utilities.ListToScrollConverter;
 
 /**

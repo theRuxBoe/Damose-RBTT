@@ -1,6 +1,6 @@
 package main.java.frontend.rightpanel;
 
-import main.java.frontend.main.MainFrame;
+import main.java.frontend.MainFrame;
 import main.java.frontend.rightpanel.panels.StopFocus;
 
 /**

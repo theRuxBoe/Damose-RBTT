@@ -1,4 +1,4 @@
-package main.java.frontend.main;
+package main.java.frontend;
 
 import java.awt.BorderLayout;
 
@@ -7,16 +7,15 @@ import main.java.frontend.rightpanel.RightPanel;
 import main.java.frontend.rightpanel.SearchPanel;
 import main.java.frontend.user.LoginToMainFrame;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RightPanelToMainFrameController.
  */
 public class RightPanelToMainFrameController {
 
-	/** The rp. */
+	/** The {@link RightPanel}. */
 	private static RightPanel rp;
 	
-	/** The mframe. */
+	/** The {@link MainFrame}. */
 	private static MainFrame mframe;
 	
 	
@@ -56,12 +55,17 @@ public class RightPanelToMainFrameController {
 		return mframe;
 	}
 	
+	/**
+	 * Sets the frame.
+	 *
+	 * @param f the new frame
+	 */
 	public static void setFrame(MainFrame f) {
 		mframe = f;
 	}
 	
 	/**
-	 * Switch current right panel.
+	 * Switch the current {@link RightPanel}.
 	 */
 	public static void switchCurrentRightPanel() {
 

@@ -15,8 +15,7 @@ import javax.swing.Timer;
 
 
 import main.java.backend.model.PredizioneArrivo;
-import main.java.backend.model.RouteType;
-import main.java.frontend.main.BackendController;
+import main.java.frontend.BackendController;
 
 /**
  * The Class ArrivingVehiclePanel displays the representation
@@ -34,9 +33,8 @@ public class ArrivingVehiclePanel extends JPanel {
 	/** The grid bag constraints. */
 	private GridBagConstraints gbc = new GridBagConstraints();
 	
-	/** The vehicle type. */
-	private RouteType type;
 	
+	/** The timer for arrival time. */
 	private Timer t;
 
 	/**
@@ -47,7 +45,7 @@ public class ArrivingVehiclePanel extends JPanel {
 	public ArrivingVehiclePanel(PredizioneArrivo v) {
 		super();
 		this.vehicle = v;
-		this.type = BackendController.getTTS().cercaLinee(v.getRouteId()).getFirst().getRouteType();
+//		this.type = BackendController.getTTS().getLinea(v.getRouteId()).getRouteType();
 		setLayout(new GridBagLayout());
 
 		addLine();
@@ -157,9 +155,9 @@ public class ArrivingVehiclePanel extends JPanel {
 				
 				
 			}
-			else if (tArrivo.getHour() == ora.getHour()+1) {
-				x += 60;
-				res = x  ;
+			else if (tArrivo.getHour() == ora.getHour()+1 ||
+					tArrivo.getHour() == 0 && ora.getHour() == 23) {
+				res = x + 60 ;
 			
 				
 			}
@@ -173,7 +171,7 @@ public class ArrivingVehiclePanel extends JPanel {
 		else { 
 			if (tArrivo.getHour() == ora.getHour()) {
 				res = x ; }
-			else if (tArrivo.getHour() == ora.getHour()+1){
+			else if (tArrivo.getHour() == ora.getHour()+1 || tArrivo.getHour() == 0 && ora.getHour() == 23) {
 				res = x + 60;
 			}
 			else { res = x + 120; }

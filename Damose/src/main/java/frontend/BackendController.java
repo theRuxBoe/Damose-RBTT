@@ -1,4 +1,4 @@
-package main.java.frontend.main;
+package main.java.frontend;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import main.java.backend.service.TransitServiceImpl;
 
 /**
+ * 
  * The Class BackendController controls the communication 
  * with the back-end by providing a static reference
  * to the {@link TransitServiceImpl}.

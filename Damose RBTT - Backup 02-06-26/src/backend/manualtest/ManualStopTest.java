@@ -1,18 +1,28 @@
-package main.java.backend.realtime;
+package backend.manualtest;
 
-import main.java.backend.service.TransitServiceImpl;
-import main.java.backend.service.TransitService;
-import main.java.backend.model.PredizioneArrivo;
-import main.java.backend.realtime.GTFSRealTimeClient;
-import main.java.backend.realtime.RealtimeService;
-import main.java.backend.realtime.RealtimeSnapshot;
-import main.java.backend.realtime.ServiceAlertInfo;
-import main.java.backend.realtime.VehiclePositionInfo;
+import backend.service.TransitServiceImpl;
+import backend.service.TransitService;
+import backend.model.PredizioneArrivo;
+import backend.realtime.GTFSRealTimeClient;
+import backend.realtime.RealtimeService;
+import backend.realtime.RealtimeSnapshot;
+import backend.realtime.ServiceAlertInfo;
+import backend.realtime.VehiclePositionInfo;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The Class ManualStopTest.
+ */
 public class ManualStopTest {
+    
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] args) throws Exception {
         // --- creazione (modifica gli URL se necessario) ---
         GTFSRealTimeClient tripClient = new GTFSRealTimeClient("https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb");

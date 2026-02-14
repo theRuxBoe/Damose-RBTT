@@ -13,7 +13,7 @@ import javax.swing.border.BevelBorder;
 
 import main.java.backend.model.Fermata;
 import main.java.backend.model.Linea;
-import main.java.frontend.main.BackendController;
+import main.java.frontend.BackendController;
 import main.java.frontend.user.FavouritesDBManager;
 import main.java.frontend.user.LoginToMainFrame;
 import main.java.frontend.utilities.ListToScrollConverter;
@@ -56,7 +56,7 @@ public class LinePanel extends JPanel {
 		if (LoginToMainFrame.isLogged()) {
 			p.add(createFavouriteButton());
 		}
-		JLabel data = new JLabel(line.getName() + " - " + line.getDescription() + " - Qualità : "	);
+		JLabel data = new JLabel(line.getName() + " - " + line.getDescription() + " - Qualità : " + BackendController.getTTS().getValutazioneLinea(line.getRouteId()));
 		data.setFont(new Font("Serif", Font.BOLD, 30));
 		
 		p.add(data);
@@ -76,7 +76,7 @@ public class LinePanel extends JPanel {
 		b.setFocusPainted(false);
 		b.setContentAreaFilled(false);
 		b.addActionListener(e -> {
-				if (b.getText() == "☆") {
+				if (b.getText().equals("☆")) {
 					b.setText("★");
 					
 					FavouritesDBManager.addToFavourites(line);
@@ -97,10 +97,11 @@ public class LinePanel extends JPanel {
 	 */
 	private void addScrollPanel() {
 		List<Fermata> j = BackendController.getTTS().trovaFermatePerLinea(line.getRouteId(), line.getDescription());
+		System.out.println(j.toString());
 		JScrollPane x = ListToScrollConverter.setContent(ListToScrollConverter.convertList(j));
 		if (x != null) {
 		x.setMaximumSize(getPreferredSize());
-		add(x, BorderLayout.WEST);
+		add(x, BorderLayout.EAST);
 		}
 	}
 

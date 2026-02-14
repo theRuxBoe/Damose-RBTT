@@ -6,11 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -20,7 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import main.java.backend.user.UserDB;
-import main.java.frontend.main.MainFrame;
+import main.java.frontend.MainFrame;
 
 /**
  * The Class UserPanel is used as a super class for both the login
@@ -82,15 +79,9 @@ public class UserPanel extends JPanel{
 		gbc.weighty = 0.25;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		ImageIcon pic = null;
-//		try {
-//			pic = ImageIO.read(new File("/main/res/damose_logo.png"));
 			pic = new ImageIcon(getClass().getResource("/main/res/damose_logo.png"));
 			JLabel picLabel = new JLabel(pic);
 			add(picLabel, gbc);
-//		} catch (IOException e) {
-//			JOptionPane.showMessageDialog(this, e.getMessage());
-//		}
-		
 	}
 	
 	/**
@@ -180,7 +171,7 @@ public class UserPanel extends JPanel{
 			db = dab;
 		}
 		catch (IOException e) {
-			JOptionPane.showMessageDialog(observer.getFrame(), e.getMessage());
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		}
 	}

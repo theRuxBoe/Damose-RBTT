@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 
 
 import main.java.backend.model.Fermata;
-import main.java.frontend.main.MainFrame;
 import main.java.frontend.rightpanel.FocusController;
 import main.java.frontend.user.FavouritesDBManager;
 import main.java.frontend.user.LoginToMainFrame;
@@ -40,6 +39,8 @@ public class StopPanel extends JPanel {
 	 */
 	public StopPanel(Fermata f) {
 		super();
+		if (f != null) {
+		
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		stop = f;
@@ -47,7 +48,7 @@ public class StopPanel extends JPanel {
 		addListener();
 		setMaximumSize(getPreferredSize());
 		setAlignmentX(Component.LEFT_ALIGNMENT);
-		
+		}
 	}
 	
 	
@@ -65,6 +66,8 @@ public class StopPanel extends JPanel {
 			@Override public void mouseClicked(MouseEvent e) {
 					StopFocus bsfocus = new StopFocus(StopPanel.this.getStop());
 					FocusController.openFocus(bsfocus);
+					bsfocus.showOnMap();
+					bsfocus.showVehiclesOnMap();
 				
 			}
 		});
@@ -105,7 +108,7 @@ public class StopPanel extends JPanel {
 		b.setContentAreaFilled(false);
 		b.setSize(new Dimension(10,10));
 		b.addActionListener(e -> {
-				if (b.getText() == "☆") {
+				if (b.getText().equals("☆")) {
 					b.setText("★");
 					FavouritesDBManager.addToFavourites(stop);
 //					this will put the stop into the favourites area

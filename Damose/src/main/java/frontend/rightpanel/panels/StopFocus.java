@@ -21,8 +21,8 @@ import org.jxmapviewer.viewer.GeoPosition;
 import main.java.backend.model.Fermata;
 import main.java.backend.model.PredizioneArrivo;
 import main.java.backend.realtime.VehiclePositionInfo;
-import main.java.frontend.main.BackendController;
-import main.java.frontend.main.MapPanel;
+import main.java.frontend.BackendController;
+import main.java.frontend.MapPanel;
 import main.java.frontend.user.FavouritesDBManager;
 import main.java.frontend.user.LoginToMainFrame;
 import main.java.frontend.utilities.ListToScrollConverter;
@@ -39,8 +39,10 @@ public class StopFocus extends JPanel {
 	/** The stop object. */
 	private Fermata stop;
 	
+	/** The timer to update the vehicles position on the map. */
 	private Timer t;
 	
+	/** The scroll panel containing the {@link ArrivingVehiclePanel} */
 	private JScrollPane scroll;
 
 	/**
@@ -51,8 +53,8 @@ public class StopFocus extends JPanel {
 	public StopFocus(Fermata f) {
 		super();
 		stop = f;
-		showOnMap();
-		showVehiclesOnMap();
+//		showOnMap();
+//		showVehiclesOnMap();
 
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -75,7 +77,7 @@ public class StopFocus extends JPanel {
 		b.setContentAreaFilled(false);
 		b.setSize(new Dimension(10, 10));
 		b.addActionListener(e -> {
-			if (b.getText() == "☆") {
+			if (b.getText().equals("☆")) {
 				b.setText("★");
 				FavouritesDBManager.addToFavourites(stop);
 			} else {
@@ -126,7 +128,7 @@ public class StopFocus extends JPanel {
 	 * Shows a {@link StopWaypoint} for the stop on the {@link MapPanel} through
 	 * the {@link WaypointManager} class.
 	 */
-	private void showOnMap() {
+	public void showOnMap() {
 		GeoPosition gp = new GeoPosition(stop.getLat(), stop.getLon());
 		WaypointManager.getMap().setCenterPosition(gp);
 
@@ -138,7 +140,7 @@ public class StopFocus extends JPanel {
 	 * Periodically shows a {@link VehicleWaypoint} for the arriving vehicles on the {@link MapPanel} 
 	 * through the {@link WaypointManager} class.
 	 */
-	private void showVehiclesOnMap() {
+	public void showVehiclesOnMap() {
 		
 		
 		addVehicleWaypoints();

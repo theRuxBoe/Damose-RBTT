@@ -19,14 +19,35 @@ import main.java.backend.model.Linea;
 import main.java.backend.model.OrarioFermata;
 import main.java.backend.model.ServiceCalendar;
 
+/**
+ * The Class GTFSStaticParser -> its task is to download the zip file containing the static GTFS data taken from Roma Mobilità, parse it, 
+ * and return lists containing the objects obtained from the parsing of each file.
+ */
 public class GTFSStaticParser {
 	
+	/** The list containing the stop objects. */
 	private List<Fermata> fermate;
+	
+	/** The The list containing the route objects. */
 	private List<Linea> linee;
+	
+	/** The The list containing the trip objects. */
 	private List<Corsa> corse;
+	
+	/** The The list containing the stop times objects. */
 	private List<OrarioFermata> orari;
+	
+	/** The The list containing the service calendar objects. */
 	private Map<String, ServiceCalendar> serviziCalendario;
 	
+	/**
+	 * Downloads the GTFS zip file from a url.
+	 *
+	 * @param url the url
+	 * @param destinazione the file destination
+	 * @return the path
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private Path downloadGTFSZip(String url, Path destinazione) throws IOException {
 		
 	    if (!Files.exists(destinazione.getParent())) {
@@ -38,6 +59,14 @@ public class GTFSStaticParser {
 	    return destinazione;
 	}
 	
+	/**
+	 * Unzips the GTFS zip file.
+	 *
+	 * @param zipPath the zip path
+	 * @param outputDir the output dir
+	 * @return the path
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private Path unzipGTFS(Path zipPath, Path outputDir) throws IOException {
 	    if (!Files.exists(outputDir)) {
 	        Files.createDirectories(outputDir);
@@ -59,6 +88,13 @@ public class GTFSStaticParser {
 	    return outputDir;
 	}
 	
+	/**
+	 * Parses the stop objects (from stops.txt).
+	 *
+	 * @param file the file
+	 * @return the list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private List<Fermata> parseFermate(Path file) throws IOException {
 		
 		List<Fermata> risultatoFermate = new ArrayList<Fermata>();
@@ -76,6 +112,13 @@ public class GTFSStaticParser {
 		return risultatoFermate;
 	}
 	
+	/**
+	 * Parses the service calendar objects (from calendar_dates.txt)
+	 *
+	 * @param file the file
+	 * @return the map
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private Map<String, ServiceCalendar> parseServiceCalendar(Path file) throws IOException {
 		
 		Map<String, ServiceCalendar> calendarMap = new HashMap<String, ServiceCalendar>();
@@ -87,7 +130,7 @@ public class GTFSStaticParser {
 			String dateString = riga[1];
 			int exceptionType = Integer.parseInt(riga[2]);
 			
-			// Aggiungiamo la data solo se il tipo è 1 (Servizio Attivo)
+			// Aggiungo la data solo se il tipo è 1 (servizio attivo)
 	        if (exceptionType == 1) {
 	            LocalDate date = LocalDate.parse(dateString, dtf);
 	            calendarMap.putIfAbsent(serviceId, new ServiceCalendar(serviceId));
@@ -99,6 +142,13 @@ public class GTFSStaticParser {
 		
 	}
 	
+	/**
+	 * Parses the route objects (from routes.txt).
+	 *
+	 * @param file the file
+	 * @return the list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private List<Linea> parseLinee(Path file) throws IOException {
 		
 		List<Linea> risultatoLinee = new ArrayList<Linea>();
@@ -117,6 +167,13 @@ public class GTFSStaticParser {
 		return risultatoLinee;
 	}
 	
+	/**
+	 * Parses the trip objects (from trips.txt).
+	 *
+	 * @param file the file
+	 * @return the list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private List<Corsa> parseCorse(Path file) throws IOException {
 		
 		List<Corsa> risultatoCorse = new ArrayList<Corsa>();
@@ -135,6 +192,13 @@ public class GTFSStaticParser {
 		return risultatoCorse;
 	}
 	
+	/**
+	 * Parses the stop times objects (from stop_times.txt).
+	 *
+	 * @param file the file
+	 * @return the list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private List<OrarioFermata> parseOrari(Path file) throws IOException {
 		
 		List<OrarioFermata> risultatoOrari = new ArrayList<OrarioFermata>();
@@ -153,6 +217,12 @@ public class GTFSStaticParser {
 		return risultatoOrari;
 	}
 	
+	/**
+	 * Checks if the file is already unzipped.
+	 *
+	 * @param outputDir the output dir
+	 * @return true, if is already unzipped
+	 */
 	private boolean isAlreadyUnzipped(Path outputDir) {
 	    return Files.exists(outputDir)
 	        && Files.exists(outputDir.resolve("stops.txt"))
@@ -162,12 +232,18 @@ public class GTFSStaticParser {
 	        && Files.exists(outputDir.resolve("calendar_dates.txt"));
 	}
 	
+	/**
+	 * Parses all the objects in a single method. However, if the latest downloaded GTFS file has been downloaded less than 7 days ago,
+	 * the download will be skipped.
+	 *
+	 * @param gtfsUrl the gtfs url
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void parseAll(String gtfsUrl) throws IOException {
 		Path baseDir = Path.of(System.getProperty("user.dir"), "data");
 		Path zipPath = baseDir.resolve("rome_gtfs.zip");
 		Path outputDir = baseDir.resolve("gtfs_extracted");
 
-	    //Controllo aggiornamento: se il file non esiste o è troppo vecchio, lo riscarico
 	    boolean deveAggiornare = true;
 	    if (Files.exists(zipPath)) {
 	        long setteGiorniMillis = 7L * 24 * 60 * 60 * 1000; // 7 giorni in millisecondi
@@ -202,22 +278,47 @@ public class GTFSStaticParser {
 	                       + linee.size() + " linee, " + corse.size() + " corse, " + serviziCalendario.size()+ " servizi calendario.");
 	}
 
+	/**
+	 * Gets the stops.
+	 *
+	 * @return the stops
+	 */
 	public List<Fermata> getFermate() {
 		return fermate;
 	}
 
+	/**
+	 * Gets the routes.
+	 *
+	 * @return the routes
+	 */
 	public List<Linea> getLinee() {
 		return linee;
 	}
 
+	/**
+	 * Gets the trips.
+	 *
+	 * @return the trips
+	 */
 	public List<Corsa> getCorse() {
 		return corse;
 	}
 
+	/**
+	 * Gets the stop times.
+	 *
+	 * @return the stop times
+	 */
 	public List<OrarioFermata> getOrari() {
 		return orari;
 	}
 	
+	/**
+	 * Gets the service calendar  map.
+	 *
+	 * @return the service calendar map
+	 */
 	public Map<String, ServiceCalendar> getCalendarMap() {
 		
 		return serviziCalendario;

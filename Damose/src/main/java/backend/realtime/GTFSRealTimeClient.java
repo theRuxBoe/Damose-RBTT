@@ -23,19 +23,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The Class GTFSRealTimeClient -> class responsible for parsing data in real time and organizing it into specific lists of objects
+ */
 public class GTFSRealTimeClient {
 	
+	/** The last snapshot. */
 	private RealtimeSnapshot lastSnapshot = null;
-	private long lastFetchTime = 0;  // in millisecondi
+	
+	/** The last fetch time. */
+	private long lastFetchTime = 0;  // Millisecondi
+	
+	/** The Constant CACHE_TTL_MS. */
 	private static final long CACHE_TTL_MS = 30_000; // 30 secondi
+    
+    /** The connection timeout ms. */
     private final int connectionTimeoutMs = 5_000; // 5 secondi
+    
+    /** The read timeout ms. */
     private final int readTimeoutMs = 15_000; // 15 secondi
+    
+    /** The feed url. */
     private final String feedUrl;
 
+    /**
+     * Instantiates a new GTFS real time client.
+     *
+     * @param feedUrl the feed url
+     */
     public GTFSRealTimeClient(String feedUrl) {
         this.feedUrl = feedUrl;
     }
 
+    /**
+     * Downloads the feed with the raw data.
+     *
+     * @return the byte[]
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private byte[] downloadFeed() throws IOException {
         URL url = new URL(feedUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -63,6 +88,13 @@ public class GTFSRealTimeClient {
         }
     }
 
+    /**
+     * Parses the real time raw feed.
+     *
+     * @param raw the raw feed data
+     * @return the feed message
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private FeedMessage parseFeed(byte[] raw) throws IOException {
         try {
             return FeedMessage.parseFrom(raw);
@@ -71,6 +103,13 @@ public class GTFSRealTimeClient {
         }
     }
  
+    /**
+     * Parses the real time feed in order to parse the entity's trip update data in a TripUpdateInfo object.
+     *
+     * @param entity the feed entity
+     * @param feedTimestampMillis the feed timestamp millis
+     * @return the trip update info
+     */
     private TripUpdateInfo parseTripUpdate(FeedEntity entity, long feedTimestampMillis) {
         if (!entity.hasTripUpdate()) return null;
         TripUpdate tu = entity.getTripUpdate();
@@ -107,7 +146,7 @@ public class GTFSRealTimeClient {
                 if (stopSequence != null) delaysBySequence.put(stopSequence, delaySeconds);
                 if (stopId != null && !stopId.isBlank()) delaysByStopId.put(stopId, delaySeconds);
             } else {
-                //se non c'è delay, può esserci arrival.time o departure.time (epoch seconds)
+                // Se non c'è delay, può esserci arrival.time o departure.time (epoch seconds)
                 if (stu.hasArrival() && stu.getArrival().hasTime()) {
                     long epoch = stu.getArrival().getTime();
                     predictedTimesByStopSequence.put(stopSequence != null ? stopSequence : -1, epoch);
@@ -120,10 +159,16 @@ public class GTFSRealTimeClient {
             }
         }
 
-        //rende immutabili le mappe interne
+        // Rende immutabili le mappe interne
         return new TripUpdateInfo(tripId, routeId, feedTimestampMillis, cancelled, Map.copyOf(delaysBySequence), Map.copyOf(delaysByStopId), Map.copyOf(predictedTimesByStopSequence), Map.copyOf(predictedTimesByStopId));
     }
     
+    /**
+     * Parses the real time feed in order to parse the entity's vehicle position data in a VehiclePositionInfo object.
+     *
+     * @param entity the feed entity
+     * @return the vehicle position info
+     */
     private VehiclePositionInfo parseVehiclePosition(FeedEntity entity) {
     	if (!entity.hasVehicle()) return null;
     	VehiclePosition vp = entity.getVehicle();
@@ -161,6 +206,13 @@ public class GTFSRealTimeClient {
 
     }
     
+    /**
+     * Maps the OccupancyStatus object (which indicates how occupied a vehicle is) of a VehiclePosition 
+     * into an enum with values ​​useful for the frontend.
+     *
+     * @param status the status
+     * @return the occupancy level
+     */
     private OccupancyLevel map(VehiclePosition.OccupancyStatus status) {
     	
     	if (status == null) {
@@ -189,6 +241,12 @@ public class GTFSRealTimeClient {
     	}
     }
     
+    /**
+     * Parses the real time feed in order to parse the entity's alert data in a ServiceAlertInfo object.
+     *
+     * @param entity the feed entity
+     * @return the service alert info
+     */
     private ServiceAlertInfo parseAlert(FeedEntity entity) {
     	
     	if (!entity.hasAlert()) return null;
@@ -242,6 +300,12 @@ public class GTFSRealTimeClient {
     	
     }
 
+    /**
+     * Builds the RealtimeSnapshot object.
+     *
+     * @param msg the feed message
+     * @return the realtime snapshot
+     */
     private RealtimeSnapshot buildSnapshot(FeedMessage msg) {
         Map<String, Map<Integer, Integer>> delayByTripAndSequence = new HashMap<>();
         Map<String, Map<String, Integer>> delayByTripAndStopId = new HashMap<>();
@@ -289,7 +353,12 @@ public class GTFSRealTimeClient {
         return new RealtimeSnapshot(delayByTripAndSequence, delayByTripAndStopId, tripUpdateInfoMap, vehiclePositionByTripId, vehiclePositionByVehicleId, alerts);
     }
     
-    //controllo attivo per verificare se i server sono raggiungibili in questo momento
+    /**
+     * Actively checks the connectivity by trying to read a few bytes of the feed
+     *
+     * @return true, if successful
+     */
+    // Controllo attivo per verificare se i server sono raggiungibili in questo momento
     public synchronized boolean checkConnectivity() {
 
         HttpURLConnection conn = null;
@@ -297,7 +366,7 @@ public class GTFSRealTimeClient {
             URL url = new URL(feedUrl);
             conn = (HttpURLConnection) url.openConnection();
 
-            // timeout MOLTO brevi
+            // Timeout molto brevi
             conn.setConnectTimeout(2000);
             conn.setReadTimeout(3000);
             conn.setRequestMethod("GET");
@@ -321,17 +390,24 @@ public class GTFSRealTimeClient {
         }
     }
     
-    //metodo pubblico completo
+    /**
+     * Full public method to create a RealtimeSnapshot object with various real-time data parsed.
+     * Limits calls to the ATAC server to a maximum of once every 30 seconds
+     *
+     * @return the realtime snapshot
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+
     public synchronized RealtimeSnapshot fetchRealtime() throws IOException {
     	
     	long now = System.currentTimeMillis();
     	
-    	//chiamata al server limitata a una volta ogni 30 secondi
+    	// Chiamata al server limitata a una volta ogni 30 secondi
     	if (lastSnapshot != null && (now - lastFetchTime) < CACHE_TTL_MS) {
             return lastSnapshot;
         }
     	
-    	//altrimenti aggiorno lo snapshot
+    	// Altrimenti aggiorno lo snapshot
         byte[] raw = downloadFeed();
         FeedMessage msg = parseFeed(raw);
         RealtimeSnapshot snapshot = buildSnapshot(msg);

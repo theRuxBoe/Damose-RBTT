@@ -34,11 +34,12 @@ public class VehicleImgFactory {
 	public BufferedImage selectImage(RouteType type) {
 
 		BufferedImage x;
+		if (type == null) {return null;}
 		switch (type) {
 		case TRAM:
 			if (tramImg == null) {
 				try {
-					tramImg = ImageIO.read(WaypointManager.class.getResource("main/res/waypoints/tram.png"));
+					tramImg = ImageIO.read(WaypointManager.class.getResource("/main/res/waypoints/tram.png"));
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
 				}
@@ -48,7 +49,7 @@ public class VehicleImgFactory {
 		case METRO:
 			if (metroImg == null) {
 				try {
-					metroImg = ImageIO.read(WaypointManager.class.getResource("main/res/waypoints/metro.png"));
+					metroImg = ImageIO.read(WaypointManager.class.getResource("/main/res/waypoints/metro.png"));
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
 				}
@@ -58,7 +59,7 @@ public class VehicleImgFactory {
 		case TRAIN:
 			if (trainImg == null) {
 				try {
-					trainImg = ImageIO.read(WaypointManager.class.getResource("main/res/waypoints/train.png"));
+					trainImg = ImageIO.read(WaypointManager.class.getResource("/main/res/waypoints/train.png"));
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
 				}
@@ -68,7 +69,7 @@ public class VehicleImgFactory {
 		case BUS:
 			if (busImg == null) {
 				try {
-					busImg = ImageIO.read(WaypointManager.class.getResource("main/res/waypoints/bus.png"));
+					busImg = ImageIO.read(WaypointManager.class.getResource("/main/res/waypoints/bus.png"));
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
 				}

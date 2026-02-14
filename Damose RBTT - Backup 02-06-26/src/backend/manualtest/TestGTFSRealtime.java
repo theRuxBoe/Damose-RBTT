@@ -1,6 +1,18 @@
-package main.java.backend.realtime;
+package backend.manualtest;
 
+import backend.realtime.GTFSRealTimeClient;
+import backend.realtime.RealtimeSnapshot;
+
+/**
+ * The Class TestGTFSRealtime.
+ */
 public class TestGTFSRealtime {
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
         try {
             // ✔️ Feed GTFS-RT reale e pubblico (TripUpdates)

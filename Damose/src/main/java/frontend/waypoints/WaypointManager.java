@@ -20,8 +20,8 @@ import org.jxmapviewer.viewer.WaypointRenderer;
 import main.java.backend.model.PredizioneArrivo;
 import main.java.backend.model.RouteType;
 import main.java.backend.realtime.VehiclePositionInfo;
-import main.java.frontend.main.BackendController;
-import main.java.frontend.main.MapPanel;
+import main.java.frontend.BackendController;
+import main.java.frontend.MapPanel;
 
 /**
  * The class WaypointManager is used to store methods to paint the entities on
@@ -34,16 +34,22 @@ public class WaypointManager {
 	/** The MapPanel to paint way-points. */
 	private static MapPanel map;
 
+	/** The compound painter. */
 	private static CompoundPainter<JXMapViewer> compound = new CompoundPainter<JXMapViewer>();
 	
+	/** The bus painter. */
 	private static WaypointPainter<VehicleWaypoint> busPainter = new WaypointPainter<VehicleWaypoint>();
 	
+	/** The tram painter. */
 	private static WaypointPainter<VehicleWaypoint> tramPainter = new WaypointPainter<VehicleWaypoint>();
 	
+	/** The metro painter. */
 	private static WaypointPainter<VehicleWaypoint> metroPainter = new WaypointPainter<VehicleWaypoint>();
 	
+	/** The train painter. */
 	private static WaypointPainter<VehicleWaypoint> trainPainter = new WaypointPainter<VehicleWaypoint>();
 	
+	/** The stop painter. */
 	private static WaypointPainter<StopWaypoint> stopPainter = new WaypointPainter<StopWaypoint>();
 	
 	
@@ -122,8 +128,11 @@ public class WaypointManager {
 		
 		for (PredizioneArrivo v : vehicles) {
 			 RouteType type = BackendController.getTTS().cercaLinee(v.getRouteId()).getFirst().getRouteType();
+			 if (type == null) {
+				 continue;
+			 }
 			 Optional<VehiclePositionInfo> position = BackendController.getTTS().getVehiclePositionForTripId(v.getTripId());
-			 if (position.isPresent()) {
+			 if ( position.isPresent()) {
 				 if (type.equals(RouteType.BUS)) {
 					 buses.add(new VehicleWaypoint(position.get().getLat(), position.get().getLon()));
 				 }

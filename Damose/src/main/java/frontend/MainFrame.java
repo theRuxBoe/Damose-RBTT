@@ -1,4 +1,4 @@
-package main.java.frontend.main;
+package main.java.frontend;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

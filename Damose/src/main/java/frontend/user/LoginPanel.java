@@ -36,13 +36,14 @@ public class LoginPanel extends UserPanel {
 	 * <p>
 	 * The login button calls the database to verify the user's name and password,
 	 * then opens the database for favourites lines and stops, and finally updates the 
-	 * MainFrame with the successful login information .
+	 * {@link LoginToMainFrame} with the successful login information .
 	 * <p>
 	 * The register button calls the static method from Login to MainFrame class
 	 * to open the register panel.
 	 * <p>
-	 * The enter as guest button calls the Main Frame telling it
-	 * the user isn't logged.
+	 * The enter as guest button calls {@link LoginToMainFrame} and opens
+	 * the frame knowing that no user is logged in.
+	 * 
 	 *
 	 */
 	private void addButtons() {
@@ -113,20 +114,6 @@ public class LoginPanel extends UserPanel {
 		revalidate();
 	}
 	
-	/**
-	 * Removes itself from the observer.
-	 */
-//	private void removeItself() {
-//		getObserver().getFrame().remove(this);
-//	}
-
-
-	/**
-	 * Removes the observer.
-	 */
-//	public void removeObserver() {
-//		setObserver(null);
-//	}
 
 	
 

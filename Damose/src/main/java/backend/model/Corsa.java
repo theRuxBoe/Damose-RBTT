@@ -2,11 +2,26 @@ package main.java.backend.model;
 
 import java.util.Objects;
 
+/**
+ * The Class Corsa -> identifies a certain trip
+ */
 public class Corsa extends DatoGTF {
 	
+	/** The route id (the route associated to that trip), trip id, service id and direction name. */
 	private String routeId, tripId, serviceId, directionName;
+	
+	/** The direction id. */
 	private int directionId;
 	
+	/**
+	 * Instantiates a new corsa.
+	 *
+	 * @param rId the r id
+	 * @param tId the t id
+	 * @param svId the sv id
+	 * @param dirn the dirn
+	 * @param dirId the dir id
+	 */
 	public Corsa(String rId, String tId, String svId, String dirn, int dirId) {
 		
 		this.routeId = rId;
@@ -17,57 +32,78 @@ public class Corsa extends DatoGTF {
 		
 	}
 	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		
 		return "Corsa di linea "+routeId+" direzione "+directionName;
 	}
 
+	/**
+	 * Gets the route id.
+	 *
+	 * @return the route id
+	 */
 	public String getRouteId() {
 		return routeId;
 	}
 
-	public void setRouteId(String routeId) {
-		this.routeId = routeId;
-	}
-
+	/**
+	 * Gets the trip id.
+	 *
+	 * @return the trip id
+	 */
 	public String getTripId() {
 		return tripId;
 	}
 
-	public void setTripId(String tripId) {
-		this.tripId = tripId;
-	}
-
+	/**
+	 * Gets the service id.
+	 *
+	 * @return the service id
+	 */
 	public String getServiceId() {
 		return serviceId;
 	}
 
-	public void setServiceId(String serviceId) {
-		this.serviceId = serviceId;
-	}
-
+	/**
+	 * Gets the direction name.
+	 *
+	 * @return the direction name
+	 */
 	public String getDirectionName() {
 		return directionName;
 	}
 
-	public void setDirectionName(String directionName) {
-		this.directionName = directionName;
-	}
-
+	/**
+	 * Gets the direction id.
+	 *
+	 * @return the direction id
+	 */
 	public int getDirectionId() {
 		return directionId;
 	}
 
-	public void setDirectionId(int directionId) {
-		this.directionId = directionId;
-	}
-
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(directionId, directionName, routeId, serviceId, tripId);
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

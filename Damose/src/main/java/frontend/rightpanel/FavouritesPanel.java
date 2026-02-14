@@ -12,7 +12,6 @@ import main.java.frontend.user.FavouritesDBManager;
 import main.java.frontend.user.LoginToMainFrame;
 import main.java.frontend.utilities.ListToScrollConverter;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FavouritesPanel displays all of the 
  * stops and lines saved by the user in a j scroll pane.

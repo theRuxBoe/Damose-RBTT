@@ -8,8 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import main.java.frontend.main.MainFrame;
-import main.java.frontend.main.RightPanelToMainFrameController;
+import main.java.frontend.MainFrame;
+import main.java.frontend.RightPanelToMainFrameController;
 import main.java.frontend.rightpanel.panels.StopFocus;
 import main.java.frontend.user.LoginToMainFrame;
 
@@ -34,8 +34,6 @@ public class RightPanel extends JPanel {
 	/** The current panel. */
 	private JPanel current;
 
-	/** The {@link MainFrame}. */
-//	private MainFrame frame;
 
 	/**
 	 * Instantiates a new right panel from a given {@link MainFrame}.

@@ -12,8 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 
 import main.java.backend.realtime.ServiceAlertInfo;
-import main.java.frontend.main.BackendController;
-import main.java.frontend.main.MainFrame;
+import main.java.frontend.BackendController;
 import main.java.frontend.utilities.ListToScrollConverter;
 
 /**
@@ -52,7 +51,7 @@ public class ServicePanel extends JPanel{
 	 */
 	private void addAlerts() {
 		List<ServiceAlertInfo> alerts = BackendController.getTTS().getAllAlerts();
-		if (alerts.isEmpty()) { System.out.println("alerts vuoti"); }
+		if (!alerts.isEmpty()) {
 		List<AlertPanel> alertPanel = new ArrayList<>();
 		for (ServiceAlertInfo alert : alerts) {
 			AlertPanel n = new AlertPanel(alert);
@@ -60,6 +59,7 @@ public class ServicePanel extends JPanel{
 		}
 		JScrollPane scroll =  ListToScrollConverter.setContent(alertPanel);
 		this.add(scroll);
+	}
 	}
 	
 	

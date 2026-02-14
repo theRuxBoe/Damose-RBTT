@@ -11,16 +11,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import main.java.backend.model.Linea;
-import main.java.backend.parser.GTFSStaticParser;
 import main.java.backend.parser.GTFSStaticRepository;
 
+/**
+ * The Class FavoriteRouteDB -> represents a database (a txt file) containing all the users' saved routes.
+ */
 public class FavoriteRouteDB {
 
+	/** The favorites file DB routes. */
 	private final File favoritesFileDBRoutes;
+	
+	/** The favorite routes indexed by user id. */
 	private final Map<String, List<FavoriteRoute>> favoriteRoutesByUserId;
 
+	/**
+	 * Instantiates a new favorite route DB.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public FavoriteRouteDB() throws IOException {
 		
         GTFSStaticRepository.initIfNeeded("https://romamobilita.it/sites/default/files/rome_static_gtfs.zip");
@@ -36,6 +45,11 @@ public class FavoriteRouteDB {
 		loadFavoritesFromFile();
 	}
 	
+	/**
+	 * Loads saved favorite routes from the database file to fill the favoriteRoutesByUserId map when a new instance of FavoriteRouteDB is created.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void loadFavoritesFromFile() throws IOException {
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(favoritesFileDBRoutes))) {
@@ -76,6 +90,12 @@ public class FavoriteRouteDB {
 		}
 	}
 	
+	/**
+	 * Gets the route by its id.
+	 *
+	 * @param routeId the route id
+	 * @return the route by id
+	 */
 	private Optional<Linea> getLineaById(String routeId) {
 		
 		for (Linea l : GTFSStaticRepository.getLinee()) {
@@ -89,6 +109,15 @@ public class FavoriteRouteDB {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Adds the favorite route in the database and in the map.
+	 *
+	 * @param userId the user id
+	 * @param linea the linea
+	 * @param commento the commento
+	 * @return true, if successful
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public synchronized boolean addFavoriteRoute(String userId, Linea linea, String commento) throws IOException {
 		
 		if (userId == null || linea == null) {
@@ -134,11 +163,18 @@ public class FavoriteRouteDB {
 		return true;
 	}
 	
+	/**
+	 * Checks if a saved favorite route is present in the map (and so in the database).
+	 *
+	 * @param userId the user id
+	 * @param routeId the route id
+	 * @return true, if is favorite route present
+	 */
 	public boolean isFavoriteRoutePresent(String userId, String routeId) {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);
 		
-		if ( list == null ||  list.isEmpty()) return false;
+		if (list == null || list.isEmpty()) return false;
 		
 		for (FavoriteRoute f : list) {
 			
@@ -151,7 +187,13 @@ public class FavoriteRouteDB {
 		return false;
 	}
 	
-	//trova tutti i Favorites di un determinato utente
+	/**
+	 * Finds all the user's saved favorite routes by user id.
+	 *
+	 * @param userId the user id
+	 * @return the optional
+	 */
+
 	public synchronized Optional<List<FavoriteRoute>> findFavoriteRouteByUserId(String userId) {
 		
 		if (favoriteRoutesByUserId.containsKey(userId)) {
@@ -162,6 +204,13 @@ public class FavoriteRouteDB {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Finds a certain saved favorite route by user id and route id.
+	 *
+	 * @param userId the user id
+	 * @param routeId the route id
+	 * @return the optional
+	 */
 	//trova un particolare FavoriteRoute di un determinato utente
 	public synchronized Optional<FavoriteRoute> findFavoriteRouteByUserIdAndRouteId(String userId, String routeId) {
 		
@@ -182,6 +231,11 @@ public class FavoriteRouteDB {
 		
 	}
 	
+	/**
+	 * Rewrites file once a favorite is deleted from the database.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void rewriteFile() throws IOException {
 
 	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(favoritesFileDBRoutes, false))) {
@@ -202,6 +256,14 @@ public class FavoriteRouteDB {
 	    }
 	}
 	
+	/**
+	 * Deletes a favorite route.
+	 *
+	 * @param userId the user id
+	 * @param routeId the route id
+	 * @return the optional
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public synchronized Optional<FavoriteRoute> deleteFavoriteRoute(String userId, String routeId) throws IOException {
 		
 		List<FavoriteRoute> list = favoriteRoutesByUserId.get(userId);

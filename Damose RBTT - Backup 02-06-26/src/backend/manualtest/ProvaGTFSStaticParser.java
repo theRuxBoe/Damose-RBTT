@@ -1,11 +1,20 @@
-package main.java.backend.parser;
+package backend.manualtest;
 
 import java.util.List;
 
-import main.java.backend.model.Corsa;
+import backend.model.Corsa;
+import backend.parser.GTFSStaticParser;
 
+/**
+ * The Class ProvaGTFSStaticParser.
+ */
 public class ProvaGTFSStaticParser {
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		
 		try {
