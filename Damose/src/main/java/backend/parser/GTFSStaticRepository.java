@@ -2,8 +2,15 @@ package main.java.backend.parser;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import main.java.backend.model.*;
+import main.java.backend.model.Corsa;
+import main.java.backend.model.Fermata;
+import main.java.backend.model.Linea;
+import main.java.backend.model.OrarioFermata;
+import main.java.backend.model.RisultatoLinea;
+import main.java.backend.model.ServiceCalendar;
 
 /**
  * The Class GTFSStaticRepository -> It's a caching class that instantiates a GTFSStaticParser with all the related lists of data objects. 
@@ -29,6 +36,9 @@ public class GTFSStaticRepository {
     
     /** The service calendar map indexed by service id. */
     private static Map<String, ServiceCalendar> serviziCalendario;
+    
+    /** A set of wrapper object containing a route and its direction. */
+    private static Set<RisultatoLinea> risultatiLinea;
 
     /**
      * Instantiates a new GTFS static repository.
@@ -52,6 +62,7 @@ public class GTFSStaticRepository {
         corse = parser.getCorse();
         orari = parser.getOrari();
         serviziCalendario = parser.getCalendarMap();
+        risultatiLinea = parser.getRisultatiLinea();
 
         initialized = true;
     }
@@ -118,6 +129,17 @@ public class GTFSStaticRepository {
     	
     	ensureInit();
     	return serviziCalendario;
+    }
+    
+    /**
+     * Gets the set of RisultatoLinea wrappers
+     *
+     * @return the set of RisultatoLinea wrappers
+     */
+    public static Set<RisultatoLinea> getRisultatiLinea() {
+    	
+    	ensureInit();
+    	return risultatiLinea;
     }
     
     /**

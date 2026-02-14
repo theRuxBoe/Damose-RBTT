@@ -127,7 +127,7 @@ public class WaypointManager {
 		Set<VehicleWaypoint> trains = new HashSet<>();
 		
 		for (PredizioneArrivo v : vehicles) {
-			 RouteType type = BackendController.getTTS().cercaLinee(v.getRouteId()).getFirst().getRouteType();
+			 RouteType type = RouteType.fromCode(BackendController.getTTS().getLinea(v.getRouteId()).getType());
 			 if (type == null) {
 				 continue;
 			 }

@@ -53,6 +53,9 @@ public class TransitServiceImpl implements TransitService {
 	/** The calendar service map. */
 	private Map<String, ServiceCalendar> serviziCalendario;
 	
+	/** A set of RisultatoLinea, wrapper objects which contain a route and its direction name */
+	private Set<RisultatoLinea> risultatiLinea;
+	
 	/** The trip client. */
 	private final GTFSRealTimeClient tripClient;
 	
@@ -93,6 +96,7 @@ public class TransitServiceImpl implements TransitService {
 	    this.orari = GTFSStaticRepository.getOrari();
 	    this.fermate = GTFSStaticRepository.getFermate();
 	    this.serviziCalendario = GTFSStaticRepository.getCalendarMap();
+	    this.risultatiLinea = GTFSStaticRepository.getRisultatiLinea();
 	    
 	    this.tripClient = tClient;
 	    this.vehicleClient = vClient;
@@ -258,7 +262,7 @@ public class TransitServiceImpl implements TransitService {
 	    			
 	    			if (isTripActiveToday(c.getTripId(), c.getServiceId())) {
 	    				
-	    				RisultatoLinea rl = new RisultatoLinea(c.getRouteId(), c.getDirectionName().trim());
+	    				RisultatoLinea rl = new RisultatoLinea(getLinea(c.getRouteId()), c.getDirectionName().trim());
 	    				
 	    				if (rl != null) {
 	    					
@@ -321,7 +325,7 @@ public class TransitServiceImpl implements TransitService {
 	    			
 	    			if (isTripActiveToday(c.getTripId(), c.getServiceId())) {
 	    				
-	    				RisultatoLinea rl = new RisultatoLinea(c.getRouteId(), c.getDirectionName().trim());
+	    				RisultatoLinea rl = new RisultatoLinea(getLinea(c.getRouteId()), c.getDirectionName().trim());
 	    				
 	    				if (rl !=null ) {
 	    					
@@ -346,21 +350,23 @@ public class TransitServiceImpl implements TransitService {
 	 * @throws IllegalArgumentException the illegal argument exception
 	 */
 	@Override
-	public List<Linea> cercaLinee(String query) throws IllegalArgumentException {
+	public List<RisultatoLinea> cercaLinee(String query) throws IllegalArgumentException {
 		
 		if (query == null || query.isEmpty()) throw new IllegalArgumentException("Input invalido.");
 		
 		String q = query.toLowerCase();
 		
-		List<Linea> risultato = new ArrayList<Linea>();
+		List<RisultatoLinea> risultato = new ArrayList<RisultatoLinea>();
 		
-		for (Linea l : linee) {
+		for (RisultatoLinea rl : risultatiLinea) {
 			
-			if (l.getRouteId().toLowerCase().contains(q) || l.getName().toLowerCase().contains(q) || l.getDescription().toLowerCase().contains(q)) {
+			if (rl.getRouteId().toLowerCase().contains(q) || rl.getLinea().getName().toLowerCase().contains(q)) {
 				
-				risultato.add(l);
+				risultato.add(rl);
 			}
 		}
+		
+	    risultato.sort(Comparator.comparing(RisultatoLinea::getRouteId));
 		
 		return risultato;
 		
@@ -477,16 +483,14 @@ public class TransitServiceImpl implements TransitService {
 	 */
 	public List<Fermata> trovaFermatePerLinea(String routeId, String directionName) throws IllegalArgumentException {
 
-		if (routeId == null || routeId.isBlank() || directionName == null ) {
+		if (routeId == null || routeId.isBlank()  || directionName == null) {
 			
 			throw new IllegalArgumentException("Ciao Input invalido.");
 		}
 		
 		String tripIdRiferimento = trovaMigliorTripId(routeId, directionName.trim());
-	    if (tripIdRiferimento == null) {
-	    	System.out.println(tripIdRiferimento);
-	    	return new ArrayList<>();
-	    }
+	    if (tripIdRiferimento == null) return new ArrayList<>();
+	    
 	    Map<String, Fermata> fermateByStopId = new HashMap<String, Fermata>();
 	    for (Fermata f : fermate) {
 	        fermateByStopId.put(f.getStopId(), f);
@@ -529,13 +533,13 @@ public class TransitServiceImpl implements TransitService {
 	 */
 	public List<WrapperGenerico> ricercaGenerica(String in) throws IllegalArgumentException {
 		
-		if (in == null || in.isBlank() ) {
+		if (in.isBlank() || in == null) {
 			throw new IllegalArgumentException("Input di ricerca invalido.");
 		}
 		
 		List<WrapperGenerico> risultato = new ArrayList<WrapperGenerico>();
 		
-		for (Linea l : cercaLinee(in)) {
+		for (RisultatoLinea l : cercaLinee(in)) {
 			
 			risultato.add(new WrapperGenerico("Linea", l));
 		}

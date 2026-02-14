@@ -13,6 +13,7 @@ import javax.swing.border.BevelBorder;
 
 import main.java.backend.model.Fermata;
 import main.java.backend.model.Linea;
+import main.java.backend.model.RisultatoLinea;
 import main.java.frontend.BackendController;
 import main.java.frontend.user.FavouritesDBManager;
 import main.java.frontend.user.LoginToMainFrame;
@@ -25,7 +26,7 @@ import main.java.frontend.utilities.ListToScrollConverter;
 public class LinePanel extends JPanel { 
 	
 /** The {@link Linea} object. */
-	private Linea line;
+	private RisultatoLinea line;
 	
 	
 	/**
@@ -33,16 +34,30 @@ public class LinePanel extends JPanel {
 	 *
 	 * @param l the line
 	 */
-	public LinePanel(Linea l) {
+//	public LinePanel(Linea l) {
+//		super();
+//		setLayout(new BorderLayout());
+//		setBorder(new BevelBorder(BevelBorder.LOWERED));
+//		this.line = l;
+//		
+//		addDataLabel();
+//		addScrollPanel();
+//		setMaximumSize(getPreferredSize());
+//		setAlignmentX(LEFT_ALIGNMENT);
+//	
+//	}
+	
+	public LinePanel(RisultatoLinea l) {
 		super();
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
+		
 		this.line = l;
 		
 		addDataLabel();
 		addScrollPanel();
 		setMaximumSize(getPreferredSize());
-		setAlignmentX(LEFT_ALIGNMENT);
+		setAlignmentX(CENTER_ALIGNMENT);
 	
 	}
 	
@@ -56,7 +71,7 @@ public class LinePanel extends JPanel {
 		if (LoginToMainFrame.isLogged()) {
 			p.add(createFavouriteButton());
 		}
-		JLabel data = new JLabel(line.getName() + " - " + line.getDescription() + " - Qualità : " + BackendController.getTTS().getValutazioneLinea(line.getRouteId()));
+		JLabel data = new JLabel(line.getLinea().getName() + " - " + line.getDirectionName() + " - Qualità : " + BackendController.getTTS().getValutazioneLinea(line.getRouteId()));
 		data.setFont(new Font("Serif", Font.BOLD, 30));
 		
 		p.add(data);
@@ -69,7 +84,7 @@ public class LinePanel extends JPanel {
 	 * @return the favourites button
 	 */
 	private JButton createFavouriteButton() {
-		String s = FavouritesDBManager.isPresent(line) ? "★" : "☆";
+		String s = FavouritesDBManager.isPresent(line.getLinea()) ? "★" : "☆";
 		JButton b = new JButton(s);
 		b.setSize(new Dimension(10,10));
 		b.setBorderPainted(false);
@@ -79,25 +94,24 @@ public class LinePanel extends JPanel {
 				if (b.getText().equals("☆")) {
 					b.setText("★");
 					
-					FavouritesDBManager.addToFavourites(line);
+					FavouritesDBManager.addToFavourites(line.getLinea());
 					
 				}
 				else {
 					b.setText("☆");
-					FavouritesDBManager.remove(line);
+					FavouritesDBManager.remove(line.getLinea());
 				}
 			
 		});
 		return b;
 	}
-	
+
 	/**
 	 * Adds a scroll panel containing all the {@link StopPanel}s 
 	 * that the line goes through.
 	 */
 	private void addScrollPanel() {
-		List<Fermata> j = BackendController.getTTS().trovaFermatePerLinea(line.getRouteId(), line.getDescription());
-		System.out.println(j.toString());
+		List<Fermata> j = BackendController.getTTS().trovaFermatePerLinea(line.getRouteId(), line.getDirectionName());
 		JScrollPane x = ListToScrollConverter.setContent(ListToScrollConverter.convertList(j));
 		if (x != null) {
 		x.setMaximumSize(getPreferredSize());

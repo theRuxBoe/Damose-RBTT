@@ -44,7 +44,7 @@ public class ProvaTransitService {
 
             System.out.println("\n=== Test: cercaLinee('78') ===");
             service.cercaLinee("78").forEach(l ->
-                System.out.println(l.getRouteId() + " (" + l.getDescription() + ")")
+                System.out.println(l.getRouteId() + " (" + l.getDirectionName() + ")")
             );
             
             System.out.println("\n== Test: trovaFermatePerLinea");
@@ -85,8 +85,8 @@ public class ProvaTransitService {
             System.out.println("\n=== Test: getFermata('79315') ===");
             System.out.println(service.getFermata("79315"));
             
-            System.out.println("\n=== Test: ricercaGenerica('CADUTI LIBERAZIONE') ===");
-            service.ricercaGenerica("").forEach(f ->
+            System.out.println("\n=== Test: ricercaGenerica('78') ===");
+            service.ricercaGenerica("78").forEach(f ->
             System.out.println(f));
             
             System.out.println("\n=== Test: cercaFermate('TARANTELLI') ===");

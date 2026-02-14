@@ -8,8 +8,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,6 +20,7 @@ import main.java.backend.model.Fermata;
 import main.java.backend.model.Linea;
 import main.java.backend.model.OrarioFermata;
 import main.java.backend.model.ServiceCalendar;
+import main.java.backend.model.RisultatoLinea;
 
 /**
  * The Class GTFSStaticParser -> its task is to download the zip file containing the static GTFS data taken from Roma Mobilità, parse it, 
@@ -322,6 +325,34 @@ public class GTFSStaticParser {
 	public Map<String, ServiceCalendar> getCalendarMap() {
 		
 		return serviziCalendario;
+	}
+	
+	/**
+	 * Creates a set of RisultatoLinea objects, which are wrapper objects containing a route and its direction name.
+	 *
+	 * @return the RisultatoLinea set
+	 */
+	public Set<RisultatoLinea> getRisultatiLinea() {
+	    
+	    Set<RisultatoLinea> risultatiLinea = new HashSet<>();
+	    
+	    Map<String, Linea> mappaLinee = new HashMap<>();
+	    for (Linea l : linee) {
+	        mappaLinee.put(l.getRouteId(), l);
+	    }
+	    
+	    for (Corsa c : corse) {
+
+	        Linea lineaAssociata = mappaLinee.get(c.getRouteId());
+	        
+	        if (lineaAssociata != null) {
+	
+	            String direzionePulita = c.getDirectionName().trim();
+	            risultatiLinea.add(new RisultatoLinea(lineaAssociata, direzionePulita));
+	        }
+	    }
+	    
+	    return risultatiLinea;
 	}
 	
 }
