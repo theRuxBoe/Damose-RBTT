@@ -84,7 +84,7 @@ public class LinePanel extends JPanel {
 	 * @return the favourites button
 	 */
 	private JButton createFavouriteButton() {
-		String s = FavouritesDBManager.isPresent(line.getLinea()) ? "★" : "☆";
+		String s = FavouritesDBManager.isPresent(line) ? "★" : "☆";
 		JButton b = new JButton(s);
 		b.setSize(new Dimension(10,10));
 		b.setBorderPainted(false);
@@ -94,12 +94,12 @@ public class LinePanel extends JPanel {
 				if (b.getText().equals("☆")) {
 					b.setText("★");
 					
-					FavouritesDBManager.addToFavourites(line.getLinea());
+					FavouritesDBManager.addToFavourites(line);
 					
 				}
 				else {
 					b.setText("☆");
-					FavouritesDBManager.remove(line.getLinea());
+					FavouritesDBManager.remove(line);
 				}
 			
 		});

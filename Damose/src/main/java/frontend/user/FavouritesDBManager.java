@@ -16,6 +16,7 @@ import main.java.backend.favorite.FavoriteStopDB;
 import main.java.backend.model.DatoGTF;
 import main.java.backend.model.Fermata;
 import main.java.backend.model.Linea;
+import main.java.backend.model.RisultatoLinea;
 import main.java.frontend.utilities.ListToScrollConverter;
 
 /**
@@ -55,22 +56,24 @@ public class FavouritesDBManager {
 	 * @return the favourites' panels
 	 */
 	public static List<JPanel> getFavourites(String user) {
-		Optional<List<FavoriteRoute>> rt = lines.findFavoriteRouteByUserId(user);
+		Optional<List<FavoriteRoute>> rt = lines.findFavoriteRoutesByUserId(user);
 
-		Optional<List<FavoriteStop>> st = stops.findFavoritesByUserId(user);
+		Optional<List<FavoriteStop>> st = stops.findFavoriteStopsByUserId(user);
 		List<DatoGTF> result = new ArrayList<>();
-		if (!rt.isEmpty()) {
-			List<FavoriteRoute> linesFav = rt.get();
-			for (FavoriteRoute fr : linesFav) {
-				result.add(fr.getLineaSalvata());
-			}
-		}
+		
 		if (!st.isEmpty()) {
 			List<FavoriteStop> stopsFav = st.get();
 			for (FavoriteStop fs : stopsFav) {
 				result.add(fs.getFermataSalvata());
 			}
 		
+		}
+		
+		if (!rt.isEmpty()) {
+			List<FavoriteRoute> linesFav = rt.get();
+			for (FavoriteRoute fr : linesFav) {
+				result.add(fr.getLineaSalvata());
+			}
 		}
 
 		return ListToScrollConverter.convertList(result);
@@ -101,7 +104,7 @@ public class FavouritesDBManager {
 	 *
 	 * @param l the line
 	 */
-	public static void addToFavourites(Linea l) {
+	public static void addToFavourites(RisultatoLinea l) {
 		try {
 			lines.addFavoriteRoute(LoginToMainFrame.getCurrentUser(), l, null);
 		} catch (IOException e) {
@@ -132,9 +135,9 @@ public class FavouritesDBManager {
 	 *
 	 * @param l the line
 	 */
-	public static void remove(Linea l) {
+	public static void remove(RisultatoLinea l) {
 		try {
-			lines.deleteFavoriteRoute(LoginToMainFrame.getCurrentUser(), l.getRouteId());
+			lines.deleteFavoriteRoute(LoginToMainFrame.getCurrentUser(), l.getRouteId(), l.getDirectionName());
 			}
 			catch (IOException ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -147,8 +150,8 @@ public class FavouritesDBManager {
 	 * @param l the line
 	 * @return true, if the line is present in the DB
 	 */
-	public static boolean isPresent(Linea l) {
-		return lines.isFavoriteRoutePresent(LoginToMainFrame.getCurrentUser(), l.getRouteId());
+	public static boolean isPresent(RisultatoLinea l) {
+		return lines.isFavoriteRoutePresent(LoginToMainFrame.getCurrentUser(), l.getRouteId(), l.getDirectionName());
 	}
 	
 	/**

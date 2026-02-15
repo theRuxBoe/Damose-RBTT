@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import main.java.backend.model.Fermata;
-import main.java.backend.parser.GTFSStaticParser;
 import main.java.backend.parser.GTFSStaticRepository;
 
 /**
@@ -195,7 +194,7 @@ public class FavoriteStopDB {
 	 * @param userId the user id
 	 * @return the optional
 	 */
-	public synchronized Optional<List<FavoriteStop>> findFavoritesByUserId(String userId) {
+	public synchronized Optional<List<FavoriteStop>> findFavoriteStopsByUserId(String userId) {
 		
 		if (favoriteStopsByUserId.containsKey(userId)) {
 			

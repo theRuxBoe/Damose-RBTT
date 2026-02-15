@@ -1,5 +1,7 @@
-package main.java.frontend;
+package main.java;
 
+import main.java.frontend.BackendController;
+import main.java.frontend.MainFrame;
 import main.java.frontend.user.LoginToMainFrame;
 
 public class Main {

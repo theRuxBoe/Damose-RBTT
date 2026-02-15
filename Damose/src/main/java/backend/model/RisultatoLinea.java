@@ -1,8 +1,5 @@
 package main.java.backend.model;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * The Class RisultatoLinea -> a wrapper with a Linea object and an additional field which indentifies the route's direction name.

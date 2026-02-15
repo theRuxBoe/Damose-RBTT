@@ -18,11 +18,11 @@ import main.java.frontend.utilities.ListToScrollConverter;
  */
 public class FavouritesPanel extends JPanel{
 
-	/** The {@link JScrollPane} containing the favourites stops. */
-	private JScrollPane favStops;
+	/** The {@link JScrollPane} containing the favourites. */
+	private JScrollPane favourites;
 	
-	/** True if the "no favourites" label was added to the panel. */
-	private boolean labelPresent = false;
+	/** The label telling the user they haven't added any favourites. */
+	private JLabel label;
 	
 	
 	/**
@@ -42,18 +42,24 @@ public class FavouritesPanel extends JPanel{
 	 */
 	public void showFavourites() {
 		List<JPanel> favs = FavouritesDBManager.getFavourites(LoginToMainFrame.getCurrentUser());
-		if (favStops != null) { this.remove(favStops); }
+		if (favourites != null) { this.remove(favourites); }
 		if (!favs.isEmpty()) {
 			JScrollPane x = ListToScrollConverter.setContent(favs);
-			favStops = x;
+			favourites = x;
+			x.setAlignmentX(CENTER_ALIGNMENT);
 			add(x);
+			if (label != null ) {
+				remove(label);
+				label = null;
+			}
 		}
 		else {
-			if (!labelPresent) {
-			JLabel l = new JLabel("Non hai ancora salvato preferiti!");
-			l.setAlignmentX(CENTER_ALIGNMENT);
-			add(l);
-			labelPresent = true;
+			
+			if (label == null) {
+				JLabel l = new JLabel("Non hai ancora salvato preferiti!");
+				l.setAlignmentX(CENTER_ALIGNMENT);
+				label = l;
+				add(label);
 			} 
 		}
 		

@@ -1,5 +1,6 @@
 package main.java.frontend.utilities;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public abstract class ListToScrollConverter {
 		support.setLayout(new BoxLayout(support, BoxLayout.PAGE_AXIS));
 
 		for (JPanel p : panels) {
+			p.setAlignmentX(Component.LEFT_ALIGNMENT);
 			support.add(p);
 		}
 		JScrollPane scroll = new JScrollPane(support);

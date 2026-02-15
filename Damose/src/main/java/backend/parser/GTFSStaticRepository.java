@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import main.java.backend.model.*;
 import main.java.backend.model.Corsa;
 import main.java.backend.model.Fermata;
 import main.java.backend.model.Linea;

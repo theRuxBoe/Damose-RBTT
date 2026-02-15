@@ -121,10 +121,20 @@ public class WaypointManager {
 	 */
 	public static void paintVehicles(Set<PredizioneArrivo> vehicles) {
 		
+		
+		
 		Set<VehicleWaypoint> buses = new HashSet<>();
 		Set<VehicleWaypoint> trams = new HashSet<>();
 		Set<VehicleWaypoint> metros = new HashSet<>();
 		Set<VehicleWaypoint> trains = new HashSet<>();
+		
+		busPainter.setWaypoints(buses);
+		tramPainter.setWaypoints(trams);
+		metroPainter.setWaypoints(metros);
+		trainPainter.setWaypoints(trains);
+		map.getMapViewer().repaint();
+		
+		
 		
 		for (PredizioneArrivo v : vehicles) {
 			 RouteType type = RouteType.fromCode(BackendController.getTTS().getLinea(v.getRouteId()).getType());
@@ -146,6 +156,9 @@ public class WaypointManager {
 					 trains.add(new VehicleWaypoint(position.get().getLat(), position.get().getLon()));
 				 }
 				 
+				 else {
+					 continue;
+				 }
 			 
 			 }
 			

@@ -80,11 +80,9 @@ public class SearchPanel extends JPanel {
 					showResults(risultato);
 					}
 					catch (IllegalArgumentException e2 ) {
-//						JOptionPane.showMessageDialog(null,e2.printStackTrace());
-						e2.printStackTrace();
+						JOptionPane.showMessageDialog(null,e2.getMessage());
 					}
 				
-//					 e2.getMessage()
 			}
 		});
 		panel.add(text);
