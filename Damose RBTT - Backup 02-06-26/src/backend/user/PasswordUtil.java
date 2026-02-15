@@ -16,7 +16,7 @@ public class PasswordUtil {
      */
     // SHA-256
     public static String hash(String input) {
-        if (input == null) {
+        if (input == null || input.isBlank()) {
             throw new IllegalArgumentException("Password nulla non consentita");
         }
         try {

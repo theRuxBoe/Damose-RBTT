@@ -5,6 +5,7 @@ import java.util.Optional;
 import backend.favorite.FavoriteRouteDB;
 import backend.favorite.FavoriteStopDB;
 import backend.model.Linea;
+import backend.model.RisultatoLinea;
 import backend.parser.GTFSStaticRepository;
 import backend.service.TransitServiceImpl;
 import backend.user.User;
@@ -30,14 +31,17 @@ public class ProvaDataBasePreferiti {
 			UserDB userDB = new UserDB();
 			
 			System.out.println("Creazione account");
-			userDB.createNewAccount("Patatina", "brotato699");
-			Optional<User> o1 = userDB.findUserByName("Patatina");
+			userDB.createNewAccount("utente2", "676767676767");
+			Optional<User> o1 = userDB.findUserByName("utente2");
 			User u1 = null;
+			
+
 			
 			if (o1.isPresent()) {
 				
 				System.out.println("Ottengo user name con successo");
 				u1 = o1.get();
+				favRouteDB.addFavoriteRoute(u1.getId(), new RisultatoLinea(new Linea("899", "899", "CHEESE", "a caso", 3), "via dalle palle"), "2 test");
 			}
 			
 			userDB.createNewAccount("MacDonaldPro", "afrikaChicken");

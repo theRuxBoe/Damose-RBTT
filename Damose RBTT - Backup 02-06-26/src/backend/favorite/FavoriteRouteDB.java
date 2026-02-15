@@ -16,7 +16,7 @@ import backend.model.RisultatoLinea;
 import backend.parser.GTFSStaticRepository;
 
 /**
- * The Class FavoriteRouteDB -> represents a database (a txt file) containing all the users' saved routes.
+ * The Class FavoriteRouteDB -> represents a database (a txt file) containing all the users' saved routes, which are represented by a RisultatoLinea object.
  */
 public class FavoriteRouteDB {
 
@@ -65,7 +65,7 @@ public class FavoriteRouteDB {
 				
 				reader.readLine(); // Salta riga vuota
 				
-				if (idUtenteRiga == null || lineaRiga == null || commRiga == null || direzioneLinea == null) {
+				if (lineaRiga == null || commRiga == null || direzioneLinea == null) {
 					
 					break;
 				}
@@ -97,6 +97,7 @@ public class FavoriteRouteDB {
 	 * Gets the route by its id and direction name.
 	 *
 	 * @param routeId the route id
+	 * @param directionName the direction name
 	 * @return the route by id
 	 */
 	private Optional<RisultatoLinea> getLineaById(String routeId, String directionName) {
@@ -173,6 +174,7 @@ public class FavoriteRouteDB {
 	 *
 	 * @param userId the user id
 	 * @param routeId the route id
+	 * @param directionName the direction name
 	 * @return true, if is favorite route present
 	 */
 	public boolean isFavoriteRoutePresent(String userId, String routeId, String directionName) {
@@ -210,10 +212,11 @@ public class FavoriteRouteDB {
 	}
 	
 	/**
-	 * Finds a certain saved favorite route by user id and route id.
+	 * Finds a certain saved favorite route by user id, route id and direction name.
 	 *
 	 * @param userId the user id
 	 * @param routeId the route id
+	 * @param directionName the direction name
 	 * @return the optional
 	 */
 	//trova un particolare FavoriteRoute di un determinato utente
@@ -268,6 +271,7 @@ public class FavoriteRouteDB {
 	 *
 	 * @param userId the user id
 	 * @param routeId the route id
+	 * @param directionName the direction name
 	 * @return the optional
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */

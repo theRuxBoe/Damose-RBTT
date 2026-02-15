@@ -31,16 +31,16 @@ public class GTFSStaticParser {
 	/** The list containing the stop objects. */
 	private List<Fermata> fermate;
 	
-	/** The The list containing the route objects. */
+	/** The list containing the route objects. */
 	private List<Linea> linee;
 	
-	/** The The list containing the trip objects. */
+	/** The list containing the trip objects. */
 	private List<Corsa> corse;
 	
-	/** The The list containing the stop times objects. */
+	/** The list containing the stop times objects. */
 	private List<OrarioFermata> orari;
 	
-	/** The The list containing the service calendar objects. */
+	/** The list containing the service calendar objects. */
 	private Map<String, ServiceCalendar> serviziCalendario;
 	
 	/**
