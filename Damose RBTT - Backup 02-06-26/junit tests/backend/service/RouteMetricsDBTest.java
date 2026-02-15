@@ -26,7 +26,6 @@ class RouteMetricsDBTest {
     	int punteggioPredecente = db.getRouteScore(TEST_ROUTE_ID);
         int nuovoPunteggio = 75;
         
-        // Supponiamo che il tuo metodo si chiami updateRouteScore o simile
         db.updateRouteScore(TEST_ROUTE_ID, nuovoPunteggio);
         
 		assertEquals(punteggioPredecente+nuovoPunteggio, db.getRouteScore(TEST_ROUTE_ID), 
